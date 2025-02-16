@@ -1,0 +1,4 @@
+RewriteEngine On
+
+#send everything else to the index page
+RewriteRule ^(.*)$ /public/=$1 [L,QSA]
