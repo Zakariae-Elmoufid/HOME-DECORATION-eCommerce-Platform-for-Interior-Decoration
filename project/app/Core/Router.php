@@ -32,10 +32,7 @@ class Router {
         $callback = $this->routes[$method][$url] ?? false;
         if (!$callback) {
             $this->response->statusCode(code: 404);
-            // return 'Not Found';
-         dump($this->routes);
-         dump($method);
-         dump($url);
+            return 'Not Found';
         }else{
        
 
@@ -43,7 +40,7 @@ class Router {
                 [$controller, $method] = explode('@', $callback);
                 $namespace = "App\\Controllers\\";
                 $controllerClass = $namespace . $controller;
-        
+
                 if (class_exists($controllerClass) && method_exists($controllerClass, $method)) {
                     $controllerInstance = new $controllerClass();
                     return $controllerInstance->$method();
@@ -56,27 +53,15 @@ class Router {
 
         }
 
-}
+    }
 
 
 
 
 
-public function renderView($view, $params = [])
-{
-    extract($params);
-    $layoutName = Application::$app->controller->layout;
-    ob_start();
-    include_once __DIR__ . "/../Views/$view.php";
-    $viewContent  = ob_get_clean();
-
-    ob_start();
-    include_once __DIR__ ."/../Views/layouts/$layoutName.php";
-    $layoutContent = ob_get_clean();
     
-    return str_replace('{{content}}', $viewContent, $layoutContent);
-
-}
+        
+    
 
 
 

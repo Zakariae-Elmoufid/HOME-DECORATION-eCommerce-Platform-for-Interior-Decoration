@@ -3,6 +3,7 @@
 namespace App\Core;
 
 
+
 class Application
 {
     public static Application $app;
@@ -12,6 +13,7 @@ class Application
     public Response $response;
     public Controller $controller;
 
+
     public function __construct($rootDir)
     {
         self::$ROOT_DIR = $rootDir;
@@ -20,11 +22,10 @@ class Application
         $this->response = new Response();
         $this->router = new Router($this->request, $this->response);
         $this->controller = new Controller();
-
     }
 
     public function run()
     {
-        echo $this->router->dispatch();
+        $this->router->dispatch();
     }
 }
