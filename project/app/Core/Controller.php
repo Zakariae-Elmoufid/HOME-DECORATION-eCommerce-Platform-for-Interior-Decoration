@@ -6,7 +6,6 @@ use Twig\Loader\FilesystemLoader;
 
 class Controller
 {
-    public string $layout = 'main';
 
     protected Environment $twig;
     public function __construct()
@@ -16,18 +15,17 @@ class Controller
             'cache' => false, 
         ]);
     }
-    public function setLayout($layout): void
-    {
-        $this->layout ="layouts/$layout";
-    }
-    public function render($view, $params = []): string {
-        try {
-        
-               echo  $this->twig->render("$view.twig", $params);
-               exit;
+    
 
-        } catch (\Exception $e) {
-            die("Twig Error: " . $e->getMessage());
-        }
+    public function render($view, $params = []): string
+    {
+        
+        return Application::$app->response->render($view, $params);
     }
+
+
+    
+    
+
+
 }
