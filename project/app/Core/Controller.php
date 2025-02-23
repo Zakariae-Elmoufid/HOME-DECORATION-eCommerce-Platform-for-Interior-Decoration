@@ -1,16 +1,31 @@
 <?php
 
 namespace App\Core;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 class Controller
 {
-    public string $layout = 'main';
-    public function setLayout($layout): void
+
+    protected Environment $twig;
+    public function __construct()
     {
-        $this->layout = $layout;
+        $loader = new FilesystemLoader(dirname(__DIR__) . '/Views');
+        $this->twig = new Environment($loader, [
+            'cache' => false, 
+        ]);
     }
+    
+
     public function render($view, $params = []): string
     {
-        return Application::$app->router->renderView($view, $params);
+        
+        return Application::$app->response->render($view, $params);
     }
+
+
+    
+    
+
+
 }

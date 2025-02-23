@@ -1,0 +1,39 @@
+
+{% block content %}
+    {# Affichage du message de succès #}
+      {% if success %}
+        <p style="color: green;">{{ success }}</p>
+    {% endif %}
+
+
+
+    {# Votre formulaire #}
+    <form method="POST" action="/createCategory">
+        <div>
+            <label>Nom</label>
+            <input 
+                type="text" 
+                name="name" 
+                value="{{ old.name ?? '' }}"
+            >
+           
+            {% if errors.name %}
+                <p style="color: red;">{{ errors.name[0] }}</p>
+            {% endif %}        </div>
+
+        <div>
+            <label>Email</label>
+            <input 
+                type="email" 
+                name="email" 
+                value="{{ old.email ?? '' }}"
+                class="{{ errors.email ? 'is-invalid' : '' }}"
+            >
+           {% if errors.email %}
+                <p style="color: red;">{{ errors.email[0] }}</p>
+            {% endif %}
+        </div>
+
+        <button type="submit">Créer</button>
+    </form>
+{% endblock %}
