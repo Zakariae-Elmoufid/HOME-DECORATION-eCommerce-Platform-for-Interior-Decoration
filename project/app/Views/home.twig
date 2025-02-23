@@ -5,16 +5,7 @@
         <p style="color: green;">{{ success }}</p>
     {% endif %}
 
-    {# Affichage des erreurs #}
-    {# {% if errors %}
-        <div class="alert alert-danger">
-            {% for field, field_errors in errors %}
-                {% for error in field_errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            {% endfor %}
-        </div>
-    {% endif %} #}
+
 
     {# Votre formulaire #}
     <form method="POST" action="/createCategory">

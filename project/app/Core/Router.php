@@ -5,6 +5,8 @@ namespace App\Core;
 class Router {
 
     private  $routes = [];
+    private $middlewares = [];
+
     private Request $request;
     private Response $response;
 
@@ -14,6 +16,12 @@ class Router {
     {
         $this->request = $request;
         $this->response = $response;
+    }
+
+    public function middleware($route, $middlewareClass)
+    {
+        $this->middlewares[$route][] = $middlewareClass;
+        return $this;
     }
     
     public function getRoutes(){
@@ -53,6 +61,19 @@ class Router {
                         return;
                     }
                 }
+
+                if (isset($this->middlewares[$url])) {
+                    foreach ($this->middlewares[$url] as $middlewareClass) {
+                        $middleware = new $middlewareClass();
+                        $result = $middleware->handle($this->request);
+                        
+                        // Si un middleware retourne false, arrêter le traitement
+                        if ($result === false) {
+                            return false;
+                        }
+                    }
+                }
+                
                 if (is_array($callback)) {
                     // dump(Application::$app->controller );
                     $controller = $callback[0];
