@@ -1,3 +1,10 @@
 /vendor
 /composer.lock
 .env
+
+node_modules/
+package-lock.json
+package.json
+public/input.css
+public/output.css
+tailwind.config.js
