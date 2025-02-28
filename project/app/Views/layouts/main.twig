@@ -1,28 +1,258 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mon Site{% endblock %}</title>
-    <link rel="stylesheet" href="/public/output.css">
-</head>
-<body>
-    <header>
-        <h1>Bienvenue</h1>
-        <nav>
-            <ul>
-                <li><a href="/home">Accueil</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}
+        Title
+      {% endblock %}
+    </title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    {# <link rel="stylesheet" href="./public/output.css"/> #}
+      <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              light: '#f5d78e',
+              DEFAULT: '#d4af37',
+              dark: '#aa8c2c',
+            },
+            charcoal: {
+              light: '#4a4a4a',
+              DEFAULT: '#333333',
+              dark: '#1a1a1a',
+            },
+            cream: {
+              light: '#fffef5',
+              DEFAULT: '#f5f5f0',
+              dark: '#e6e6e0',
+            }
+          },
+          fontFamily: {
+            'sans': ['Montserrat', 'sans-serif'],
+            'serif': ['Playfair Display', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+    <style>
+      .hero-section {
+        background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80');
+        background-size: cover;
+        background-position: center;
+        height: 70vh;
+      }
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+    </style>
+  </head>
+
+  <body class="bg-cream-light font-sans">
+    <!-- Promotional Announcement -->
+    <div class="bg-gold text-white text-center py-2 text-sm">
+      <p>Free shipping on all orders over €150 | Promo code: ELEGANCE25</p>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex justify-between items-center">
+          <!-- Logo -->
+          <div class="flex-shrink-0">
+            <a href="#" class="flex items-center"><span class="text-2xl font-serif font-bold text-charcoal">Elegant<span class="text-gold">Home</span></span></a>
+          </div>
+
+          <!-- Search Bar (visible on desktop) -->
+          <div class="hidden md:flex flex-grow max-w-lg mx-6">
+            <div class="w-full">
+              <form class="flex">
+                <input type="text" placeholder="Search for products..." class="w-full border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold" />
+                <button type="submit" class="bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-r-lg transition duration-300"><i class="fas fa-search"></i></button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Navigation Icons -->
+          <div class="flex items-center space-x-6">
+            <a href="#" class="text-charcoal hover:text-gold transition duration-300"><i class="far fa-heart text-xl"></i></a>
+            <a href="#" class="text-charcoal hover:text-gold transition duration-300 relative">
+              <i class="fas fa-shopping-bag text-xl"></i>
+              <span class="absolute -top-2 -right-2 bg-gold text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+            </a>
+            <a href="#" class="text-charcoal hover:text-gold transition duration-300"><i class="far fa-user text-xl"></i></a>
+            <button class="md:hidden text-charcoal hover:text-gold transition duration-300"><i class="fas fa-bars text-xl"></i></button>
+          </div>
+        </div>
+
+        <!-- Main Navigation -->
+        <nav class="hidden md:flex justify-center py-3">
+          <ul class="flex space-x-8">
+            <li>
+              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-gold">Home</a>
+            </li>
+            <li class="group relative">
+              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-transparent hover:border-gold flex items-center">Furniture <i class="fas fa-chevron-down ml-1 text-xs"></i></a>
+              <div class="absolute hidden group-hover:block bg-white shadow-lg w-48 rounded-md p-3 z-50">
+                <a href="#" class="block py-2 px-3 text-charcoal hover:text-gold hover:bg-gray-50">Living Room</a>
+                <a href="#" class="block py-2 px-3 text-charcoal hover:text-gold hover:bg-gray-50">Bedroom</a>
+                <a href="#" class="block py-2 px-3 text-charcoal hover:text-gold hover:bg-gray-50">Kitchen</a>
+                <a href="#" class="block py-2 px-3 text-charcoal hover:text-gold hover:bg-gray-50">Office</a>
+              </div>
+            </li>
+            <li>
+              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-transparent hover:border-gold">Lighting</a>
+            </li>
+            <li>
+              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-transparent hover:border-gold">Accessories</a>
+            </li>
+            <li>
+              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-transparent hover:border-gold">Art & Decor</a>
+            </li>
+            <li>
+              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-transparent hover:border-gold">Sale</a>
+            </li>
+            <li>
+              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-transparent hover:border-gold">Inspiration</a>
+            </li>
+          </ul>
         </nav>
+
+        <!-- Mobile Search (visible on mobile) -->
+        <div class="md:hidden mt-3">
+          <form class="flex">
+            <input type="text" placeholder="Search for products..." class="w-full border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold" />
+            <button type="submit" class="bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-r-lg transition duration-300"><i class="fas fa-search"></i></button>
+          </form>
+        </div>
+      </div>
     </header>
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+      {% block content %}
+          <!-- Hero Section -->
+  <section class="hero-section relative flex items-center">
+    <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+    <div class="container mx-auto px-4 relative z-10 text-white">
+      <div class="max-w-xl">
+        <h1 class="font-serif text-5xl font-bold mb-4">Create your dream interior</h1>
+        <p class="text-xl mb-8">Discover our new collection and transform your space with elegance and style.</p>
+        <div class="flex space-x-4">
+          <a href="#" class="bg-gold hover:bg-gold-dark text-white font-medium px-6 py-3 rounded-lg transition duration-300">
+            Explore the collection
+          </a>
+          <a href="#" class="bg-transparent border-2 border-white hover:bg-white hover:text-charcoal text-white font-medium px-6 py-3 rounded-lg transition duration-300">
+            Our bestsellers
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+      {% endblock %}
 
-    <footer>
-        <p>© 2025 - Mon Site</p>
+    <footer class="bg-charcoal-dark text-white pt-16 pb-6">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          <div>
+            <h3 class="text-xl font-serif font-bold mb-6">Elegant<span class="text-gold">Home</span></h3>
+            <p class="text-gray-400 mb-6">Your destination for elegant and refined interiors that reflect your personality.</p>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-gold transition duration-300"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="text-gray-400 hover:text-gold transition duration-300"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="text-gray-400 hover:text-gold transition duration-300"><i class="fab fa-pinterest-p"></i></a>
+              <a href="#" class="text-gray-400 hover:text-gold transition duration-300"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-medium mb-6">Quick Links</h4>
+            <ul class="space-y-3">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Home</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Shop</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">New Arrivals</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Sale</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Blog</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Contact</a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-medium mb-6">Categories</h4>
+            <ul class="space-y-3">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Furniture</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Lighting</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Accessories</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Art & Decor</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Textiles</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Kitchen</a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-medium mb-6">Information</h4>
+            <ul class="space-y-3">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">About Us</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Terms & Conditions</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Shipping & Returns</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">FAQ</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-8 border-t border-gray-700 text-center text-gray-400 text-sm">
+          <div class="mb-4">
+            <span class="px-2">Secure payment</span>
+            <div class="flex justify-center space-x-4 mt-2">
+              <i class="fab fa-cc-visa text-2xl"></i>
+              <i class="fab fa-cc-mastercard text-2xl"></i>
+              <i class="fab fa-cc-paypal text-2xl"></i>
+              <i class="fab fa-cc-apple-pay text-2xl"></i>
+            </div>
+          </div>
+          <p>&copy; 2025 ElegantHome. All rights reserved.</p>
+        </div>
+      </div>
     </footer>
-</body>
+  </body>
 </html>
