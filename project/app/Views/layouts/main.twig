@@ -10,6 +10,7 @@
     </title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="../../../public/css/main.css">
     {# <link rel="stylesheet" href="./public/output.css"/> #}
       <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -41,18 +42,6 @@
       }
     }
   </script>
-    <style>
-      .hero-section {
-        background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80');
-        background-size: cover;
-        background-position: center;
-        height: 70vh;
-      }
-      .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      }
-    </style>
   </head>
 
   <body class="bg-cream-light font-sans">
@@ -88,7 +77,7 @@
               <span class="absolute -top-2 -right-2 bg-gold text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
             </a>
             <a href="#" class="text-charcoal hover:text-gold transition duration-300"><i class="far fa-user text-xl"></i></a>
-            <button class="md:hidden text-charcoal hover:text-gold transition duration-300"><i class="fas fa-bars text-xl"></i></button>
+            <button id="bars" class="md:hidden text-charcoal hover:text-gold transition duration-300"><i class="fas fa-bars text-xl"></i></button>
           </div>
         </div>
 
@@ -133,27 +122,34 @@
           </form>
         </div>
       </div>
-    </header>
 
-      {% block content %}
-          <!-- Hero Section -->
-  <section class="hero-section relative flex items-center">
-    <div class="absolute inset-0 bg-black bg-opacity-40"></div>
-    <div class="container mx-auto px-4 relative z-10 text-white">
-      <div class="max-w-xl">
-        <h1 class="font-serif text-5xl font-bold mb-4">Create your dream interior</h1>
-        <p class="text-xl mb-8">Discover our new collection and transform your space with elegance and style.</p>
-        <div class="flex space-x-4">
-          <a href="#" class="bg-gold hover:bg-gold-dark text-white font-medium px-6 py-3 rounded-lg transition duration-300">
-            Explore the collection
-          </a>
-          <a href="#" class="bg-transparent border-2 border-white hover:bg-white hover:text-charcoal text-white font-medium px-6 py-3 rounded-lg transition duration-300">
-            Our bestsellers
-          </a>
-        </div>
+    <!-- Menu Mobile  -->
+<div id="mobile-menu" class="hidden md:hidden bg-white mt-4 rounded-lg shadow-lg">
+  <ul class="py-2">
+    <li><a href="#" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Home</a></li>
+    <li class="relative" id="mobile-furniture-dropdown">
+      <div class="flex justify-between items-center px-4 py-3 text-charcoal hover:bg-cream hover:text-gold cursor-pointer">
+        <span>Furniture</span>
+        <i class="fas fa-chevron-down text-xs"></i>
       </div>
-    </div>
-  </section>
+      <div id="furniture-submenu" class="hidden bg-cream px-4 py-2">
+        <a href="#" class="block py-2 text-charcoal hover:text-gold">Living Room</a>
+        <a href="#" class="block py-2 text-charcoal hover:text-gold">Bedroom</a>
+        <a href="#" class="block py-2 text-charcoal hover:text-gold">Kitchen</a>
+        <a href="#" class="block py-2 text-charcoal hover:text-gold">Office</a>
+      </div>
+    </li>
+    <li><a href="#" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Lighting</a></li>
+    <li><a href="#" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Accessories</a></li>
+    <li><a href="#" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Art & Decor</a></li>
+    <li><a href="#" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Sale</a></li>
+    <li><a href="#" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Inspiration</a></li>
+  </ul>
+</div>
+
+    </header>
+      {% block content %}
+
       {% endblock %}
 
     <footer class="bg-charcoal-dark text-white pt-16 pb-6">
@@ -254,5 +250,7 @@
         </div>
       </div>
     </footer>
+
+    <script src="../../../public/js/main.js"></script>
   </body>
 </html>
