@@ -10,11 +10,7 @@ Session::start();
 
 class AuthService {
 
-    // private $userRepository;
-    
-    // public function __construct(UserRepository $userRepository) {
-    //     $this->userRepository = $userRepository;
-    // }
+  
 
     public function register($data) {
 
@@ -40,6 +36,11 @@ class AuthService {
            
             
         }
+
+        $user = new User($data['username'],$data['email'],$data['password'],2);
+        $userRepository = new UserRepository();
+        
+        $userRepository->createUser($user);
 
         return  [
             'success' => 'Données créées avec succès'
