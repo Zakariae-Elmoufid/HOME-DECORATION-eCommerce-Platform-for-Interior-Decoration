@@ -3,7 +3,7 @@ namespace App\Core;
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
-
+use Twig\TwigFunction;
 class Response
 {
 
@@ -14,6 +14,9 @@ class Response
         $this->twig = new Environment($loader, [
             'cache' => false, 
         ]);
+        $this->twig->addFunction(new TwigFunction('flash', function ($key) {
+            return Session::getFlash($key);
+        }));
     }
     public function render(string $view, array $params = []): string
     {
@@ -31,7 +34,5 @@ class Response
         header("Location: $url");
         exit;
     }
-    
-
 
 }

@@ -81,11 +81,10 @@ class Router {
                     $namespace = "App\\Controllers\\";
                     $controllerClass = $namespace . $controller;
                     $controllerInstance = new $controllerClass();
-                        return $controllerInstance->$method( $this->request);
+                    return $controllerInstance->$method( $this->request);
                     // Application::$app->controller = $controller;
                     // $callback[0] = $controller;
                 }
-                // return call_user_func($callback, $this->request);
 
          
 
