@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Core\Validator;
 use App\Core\Session;
+use App\Core\Response;
 Session::start();
 
 class AuthService {
@@ -37,23 +38,52 @@ class AuthService {
             
         }
 
-        $user = new User($data['username'],$data['email'],$data['password'],2);
         $userRepository = new UserRepository();
         
-        $userRepository->createUser($user);
+        $userRepository->createUser($data);
 
         return  [
             'success' => 'Données créées avec succès'
         ];
 
+    }
 
+    public function findUser($data){
+        $errors = [];
+        $validator = new Validator($data);
 
+        $validator->setRules([
+            'email' => 'required|email',
+            'password' => 'required|min:8|max:100'
+        ]);
 
+        if (!$validator->validate()) {
+            $errors = $validator->getErrors();
+            return  [
+                'errors' => $errors,
+                'old' => $oldData
+            ]; 
+        }
 
+        $userRepository = new UserRepository();
+        $result = $userRepository->findUser($data);
+          
+        if (isset($result['errorEmail'])) {
+            return $result['errorEmail']; 
+        }
+        
+        if (isset($result['errorPassword'])) {
+            return $result['errorPassword']; 
+        }
+        
+        $response = new Response();
+        $user = $result['user']; 
+        
+        if ($user->getRole() == 2) {
+            $response->redirect('customer');
+        } else {
+            $response->redirect('admin');
+        }
 
-
-
-
-      
     }
 }

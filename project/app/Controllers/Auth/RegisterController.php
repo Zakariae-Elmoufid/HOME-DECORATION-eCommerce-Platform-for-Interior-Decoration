@@ -23,15 +23,13 @@ class RegisterController extends Controller  {
         $authService = new AuthService;
         
         $result = $authService->register($data);
-    if (!empty($result['errors'])) {
-        
-        return $this->render('auth/register', 
-         ['errors' => $result['errors'],
-           'old' => $result['old']
-         ]
-         );
-    
-    }
+        if (!empty($result['errors'])) {
+            return $this->render('auth/register', 
+            ['errors' => $result['errors'],
+            'old' => $result['old']
+            ]
+            );
+        }
     Session::setFlash('success', 'Registration successful. You can now log in.');
 
     return $this->redirect('/login');

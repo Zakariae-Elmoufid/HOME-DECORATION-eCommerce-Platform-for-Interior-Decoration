@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 use App\Config\Database;
+use PDO;
 
 class BaseRepository implements RepositoryInterface {
     protected $conn;
@@ -33,9 +34,21 @@ class BaseRepository implements RepositoryInterface {
     public function getAll(){
 
     }
-    public function findById(int $id){
 
+    public function findById($table ,int $id){
+        $stmt = $this->query("SELECT * FROM $table WHERE id = ?", [$id]);
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
+
+    public function findBy($table, $condition)
+    {
+        $whereClause = implode(' AND ', array_map(fn($col) => "$col = ?", array_keys($condition)));
+    
+        $stmt = $this->query("SELECT * FROM $table WHERE $whereClause", array_values($condition));
+    
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
+    
     public function create(array $data){
 
     }
