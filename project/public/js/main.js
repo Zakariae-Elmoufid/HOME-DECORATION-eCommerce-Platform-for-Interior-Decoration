@@ -1,5 +1,6 @@
-const bars = document.getElementById('bars');
+document.addEventListener("DOMContentLoaded", function () {
 
+const bars = document.getElementById('bars');
 bars.addEventListener("click", function () {
     
         const mobileMenu =  document.getElementById('mobile-menu');
@@ -14,3 +15,4 @@ furniture.addEventListener('click', function(){
 
 
 
+});
