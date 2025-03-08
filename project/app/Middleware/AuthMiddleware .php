@@ -15,7 +15,6 @@ class AuthMiddleware implements Middleware {
 
     private function isAuthenticated()
     {
-        // Vérification de l'authentification
         return isset($_SESSION['user_id']);
     }
 }
