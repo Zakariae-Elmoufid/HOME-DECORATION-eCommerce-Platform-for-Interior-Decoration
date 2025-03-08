@@ -18,7 +18,8 @@ CREATE TABLE customers (
     id INT PRIMARY KEY,
     address VARCHAR(255) NULL, 
     phone VARCHAR(20) NULL, 
-    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
+    user_id int, 
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 

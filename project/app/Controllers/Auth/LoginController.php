@@ -1,11 +1,20 @@
 <?php
 
 namespace App\Controllers\Auth;
+use App\Core\Session;
+
+
 use App\Core\Controller;
 use App\Core\Request;
 use App\Services\AuthService;
 
 class LoginController extends Controller  {
+
+  private $authService ;
+
+  public function __construct(){
+      $this->authService = new AuthService() ; 
+  }
 
 public function index(){
   return $this->render('auth/login');
@@ -14,9 +23,8 @@ public function index(){
 public function login(Request $request){
   $data = $request->getBody();
 
-  $authService = new AuthService;
   
-    $result = $authService->findUser($data);
+    $result = $this->authService->findUser($data);
     if (!empty($result['errors'])) {
         return $this->render('auth/login', 
         ['errors' => $result['errors'],
@@ -25,5 +33,19 @@ public function login(Request $request){
       );
     }
 }
+
+public function loginGoogle(Request $request) {
+  $postData = $request->getBody();
+   
+  
+
+  $result  = $this->authService->google($postData);
+
+
+
+
+}
+
+
 
 }
