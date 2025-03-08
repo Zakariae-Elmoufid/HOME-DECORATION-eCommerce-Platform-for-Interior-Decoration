@@ -126,15 +126,27 @@ class AuthService {
                 $user  = $client->verifyIdToken($id_token);
 
                 if ($user) {
-                $userid = $user['sub'];
-               
+                $email = $user['email'];
+                $name = $user['name'];
+                $google_id = $user['sub'];
+                 
+                $result = $this->userRepository->findUserByEmail($email);
+
+                if($result){
+                    $this->response->redirect('customer');
+                }
+
                 } else {
-                // Invalid ID token
-            }
+                    $this->response->statusCode(400);
+                    die('Invalid token');
+                }
+
 
     }
 
-
+    // private function findUserByEmail($email){
+         
+    // }
 
 
 }

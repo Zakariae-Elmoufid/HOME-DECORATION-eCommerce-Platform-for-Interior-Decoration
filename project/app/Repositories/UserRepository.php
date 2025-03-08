@@ -43,5 +43,9 @@ class UserRepository extends BaseRepository {
         
     }
 
+    public function findUserByEmail($email){
+        return $this->findBy($this->table , ['email' => $email]);
+    }
+
    
 }
