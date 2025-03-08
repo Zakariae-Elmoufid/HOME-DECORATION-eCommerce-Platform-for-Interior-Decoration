@@ -51,7 +51,6 @@ class AuthService {
             
         }
 
-        // $userRepository = new UserRepository();
         
         $this->userRepository->createUser($data);
 
@@ -78,7 +77,6 @@ class AuthService {
             ]; 
         }
 
-        // $userRepository = new UserRepository();
         $result = $this->userRepository->findUser($data);
           
         if (isset($result['errorEmail'])) {
@@ -89,7 +87,6 @@ class AuthService {
             return $result['errorPassword']; 
         }
         
-        // $response = new Response();
         $user = $result['user']; 
         
         if ($user->getRole() == 2) {
@@ -100,37 +97,47 @@ class AuthService {
 
     }
 
-    public function google($postData){
-        $credential = $postData['credential'] ?? null;
+    private function verfiyToken($postData){
 
         $csrf_token_cookie = $_COOKIE['g_csrf_token'] ?? null;
-            if (!$csrf_token_cookie) {
-                $this->response->statusCode(400);
-                die('No CSRF token in Cookie.');
-            }
 
-            $csrf_token_body = $postData['g_csrf_token'] ?? null;
-            if (!$csrf_token_body) {
-                $this->response->statusCode(400);
-                die('No CSRF token in post body.');
-            }
+        if (!$csrf_token_cookie) {
+            $this->response->statusCode(400);
+            die('No CSRF token in Cookie.');
+        }
 
-            if ($csrf_token_cookie !== $csrf_token_body) {
-                $this->response->statusCode(400);
-                die('Failed to verify double submit cookie.');
-            } 
+        $csrf_token_body = $postData['g_csrf_token'] ?? null;
+        if (!$csrf_token_body) {
+            $this->response->statusCode(400);
+            die('No CSRF token in post body.');
+        }
 
+        if ($csrf_token_cookie !== $csrf_token_body) {
+            $this->response->statusCode(400);
+            die('Failed to verify double submit cookie.');
+        } 
+    }
+
+    public function loginGoogle($postData){
+        $credential = $postData['credential'] ?? null;
+
+         $this->verfiyToken($postData);
+         
             $client_id = '4542774844-43fkmsis3a9m16u9l1jes9htn0cb2gc6.apps.googleusercontent.com' ;
-            $client = new Google_Client(['client_id' => $client_id]);  // Specify the CLIENT_ID of the app that accesses the backend
+            $client = new Google_Client(['client_id' => $client_id]);  
                 $id_token = $credential;
                 $user  = $client->verifyIdToken($id_token);
-
                 if ($user) {
                 $email = $user['email'];
                 $name = $user['name'];
                 $google_id = $user['sub'];
+
+                $data = [
+                    'email' => $email,
+                    'password' => $google_id
+                ];
                  
-                $result = $this->userRepository->findUserByEmail($email);
+                $result = $this->userRepository->findUser($data);
 
                 if($result){
                     $this->response->redirect('customer');
@@ -144,9 +151,37 @@ class AuthService {
 
     }
 
-    // private function findUserByEmail($email){
-         
-    // }
+    public function registerGoogle($postData){
+        $credential = $postData['credential'] ?? null;
+
+         $this->verfiyToken($postData);
+
+         $client_id = '4542774844-43fkmsis3a9m16u9l1jes9htn0cb2gc6.apps.googleusercontent.com' ;
+         $client = new Google_Client(['client_id' => $client_id]);  
+         $id_token = $credential;
+         $user  = $client->verifyIdToken($id_token);
+        if ($user){
+            $email = $user['email'];
+            $name = $user['name'];
+            $google_id = $user['sub'];
+
+            $data = [
+                'email' => $email,
+                'username' => $name,
+                'password' => $google_id,
+                'confirm_password' => $google_id
+            ]; 
+            
+            $result = $this->userRepository->createUser($data);         
+            if($result){
+                $this->response->redirect('customer');
+            }
+        } else {
+            $this->response->statusCode(400);
+            die('Invalid token');
+        }
+
+    }
 
 
 }

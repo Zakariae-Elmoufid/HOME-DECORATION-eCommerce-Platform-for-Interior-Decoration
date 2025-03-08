@@ -10,7 +10,12 @@ Session::start();
 
 class RegisterController extends Controller  {
 
-    
+    private $authService ;
+
+    public function __construct(){
+        $this->authService = new AuthService() ; 
+    }
+
 
     public function index(){
         return $this->render('auth/register');
@@ -20,9 +25,7 @@ class RegisterController extends Controller  {
         $data = $request->getBody();
         
         
-        $authService = new AuthService;
-        
-        $result = $authService->register($data);
+        $result = $this->authService->register($data);
         if (!empty($result['errors'])) {
             return $this->render('auth/register', 
             ['errors' => $result['errors'],
@@ -30,11 +33,16 @@ class RegisterController extends Controller  {
             ]
             );
         }
-    Session::setFlash('success', 'Registration successful. You can now log in.');
+         Session::setFlash('success', 'Registration successful. You can now log in.');
+         return $this->redirect('/login');
 
-    return $this->redirect('/login');
-    
-    
-}
+
+    }
+
+    public function registerGoogle(Request $request){
+        $postData = $request->getBody();
+         $this->authService->registerGoogle($postData);
+
+    }
 
 }

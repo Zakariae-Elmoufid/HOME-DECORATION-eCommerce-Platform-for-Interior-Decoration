@@ -39,7 +39,7 @@ public function loginGoogle(Request $request) {
    
   
 
-  $result  = $this->authService->google($postData);
+  $result  = $this->authService->loginGoogle($postData);
 
 
 
