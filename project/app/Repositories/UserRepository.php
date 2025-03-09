@@ -19,7 +19,11 @@ class UserRepository extends BaseRepository {
         ];
         
       
-        return $this->insert($this->table,$userdata );
+        $create_user = $this->insert($this->table,$userdata );
+
+        if($create_user){
+            return $user;
+        }
 
     }
 

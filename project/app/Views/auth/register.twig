@@ -7,6 +7,13 @@
 
 
     <section class="py-16">
+          {% if unique.email %}
+              <div class="flex justify-center">
+                  <p class="bg-red-700 text-white px-4 py-2 mb-4 rounded-md animate-fade-in">
+                      {{ unique.email[0] }}
+                  </p>
+              </div>
+          {% endif %}         
       <div class="container mx-auto px-4">
         <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
           <div class="flex flex-col md:flex-row">
@@ -23,8 +30,7 @@
             
             <!-- Form Right Side -->
             <div class="w-full md:w-1/2 p-8 md:p-12 animate-slide-in-right">
-              <h3 class="text-2xl font-serif font-bold text-charcoal mb-6">Create Your Account</h3>
-              
+              <h3 class="text-2xl font-serif font-bold text-charcoal mb-6">Create Your Account </h3>
               <form action="store_user" method="post">
                   <div  class="mb-6">
                     <label for="username" class="block text-charcoal text-sm font-medium mb-2">Full Name</label>
@@ -119,11 +125,11 @@
         </div>
       </div>
     </section>
+
+
+
+
 <script src="https://accounts.google.com/gsi/client" async></script>
-
-
-
-
 
 {% endblock %}
 

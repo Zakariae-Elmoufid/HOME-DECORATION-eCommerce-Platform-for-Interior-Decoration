@@ -1,5 +1,6 @@
 <?php
 namespace App\core;
+use App\Repositories\BaseRepository;
 
 class Validator {
     private $data = [];
@@ -107,7 +108,9 @@ class Validator {
                 list($table, $column) = explode(',', $param);
                 
                 // Check uniqueness via repository
-                return !$repository->existsByColumn($table, $column, $val);
+                $exists = $repository->findBy($table, [$column => $val]);
+
+                return $exists === false;
             },
             'contains' => function($val, $param) {
                 if ($val === null) return false;

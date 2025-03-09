@@ -25,10 +25,10 @@ public function login(Request $request){
 
   
     $result = $this->authService->findUser($data);
-    if (!empty($result['errors'])) {
+    if (!empty($result)) {
         return $this->render('auth/login', 
-        ['errors' => $result['errors'],
-        'old' => $result['old']
+        ['errors' => $result,
+        'old' => $data['email']
         ]
       );
     }

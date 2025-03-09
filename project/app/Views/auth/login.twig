@@ -4,14 +4,13 @@
 
 {% block content %}
 
-      {% if success %}
-        <p style="color: green;">{{success }}</p>
-    {% endif %} 
+   
      <!-- Login Section with Image -->
     <section class="py-16">
       <div class="container mx-auto px-4">
         <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
           <div class="flex flex-col md:flex-row">
+
             <!-- Image Left Side -->
             <div class="login-image w-full md:w-1/2 h-64 md:h-auto animate-slide-in-left">
               <div class="h-full w-full flex items-center justify-center bg-black bg-opacity-30 p-10">
@@ -32,7 +31,14 @@
                   <label for="email" class="block text-charcoal text-sm font-medium mb-2">Email Address</label>
                   <input type="email" id="email" name="email" required 
                          class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input-focus transition duration-300"
-                         placeholder="your@email.com">
+                         placeholder="your@email.com"  value="{{ old.email ?? '' }}">
+                    {% if errors.email %}
+                      <small class="text-red-700 pl-2">{{ errors.email[0] }}</small>
+                    {% endif %}   
+                    {% if errors.errorEmail %}
+                      <small class="text-red-700 pl-2">{{ errors.errorEmail }}</small>
+                    {% endif %}      
+                    
                 </div>
                 
                 <div class="mb-6">
@@ -40,6 +46,12 @@
                   <input type="password" id="password" name="password" required 
                          class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input-focus transition duration-300"
                          placeholder="••••••••">
+                   {% if errors.password %}
+                    <small class="text-red-700 pl-2">{{ errors.password[0] }}</small>
+                  {% endif %}       
+                   {% if errors.errorPassword %}
+                    <small class="text-red-700 pl-2">{{ errors.errorPassword }}</small>
+                  {% endif %}       
                   <div class="flex justify-end mt-2">
                     <a href="#" class="text-sm text-gold hover:underline transition duration-300">Forgot password?</a>
                   </div>

@@ -33,7 +33,6 @@ class RegisterController extends Controller  {
             ]
             );
         }
-         Session::setFlash('success', 'Registration successful. You can now log in.');
          return $this->redirect('/login');
 
 
