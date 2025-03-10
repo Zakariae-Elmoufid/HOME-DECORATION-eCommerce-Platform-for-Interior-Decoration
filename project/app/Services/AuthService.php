@@ -58,6 +58,7 @@ class AuthService {
             Session::set("username" , $user->getUsername());
             Session::set("email" , $user->getEmail());
             Session::set("role" , $user->getRole());
+            Session::set('id',$user->getId());
             $this->response->redirect('customer');
         }
        
@@ -92,7 +93,7 @@ class AuthService {
         }
         
         $user = $result['user']; 
-
+        Session::set('id',$user->getId());
         Session::set("username" , $user->getUsername());
         Session::set("email" , $user->getEmail());
         Session::set("role" , $user->getRole());
@@ -147,6 +148,13 @@ class AuthService {
                  
                 $result = $this->userRepository->findUser($data);
 
+                $user = $result['user']; 
+                Session::set('id',$user->getId()); 
+                Session::set("username" , $user->getUsername());
+                Session::set("email" , $user->getEmail());
+                Session::set("role" , $user->getRole());
+                
+
                 if($result){
                     $this->response->redirect('customer');
                 }
@@ -195,15 +203,28 @@ class AuthService {
 
 
             
-            $result = $this->userRepository->createUser($data);         
-            if($result){
-
+            $user = $this->userRepository->createUser($data);         
+            if($user){
+                if($user){
+                    Session::set('id',$user->getId());
+                    Session::set("username" , $user->getUsername());
+                    Session::set("email" , $user->getEmail());
+                    Session::set("role" , $user->getRole());
+                    $this->response->redirect('customer');
+                }
                 $this->response->redirect('customer');
             }
         } else {
             $this->response->statusCode(400);
             die('Invalid token');
         }
+
+    }
+
+
+    public function logout(){
+        Session::destroy();
+        $this->response->redirect('login');
 
     }
 

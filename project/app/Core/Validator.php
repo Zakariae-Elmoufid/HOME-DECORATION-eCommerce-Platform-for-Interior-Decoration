@@ -1,5 +1,5 @@
 <?php
-namespace App\core;
+namespace App\Core;
 use App\Repositories\BaseRepository;
 
 class Validator {

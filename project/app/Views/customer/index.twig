@@ -1,4 +1,7 @@
 <h1>Hello Customer</h1>
 {% if session.username %}
     <p>Bienvenue, <strong>{{ session.username }}</strong> !</p>
+    <p>id, <strong>{{ session.id }}</strong> !</p>
 {% endif %}
+
+<a href="logout">logout</a>

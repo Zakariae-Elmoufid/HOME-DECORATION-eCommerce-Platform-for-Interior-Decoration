@@ -22,7 +22,7 @@ class Response
     public function render(string $view, array $params = []): string
     {      
         if (session_status() == PHP_SESSION_NONE) {
-           session_start();
+           Session::start();
         }
         
         $this->twig->addGlobal('session', $_SESSION);
