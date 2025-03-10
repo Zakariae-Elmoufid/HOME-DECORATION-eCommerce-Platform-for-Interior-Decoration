@@ -45,6 +45,18 @@ class Router {
             return 'Not Found';
         }else{
             
+            if (isset($this->middlewares[$url])) {
+                    foreach ($this->middlewares[$url] as $middlewareClass) {
+
+                        $middleware = new $middlewareClass();
+                        
+                        $result = $middleware->handle($this->request);
+                        // if ($result === false) {
+                        //     return false;
+                        // }
+                    }
+                }
+            
             
                 
                 if (is_string($callback) && str_contains($callback, '@')) {
@@ -62,25 +74,12 @@ class Router {
                     }
                 }
 
-                    if (isset($this->middlewares[$url])) {
-                        foreach ($this->middlewares[$url] as $middlewareClass) {
-
-                           
-                            
-                            $middleware = new $middlewareClass();
-                            $result = $middleware->handle($this->request);
-                            if ($result === false) {
-                                return false;
-                            }
-                        }
-                    }
-                
 
                 
                 if (is_array($callback)) {
                     $controller = $callback[0];
                     $method = $callback[1];
-                
+                     dump($controller);
                     $controllerInstance = new $controller();
                     return $controllerInstance->$method( $this->request);
                 }

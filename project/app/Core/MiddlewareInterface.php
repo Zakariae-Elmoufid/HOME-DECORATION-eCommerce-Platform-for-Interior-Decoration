@@ -4,7 +4,7 @@ namespace App\Core;
 
 interface MiddlewareInterface {
 
-    public function handle(Request $request): bool;
+    public function handle(Request $request);
 
 }
 

@@ -1,6 +1,9 @@
-<?php 
- 
-namespace App\Middleware;
+<?php
+
+namespace App\Middlewares;
+
+
+
 use App\Core\MiddlewareInterface;
 use App\Core\Session;
 use App\Core\Request;
