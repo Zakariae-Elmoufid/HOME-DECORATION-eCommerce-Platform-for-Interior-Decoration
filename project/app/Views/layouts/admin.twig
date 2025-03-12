@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - HomeDecoration</title>
+      {% block title %}
+        Title
+      {% endblock %}
   <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../public/css/admin.css">
- 
 </head>
 
 <body>
-    <div class="flex h-screen bg-gray-light">
+  <div class="flex h-screen bg-gray-light">
     <!-- Sidebar -->
     <div class="hidden md:flex md:flex-shrink-0">
       <div class="flex flex-col w-64 bg-navy">
@@ -64,3 +65,43 @@
         </div>
       </div>
     </div>
+    
+    <!-- Content -->
+    <div class="flex flex-col flex-1 overflow-y-auto">
+      <!-- Navbar -->
+      <header class="w-full shadow-sm bg-white">
+        <div class="flex justify-between items-center py-4 px-6">
+          <button class="md:hidden text-navy hover:text-blue" aria-label="Menu">
+            <i class="fas fa-bars text-lg"></i>
+          </button>
+          
+          <div class="flex items-center">
+            <div class="relative">
+              <input type="text" class="w-64 pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-blue bg-gray-50" placeholder="Search...">
+              <div class="absolute left-3 top-3 text-gray-400">
+                <i class="fas fa-search"></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex items-center space-x-6">
+            <button class="relative text-navy hover:text-blue">
+              <i class="fas fa-bell text-lg"></i>
+              <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+            </button>
+            
+            <div class="flex items-center">
+              <img class="h-8 w-8 rounded-full object-cover" src="/api/placeholder/32/32" alt="Avatar">
+              <span class="ml-2 text-sm font-medium text-navy">Admin</span>
+              <i class="fas fa-chevron-down ml-1 text-xs text-navy-light"></i>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {% block content %}
+
+      {% endblock %}
+    <body>
+
+    

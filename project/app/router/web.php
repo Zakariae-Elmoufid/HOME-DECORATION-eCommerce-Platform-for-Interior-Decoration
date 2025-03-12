@@ -8,6 +8,7 @@ use App\Controllers\Auth\LoginController;
 use App\Middlewares\AuthMiddleware;
 use App\Controllers\Customer\CustomerController;
 use App\Controllers\Auth\LogoutController;
+use App\Controllers\Admin\DashboardController;
 
 
 
@@ -22,11 +23,9 @@ $app->router->post('/login_google',[LoginController::class, 'loginGoogle']);
 $app->router->post('/register_google', [RegisterController::class, 'registerGoogle']);
 $app->router->get('/customer',[CustomerController::class,'index'])
 ->middleware('/customer', AuthMiddleware::class);
-// if (!class_exists(AuthMiddleware::class)) {
-//     die("La classe AuthMiddleware n'existe pas !");
-// }
-
 $app->router->get('/logout', 'Auth\LogoutController@logout' );
+
+$app->router->get('/admin' ,'Admin\DashboardController@index');
 
 // $app->get('/dashboard', [DashboardController::class, 'index']
 // $app->get('/login', [AuthController::class, 'login']);
