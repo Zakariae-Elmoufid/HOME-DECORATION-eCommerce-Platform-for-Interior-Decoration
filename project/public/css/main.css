@@ -1,3 +1,15 @@
+:root {
+  --gold-light: #f5d78e;
+  --gold: #d4af37;
+  --gold-dark: #aa8c2c;
+  --charcoal-light: #4a4a4a;
+  --charcoal: #333333;
+  --charcoal-dark: #1a1a1a;
+  --cream-light: #fffef5;
+  --cream: #f5f5f0;
+  --cream-dark: #e6e6e0;
+}
+
 .hero-section {
     background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80');
     background-size: cover;
@@ -51,4 +63,28 @@
     background-size: cover;
     background-position: center;
   }
+
+
+  .font-serif {
+    font-family: 'Playfair Display', serif;
+  }
+  .bg-gold { background-color: var(--gold); }
+  .bg-gold-light { background-color: var(--gold-light); }
+  .bg-gold-dark { background-color: var(--gold-dark); }
+  .bg-charcoal { background-color: var(--charcoal); }
+  .bg-charcoal-light { background-color: var(--charcoal-light); }
+  .bg-charcoal-dark { background-color: var(--charcoal-dark); }
+  .bg-cream { background-color: var(--cream); }
+  .bg-cream-light { background-color: var(--cream-light); }
+  .bg-cream-dark { background-color: var(--cream-dark); }
+  .text-gold { color: var(--gold); }
+  .text-gold-light { color: var(--gold-light); }
+  .text-gold-dark { color: var(--gold-dark); }
+  .text-charcoal { color: var(--charcoal); }
+  .text-charcoal-light { color: var(--charcoal-light); }
+  .text-charcoal-dark { color: var(--charcoal-dark); }
+  .text-cream { color: var(--cream); }
+  .text-cream-light { color: var(--cream-light); }
+  .text-cream-dark { color: var(--cream-dark); }
+  .border-gold { border-color: var(--gold); }
 
