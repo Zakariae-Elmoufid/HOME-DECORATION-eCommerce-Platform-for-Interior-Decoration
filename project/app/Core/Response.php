@@ -17,9 +17,15 @@ class Response
         $this->twig->addFunction(new TwigFunction('flash', function ($key) {
             return Session::getFlash($key);
         }));
+
     }
     public function render(string $view, array $params = []): string
-    {
+    {      
+        if (session_status() == PHP_SESSION_NONE) {
+           Session::start();
+        }
+        
+        $this->twig->addGlobal('session', $_SESSION);
         echo $this->twig->render("$view.twig", $params);
         exit;
     }

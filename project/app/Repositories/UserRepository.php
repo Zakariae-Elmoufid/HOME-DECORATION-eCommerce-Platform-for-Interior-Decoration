@@ -9,17 +9,21 @@ class UserRepository extends BaseRepository {
     private $table = "users";
 
     public function createUser($data) {
-        $user = new User($data['username'],$data['email'],$data['password'],2);
         
         $userdata = [
-            'username' => $user->getUsername(),
-            'email' => $user->getEmail(),
-            'password' => password_hash($user->getPassword(), PASSWORD_DEFAULT),
-            'role_id' => $user->getRole()
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+            'role_id' => 2
         ];
         
-      
-        return $this->insert($this->table,$userdata );
+        
+        $create_user = $this->insert($this->table,$userdata );
+        
+        if($create_user){
+            $user = new User($data['username'],$data['email'],$data['password'],2,$create_user);
+            return $user;
+        }
 
     }
 

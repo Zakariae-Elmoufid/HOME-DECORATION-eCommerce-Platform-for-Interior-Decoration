@@ -42,7 +42,7 @@ class Session {
         }
         if (isset($_SESSION['flash'][$key])) {
             $message = $_SESSION['flash'][$key];
-            unset($_SESSION['flash'][$key]); // Supprime le message après lecture
+            unset($_SESSION['flash'][$key]); 
             return $message;
         }
         return null;

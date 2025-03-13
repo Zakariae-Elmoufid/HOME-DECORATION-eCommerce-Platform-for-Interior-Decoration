@@ -33,7 +33,7 @@ class AuthService {
 
         $validator->setRules([
             'username' => 'required|min:8|max:50',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|max:100|confirmed:confirm_password'
         ]);
 
@@ -52,23 +52,29 @@ class AuthService {
         }
 
         
-        $this->userRepository->createUser($data);
-
-        return  [
-            'success' => 'Données créées avec succès'
-        ];
+        $user = $this->userRepository->createUser($data);
+        
+        if($user){
+            Session::set("username" , $user->getUsername());
+            Session::set("email" , $user->getEmail());
+            Session::set("role" , $user->getRole());
+            Session::set('id',$user->getId());
+            $this->response->redirect('customer');
+        }
+       
 
     }
 
     public function findUser($data){
         $errors = [];
-        // $validator = new Validator($data);
-
+        $validator = new Validator($data);
+        
         $validator->setRules([
             'email' => 'required|email',
             'password' => 'required|min:8|max:100'
         ]);
-
+        
+        $oldData = $data['email'];
         if (!$validator->validate()) {
             $errors = $validator->getErrors();
             return  [
@@ -78,16 +84,19 @@ class AuthService {
         }
 
         $result = $this->userRepository->findUser($data);
-          
         if (isset($result['errorEmail'])) {
-            return $result['errorEmail']; 
+            return ['errorEmail' =>$result['errorEmail']]; 
         }
         
         if (isset($result['errorPassword'])) {
-            return $result['errorPassword']; 
+            return ['errorPassword'=> $result['errorPassword']]; 
         }
         
         $user = $result['user']; 
+        Session::set('id',$user->getId());
+        Session::set("username" , $user->getUsername());
+        Session::set("email" , $user->getEmail());
+        Session::set("role" , $user->getRole());
         
         if ($user->getRole() == 2) {
             $this->response->redirect('customer');
@@ -139,6 +148,13 @@ class AuthService {
                  
                 $result = $this->userRepository->findUser($data);
 
+                $user = $result['user']; 
+                Session::set('id',$user->getId()); 
+                Session::set("username" , $user->getUsername());
+                Session::set("email" , $user->getEmail());
+                Session::set("role" , $user->getRole());
+                
+
                 if($result){
                     $this->response->redirect('customer');
                 }
@@ -171,15 +187,44 @@ class AuthService {
                 'password' => $google_id,
                 'confirm_password' => $google_id
             ]; 
+
+            $validator = new Validator($data);
+    
+            $validator->setRules([
+                'email' => 'required|email|unique:users,email',
+            ]);
+    
+            if (!$validator->validate()) {
+                $uniqueEmail = $validator->getErrors();
+                $this->response->render('auth/register',['unique' => $uniqueEmail]);
+
+            }
+    
+
+
             
-            $result = $this->userRepository->createUser($data);         
-            if($result){
+            $user = $this->userRepository->createUser($data);         
+            if($user){
+                if($user){
+                    Session::set('id',$user->getId());
+                    Session::set("username" , $user->getUsername());
+                    Session::set("email" , $user->getEmail());
+                    Session::set("role" , $user->getRole());
+                    $this->response->redirect('customer');
+                }
                 $this->response->redirect('customer');
             }
         } else {
             $this->response->statusCode(400);
             die('Invalid token');
         }
+
+    }
+
+
+    public function logout(){
+        Session::destroy();
+        $this->response->redirect('login');
 
     }
 

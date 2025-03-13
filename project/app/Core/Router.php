@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Core;
-
+use App\Middleware\AuthMiddleware; 
 class Router {
 
     private  $routes = [];
@@ -23,12 +23,12 @@ class Router {
         $this->middlewares[$route][] = $middlewareClass;
         return $this;
     }
-    
     public function getRoutes(){
         return $this->routes;
     }
     public   function  get( $route, $callback) {
         $this->routes['get'][$route] = $callback;
+        return $this;
     }
     
     public   function  post( $route, $callback) {
@@ -44,6 +44,18 @@ class Router {
             // $this->response->statusCode(code: 404);
             return 'Not Found';
         }else{
+            
+            if (isset($this->middlewares[$url])) {
+                    foreach ($this->middlewares[$url] as $middlewareClass) {
+
+                        $middleware = new $middlewareClass();
+                        
+                        $result = $middleware->handle($this->request);
+                        // if ($result === false) {
+                        //     return false;
+                        // }
+                    }
+                }
             
             
                 
@@ -62,28 +74,14 @@ class Router {
                     }
                 }
 
-                if (isset($this->middlewares[$url])) {
-                    foreach ($this->middlewares[$url] as $middlewareClass) {
-                        $middleware = new $middlewareClass();
-                        $result = $middleware->handle($this->request);
-                        
-                        // Si un middleware retourne false, arrêter le traitement
-                        if ($result === false) {
-                            return false;
-                        }
-                    }
-                }
+
                 
                 if (is_array($callback)) {
-                    // dump(Application::$app->controller );
                     $controller = $callback[0];
                     $method = $callback[1];
-                    $namespace = "App\\Controllers\\";
-                    $controllerClass = $namespace . $controller;
-                    $controllerInstance = new $controllerClass();
+                     dump($controller);
+                    $controllerInstance = new $controller();
                     return $controllerInstance->$method( $this->request);
-                    // Application::$app->controller = $controller;
-                    // $callback[0] = $controller;
                 }
 
          

@@ -1,9 +1,14 @@
-<?php 
- 
-namespace App\Middleware; 
-use App\Core\Middleware;
+<?php
 
-class AuthMiddleware implements Middleware {
+namespace App\Middlewares;
+
+
+
+use App\Core\MiddlewareInterface;
+use App\Core\Session;
+use App\Core\Request;
+
+class AuthMiddleware implements MiddlewareInterface {
     public function handle(Request $request): bool
     {
         if (!$this->isAuthenticated()) {
@@ -12,9 +17,10 @@ class AuthMiddleware implements Middleware {
         }
         return true;
     }
-
+    
     private function isAuthenticated()
     {
-        return isset($_SESSION['user_id']);
+        Session::start();
+        return Session::get('id') !== null;
     }
 }

@@ -18,7 +18,11 @@ class User {
       $this->password = $password;
       $this->role  = $role_id;
     } 
+    
 
+    public function getId(){
+     return $this->id;
+    }
 
     public function getUsername() {
          return $this->username; 
