@@ -79,7 +79,6 @@ class Router {
                 if (is_array($callback)) {
                     $controller = $callback[0];
                     $method = $callback[1];
-                     dump($controller);
                     $controllerInstance = new $controller();
                     return $controllerInstance->$method( $this->request);
                 }
