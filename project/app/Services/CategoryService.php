@@ -22,7 +22,7 @@ class CategoryService {
 
     $validator->setRules([
         'title' => 'required|string|min:6|max:50',
-        'icon' => 'string',
+        'icon' => 'string|min:2',
     ]);
 
     $oldData = $data;
@@ -30,18 +30,9 @@ class CategoryService {
 
     if (!$validator->validate()) {
         $errors = $validator->getErrors();
-
-
-        echo json_encode(["errors" => $errors, "data" => $oldData]);
-      
-       
-        
+        return $this->response->jsonEncode(["errors" => $errors, "data" => $oldData]);
     }
-
-
-    
-
-    //   $this->CategoryRepository-
-   }
+        return $this->response->jsonEncode("susscuful");
+    }
 
 }

@@ -41,4 +41,9 @@ class Response
         exit;
     }
 
+    public function jsonEncode($data){
+        echo json_encode($data);
+        exit;
+    }
+
 }

@@ -12,6 +12,8 @@ function openModal(modal){
     modal.classList.remove("hidden");
 }
 
+
+
 formAdd.addEventListener("submit" , async (e) => {
     e.preventDefault();
     const formData = new FormData(formAdd);
@@ -29,30 +31,34 @@ formAdd.addEventListener("submit" , async (e) => {
     });
     
     const result = await response.json();
-    let icon = result["icon"];
-    let title = result["title"];
+    console.log(result);
+    let hasErrors = false; 
+
+    const inputs = formAdd.querySelectorAll('input');
+        
+        inputs.forEach((input) => {
+            input.nextElementSibling.textContent = "";
+
+            const fieldName = input.name;
+            const errorMessages = result.errors[fieldName];
+
+            if (errorMessages) {
+                hasErrors = true;
+                errorMessages.forEach((message) => {
+                input.nextElementSibling.textContent = message;
+                });
+            }    
+        });
+    
 
 
 
-    fermModal(modalAddCategories, formAdd);
-    alert(icon, title);
-    fetchallCategories();  
+
+        // closeModal(modalAddCategories, formAdd);
+        if (!hasErrors) {
+        console.log(result);
+        }
+        
 });
-m
-function alert(iconparam, titleparam) {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-    });
-    Toast.fire({
-      icon: iconparam,
-      title: titleparam,
-    });
-  }
+    
+ 
