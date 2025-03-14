@@ -35,3 +35,11 @@
   .chart-container {
     height: 240px;
   }
+
+
+  @media (min-width: 1024px) {
+    .side {    
+      min-width: 270px;
+    }
+  }
+  

@@ -9,6 +9,7 @@ use App\Middlewares\AuthMiddleware;
 use App\Controllers\Customer\CustomerController;
 use App\Controllers\Auth\LogoutController;
 use App\Controllers\Admin\DashboardController;
+use App\Controllers\Admin\CategoryController;
 
 
 
@@ -26,6 +27,10 @@ $app->router->get('/customer',[CustomerController::class,'index'])
 $app->router->get('/logout', 'Auth\LogoutController@logout' );
 
 $app->router->get('/admin' ,'Admin\DashboardController@index');
+$app->router->get('/categorys' ,'Admin\CategoryController@index');
+$app->router->post('/categorys/store', [CategoryController::class ,'store']);
+
+
 
 // $app->get('/dashboard', [DashboardController::class, 'index']
 // $app->get('/login', [AuthController::class, 'login']);
