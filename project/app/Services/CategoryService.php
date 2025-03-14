@@ -8,12 +8,23 @@ use App\Repositories\CategoryRepository;
 
 class CategoryService {
     
-   private $CategoryRepository;
+   private $categoryRepository;
    private $response;
+
    public function __construct(){
-       $this->CategoryRepository = new CategoryRepository();
+       $this->categoryRepository = new CategoryRepository();
        $this->response = new Response();
    } 
+
+   public function fechAll(){
+    $result = $this->categoryRepository->fechAll();
+    return $this->response->jsonEncode([ 'data' => $result]);
+
+    // return $this->response->render('admin/categorys/index',[
+    //     'result' => $result
+    // ]);
+
+   }
 
    public function create($data){
      
@@ -21,8 +32,8 @@ class CategoryService {
     $validator = new Validator($data);
 
     $validator->setRules([
-        'title' => 'required|string|min:6|max:50',
-        'icon' => 'string|min:2',
+        'title' => 'required|string|min:2|max:50|unique:categorys,title',
+        'icon' => 'string|min:2|unique:categorys,icon',
     ]);
 
     $oldData = $data;
@@ -32,7 +43,10 @@ class CategoryService {
         $errors = $validator->getErrors();
         return $this->response->jsonEncode(["errors" => $errors, "data" => $oldData]);
     }
-        return $this->response->jsonEncode("susscuful");
+
+    $result = $this->categoryRepository->create($data);
+
+    return $this->response->jsonEncode([ "message" => "susscuful" ,'data' => $data]);
     }
 
 }

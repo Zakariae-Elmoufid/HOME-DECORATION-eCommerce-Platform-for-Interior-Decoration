@@ -18,6 +18,11 @@ class CategoryController extends Controller{
         $this->render('admin/categorys/index');
     }
 
+    public function fech(){
+        $this->CategoryService->fechAll();
+
+    }
+
     public function store(Request $request){
          $data = $request->getBody();
          $this->CategoryService->create($data);

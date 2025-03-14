@@ -31,8 +31,9 @@ class BaseRepository implements RepositoryInterface {
     }
 
 
-    public function getAll(){
-
+    public function getAll($table){
+        $stmt = $this->query("SELECT * FROM $table");
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function findById($table ,int $id){

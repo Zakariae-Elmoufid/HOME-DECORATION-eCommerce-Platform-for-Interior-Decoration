@@ -28,7 +28,10 @@ $app->router->get('/logout', 'Auth\LogoutController@logout' );
 
 $app->router->get('/admin' ,'Admin\DashboardController@index');
 $app->router->get('/categorys' ,'Admin\CategoryController@index');
+$app->router->get('/allCategorys' ,'Admin\CategoryController@fech');
+
 $app->router->post('/categorys/store', [CategoryController::class ,'store']);
+// $app->router->post('/categorys/store', [CategoryController::class ,'store']);
 
 
 

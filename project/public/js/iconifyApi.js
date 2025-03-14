@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.trim();
         
-        clearTimeout(searchTimeout); // Effacer le timeout précédent
+        clearTimeout(searchTimeout); 
         
         if (query.length > 0) {
             statusMessage.textContent = 'Recherche en cours...';
