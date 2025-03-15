@@ -59,6 +59,7 @@ class BaseRepository implements RepositoryInterface {
         return $stmt->rowCount();
     }
     public function delete($table ,int $id){
-        
+        $stmt = $this->query("DELETE FROM $table WHERE id = ?", [$id]);
+        return $stmt->rowCount();
     }
 } 

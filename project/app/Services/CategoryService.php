@@ -71,8 +71,14 @@ class CategoryService {
         $id =  $data['id'] ;
         $result = $this->categoryRepository->updat($id,$data);
 
-        return $this->response->jsonEncode([ "message" => "susscuful" ,'data' => $data]);
+        return $this->response->jsonEncode([ "message" => "update susscuful" ]);
     
+    }
+
+
+    public function delete($id){
+        $result = $this->categoryRepository->remove($id);
+        return $this->response->jsonEncode([ "message" => "susscuful delete" ]);
     }
 
 }

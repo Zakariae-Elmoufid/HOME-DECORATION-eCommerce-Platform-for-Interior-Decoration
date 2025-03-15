@@ -79,6 +79,19 @@ class Request {
                 }
             }
         }
+        if($this->getMethod()==='delete'){
+            $rawData = file_get_contents("php://input");
+            $jsonData = json_decode($rawData, true);            
+            if ($jsonData) {
+                foreach ($jsonData as $key => $value) {
+                    $body[$key] = filter_var($value, FILTER_SANITIZE_SPECIAL_CHARS);
+                }
+            } else {
+                foreach ($_DELETE as $key => $value) {
+                    $body[$key] = filter_input(INPUT_DELETE, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                }
+            }
+        }
         
         return $body;
     }

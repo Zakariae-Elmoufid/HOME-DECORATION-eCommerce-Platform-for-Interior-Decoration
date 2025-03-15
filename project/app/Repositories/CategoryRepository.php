@@ -29,8 +29,11 @@ class CategoryRepository extends BaseRepository {
     }
 
     public function updat($id ,$date){
-       $this->update($this->table, $id ,$date);
+       return $this->update($this->table, $id ,$date);
     }
-
+    
+    public function remove($id){
+      return $this->delete($this->table ,$id);
+    }
 
 }

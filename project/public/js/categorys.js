@@ -53,6 +53,7 @@ formAdd.addEventListener("submit" , async (e) => {
         if(!hasErrors) {
         closeModal(addCategoryModal, formAdd);
         displayMessage(result.message);
+        fetchallCategories();
         }
 });
 
@@ -101,14 +102,14 @@ const fetchallCategories = async () => {
 
             
             const actionCell = document.createElement('td');
-            actionCell.className = 'px-6 py-4 whitespace-nowrap text-center';
+            actionCell.className = 'px-6 py-4 whitespace-nowrap text-start';
             actionCell.innerHTML = `
-              <div class="flex justify-center space-x-3">
-                <button class=" text-red-600 hover:text-red-900" onclick="openModeledit(${element.id})">
-                  <div class="text-lg"><iconify-icon icon="mdi:delete"></iconify-icon></div>
+              <div class="flex justify-start space-x-3">
+                <button class=" text-blue-600 hover:text-red-900" onclick="openModeledit(${element.id})">
+                  <div class="text-lg"><iconify-icon icon="mdi:edit"></iconify-icon></div>
                 </button>
                 <button class=" text-red-600 hover:text-red-900" onclick="deleteItem(${element.id})">
-                  <div class="text-lg"><iconify-icon icon="mdi:edit"></iconify-icon></div>
+                  <div class="text-lg"><iconify-icon icon="mdi:delete"></iconify-icon></div>
                 </button>
               </div>
             `;
@@ -172,8 +173,9 @@ let hasErrors = false;
             });
         }    
         if(!hasErrors) {
-        closeModal(addCategoryModal, formAdd);
+        closeModal(updateCategoryModal, updatForm);
         displayMessage(result.message);
+        fetchallCategories();
         }
 
 });
@@ -194,6 +196,22 @@ const remplireFormUpdate = async (id) => {
     updatForm.appendChild(idInput);
     updatForm.getElementsByTagName('input')[2].value  = response.id;
     
+};
+
+async function deleteItem(id){
+  const data = {};
+  data.id = id;
+  const response = await fetch("/categorys/delete", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+     
+    body: JSON.stringify(data),
+  });
+  const result = await response.json();
+  displayMessage(result.message);
+  fetchallCategories();
 };
 
 

@@ -33,6 +33,7 @@ $app->router->get('/allCategorys' ,'Admin\CategoryController@fech');
 $app->router->post('/categorys/store', [CategoryController::class ,'store']);
 $app->router->get('/categorys/show', [CategoryController::class ,'show']);
 $app->router->patch('/categorys/update',[CategoryController::class ,'update']);
+$app->router->delete('/categorys/delete',[CategoryController::class ,'delete']);
 
 // $app->router->post('/categorys/store', [CategoryController::class ,'store']);
 

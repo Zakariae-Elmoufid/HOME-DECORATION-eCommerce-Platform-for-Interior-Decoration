@@ -32,8 +32,8 @@ class CategoryController extends Controller{
 
 
 
-    public function store(){
-        
+    public function store(Request $request){
+        $data = $request->getbody();
          $this->CategoryService->create($data);
     }
 
@@ -41,6 +41,13 @@ class CategoryController extends Controller{
     public function update(Request $request){
         $data = $request->getBody();
         $this->CategoryService->update($data);
+    }
+
+    public function delete(Request $request){
+        $body = $request->getbody();
+        $id = $body['id'];
+        $this->CategoryService->delete($id);
+
     }
 
 

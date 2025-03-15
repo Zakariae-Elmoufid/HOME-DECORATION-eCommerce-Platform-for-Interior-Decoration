@@ -38,6 +38,10 @@ class Router {
     public   function  patch( $route, $callback) {
         $this->routes['patch'][$route] = $callback;
     }
+
+    public   function  delete( $route, $callback) {
+        $this->routes['delete'][$route] = $callback;
+    }
     
     public  function  dispatch() {
         
