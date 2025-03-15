@@ -22,10 +22,25 @@ class CategoryController extends Controller{
         $this->CategoryService->fechAll();
 
     }
+    public function show(Request $request){
+        $body = $request->getbody();
+        $id = isset($body['id']) ? (int) $body['id'] : null;
 
-    public function store(Request $request){
-         $data = $request->getBody();
+        $this->CategoryService->show($id);
+
+    }
+
+
+
+    public function store(){
+        
          $this->CategoryService->create($data);
+    }
+
+    
+    public function update(Request $request){
+        $data = $request->getBody();
+        $this->CategoryService->update($data);
     }
 
 

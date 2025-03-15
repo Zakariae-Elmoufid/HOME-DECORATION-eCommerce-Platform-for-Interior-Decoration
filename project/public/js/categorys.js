@@ -1,3 +1,4 @@
+
 const addCategoryModal = document.getElementById("categoryModal");
 const formAdd = document.getElementById("categorysForm");
 const title = document.querySelector('[name="title"]');
@@ -31,6 +32,7 @@ formAdd.addEventListener("submit" , async (e) => {
     });
     
     const result = await response.json();
+
     let hasErrors = false; 
 
     const inputs = formAdd.querySelectorAll('input');
@@ -49,7 +51,6 @@ formAdd.addEventListener("submit" , async (e) => {
             });
         }    
         if(!hasErrors) {
-            console.log(result.message);
         closeModal(addCategoryModal, formAdd);
         displayMessage(result.message);
         }
@@ -63,45 +64,145 @@ function displayMessage(responseMessage){
     setTimeout(function(){ alert.classList.add('hidden')}, 3000)
 }
 
+let categoriesData = []
 const fetchallCategories = async () => {
     const data = await fetch("allCategorys", {
       method: "GET",
     });
     const response = await data.json();
- 
-    displayCategories(response);
-  };
+    categoriesData = response;
+    displayCategories();
+
+};
   fetchallCategories();
 
-  function displayCategories(data) {
-    console.log("Données reçues :", data);
-console.log("Type de data :", typeof data);
-    const tbody = document.getElementById("categoryTableBody");
-    let tableRows = "";
+  function displayCategories() {
+    const tableBody = document.getElementById('categoryTableBody');
+    tableBody.innerHTML = '';
   
-    data.data.forEach((element) => {
-      tableRows += `<tr>
-      <td class="px-6 py-4 text-gray-600">
-        <div class="text-xl"><iconify-icon icon="${element.icon}"></iconify-icon></div> 
-       </td>
-          <td class="px-6 py-4 text-gray-600">${element.tile} </td>
-          <td class="px-6 py-4">
-              <div class="flex items-center justify-end gap-2">
-                  <a id="${element["id"]}" onclick="ouverModal(modalUpdateCategories)" class="text-gray-400 hover:text-blue-500 transition-colors editLink">
-                      <svg  class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                      </svg>
-                  </a>
-                  <button id="${element["id"]}" class="text-gray-400 hover:text-red-500 transition-colors deleteLink ">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                      </svg>
-                  </button>
+    categoriesData.forEach(element => {
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-gray-50 transition-colors duration-200';
+            
+            const iconCell = document.createElement('td');
+            iconCell.className = 'px-6 py-4 text-gray-600';
+            iconCell.innerHTML = `<div class="text-xl"><iconify-icon icon="${element.icon}"></iconify-icon></div>`;
+            iconCell.dataset.type = 'icon';
+            iconCell.dataset.id = element.id;
+            iconCell.dataset.value = element.icon;
+
+            
+            const titleCell = document.createElement('td');
+            titleCell.className = 'px-6 py-4 text-gray-600';
+            titleCell.textContent = element.title;
+            titleCell.dataset.type = 'title';
+            titleCell.dataset.id = element.id;
+            titleCell.dataset.value = element.title;
+
+            
+            const actionCell = document.createElement('td');
+            actionCell.className = 'px-6 py-4 whitespace-nowrap text-center';
+            actionCell.innerHTML = `
+              <div class="flex justify-center space-x-3">
+                <button class=" text-red-600 hover:text-red-900" onclick="openModeledit(${element.id})">
+                  <div class="text-lg"><iconify-icon icon="mdi:delete"></iconify-icon></div>
+                </button>
+                <button class=" text-red-600 hover:text-red-900" onclick="deleteItem(${element.id})">
+                  <div class="text-lg"><iconify-icon icon="mdi:edit"></iconify-icon></div>
+                </button>
               </div>
-          </td>
-      </tr>`;
-    });
-  
-    tbody.innerHTML = tableRows;
-  }
-  
+            `;
+            
+            row.appendChild(iconCell);
+            row.appendChild(titleCell);
+            row.appendChild(actionCell);
+            tableBody.appendChild(row);
+          });
+ }
+
+
+
+const updateCategoryModal = document.getElementById('updateCategoryModal');
+const updatForm  = document.getElementById('updatCategorysForm');
+
+ function openModeledit(id){
+    remplireFormUpdate(id)
+    updateCategoryModal.classList.remove("hidden");
+
+}
+
+
+updatForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(updatForm);
+  const idInput = updatForm.querySelector("input[name='id']").value;
+
+  const data = {};
+  formData.forEach((value, key) => {
+    data[key] = value;
+  });
+  data.id = idInput;
+
+  const response = await fetch("/categorys/update", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+});
+
+const result = await response.json();
+
+let hasErrors = false; 
+
+    const inputs = updatForm.querySelectorAll('input');
+        
+    if (result.errors) {
+        hasErrors = true;
+        inputs.forEach((input) => {
+            input.nextElementSibling.textContent = "";
+
+            const fieldName = input.name;
+            const errorMessages = result.errors[fieldName];
+
+                errorMessages.forEach((message) => {
+                input.nextElementSibling.textContent = message;
+                });
+            });
+        }    
+        if(!hasErrors) {
+        closeModal(addCategoryModal, formAdd);
+        displayMessage(result.message);
+        }
+
+});
+
+
+ 
+const remplireFormUpdate = async (id) => {
+  const data = await fetch(`/categorys/show?id=${id}`, {
+    method: "GET",
+  });
+  const response = await data.json();
+
+    idInput = document.createElement('input');
+    idInput.setAttribute("type","hidden"); 
+    idInput.setAttribute("name", "id");                     
+    updatForm.getElementsByTagName('input')[0].value  = response.title;
+    updatForm.getElementsByTagName('input')[1].value  = response.icon;
+    updatForm.appendChild(idInput);
+    updatForm.getElementsByTagName('input')[2].value  = response.id;
+    
+};
+
+
+
+
+
+
+
+
+
+
+

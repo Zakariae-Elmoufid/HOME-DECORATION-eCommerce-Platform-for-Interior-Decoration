@@ -18,11 +18,7 @@ class CategoryService {
 
    public function fechAll(){
     $result = $this->categoryRepository->fechAll();
-    return $this->response->jsonEncode([ 'data' => $result]);
-
-    // return $this->response->render('admin/categorys/index',[
-    //     'result' => $result
-    // ]);
+    return $this->response->jsonEncode($result);
 
    }
 
@@ -47,6 +43,36 @@ class CategoryService {
     $result = $this->categoryRepository->create($data);
 
     return $this->response->jsonEncode([ "message" => "susscuful" ,'data' => $data]);
+    }
+
+    public function show($id){
+        $result = $this->categoryRepository->fetchById($id);
+        return $this->response->jsonEncode( $result);
+    }
+
+
+    public function update($data){
+        $errors = [];
+        $validator = new Validator($data);
+    
+        $validator->setRules([
+            'title' => 'required|string|min:2|max:50',
+            'icon' => 'string|min:2',
+        ]);
+    
+        $oldData = $data;
+        
+    
+        if (!$validator->validate()) {
+            $errors = $validator->getErrors();
+        
+            return $this->response->jsonEncode(["errors" => $errors, "data" => $oldData]);
+        }
+        $id =  $data['id'] ;
+        $result = $this->categoryRepository->updat($id,$data);
+
+        return $this->response->jsonEncode([ "message" => "susscuful" ,'data' => $data]);
+    
     }
 
 }

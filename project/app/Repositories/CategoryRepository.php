@@ -23,5 +23,14 @@ class CategoryRepository extends BaseRepository {
         
     }
 
+    public function fetchById($id){
+      return  $this->findById($this->table, $id);
+    
+    }
+
+    public function updat($id ,$date){
+       $this->update($this->table, $id ,$date);
+    }
+
 
 }

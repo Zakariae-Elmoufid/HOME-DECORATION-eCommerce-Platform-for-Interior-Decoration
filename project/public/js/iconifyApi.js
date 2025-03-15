@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
             statusMessage.textContent = 'Recherche en cours...';
             iconSearchResults.classList.remove('hidden');
             
-            // Définir un délai pour réduire les appels API
             searchTimeout = setTimeout(() => {
                 searchIcons(query);
             }, 300);
@@ -55,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    function displayIcons(icons) {
+ function displayIcons(icons) {
         iconSearchResults.innerHTML = '';
         iconSearchResults.className = 'mt-3 grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-64 overflow-y-auto p-3 border border-gray-200 rounded-lg';
         
@@ -70,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             iconItem.addEventListener('click', () => {
                 let iconCode = `${currentPrefix}:${iconName}`;
-                console.log(iconCode);
                 searchInput.value = iconCode;
             });
             

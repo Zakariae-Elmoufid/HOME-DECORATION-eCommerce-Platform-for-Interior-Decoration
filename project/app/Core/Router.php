@@ -30,15 +30,22 @@ class Router {
         $this->routes['get'][$route] = $callback;
         return $this;
     }
+
     
     public   function  post( $route, $callback) {
         $this->routes['post'][$route] = $callback;
+    }
+    public   function  patch( $route, $callback) {
+        $this->routes['patch'][$route] = $callback;
     }
     
     public  function  dispatch() {
         
         $method = $this->request->getMethod();
         $url = $this->request->getUrl();
+
+
+
         $callback = $this->routes[$method][$url] ?? false;
         if (!$callback) {
             // $this->response->statusCode(code: 404);
@@ -90,8 +97,7 @@ class Router {
     }
 
 
-
-
+ 
 
     
         
