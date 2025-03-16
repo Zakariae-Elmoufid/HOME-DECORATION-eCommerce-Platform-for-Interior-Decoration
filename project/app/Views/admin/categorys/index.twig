@@ -1,0 +1,110 @@
+{% extends 'layouts/admin.twig' %}
+{% block title %}
+  Category
+{% endblock %}
+
+{% block content %}
+  <div id="categoryModal" class="hidden fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50" aria-labelledby="modal-title" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true">
+      <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div class="flex justify-between items-center p-6 border-b">
+                <h5 class="text-2xl font-semibold text-gray-800 ">Add New Categories</h5>
+
+                <button class="text-gray-400 hover:text-gray-600 transition-colors" onclick="closeModal(categoryModal,formAdd)"><i class="fa-solid fa-x"></i></button>
+              </div>
+              <div class="p-6">
+                <form id="categorysForm" class="space-y-6" novalidate>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Titel</label>
+                    <input type="text" name="title" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="example" required />
+                    <small class="text-red-700 pl-2"></small>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Icon</label>
+                    <div id="icon-container" class="relative p-4 border border-gray-200 rounded-lg bg-white mb-3"></div>
+                    <input type="text" name="icon" id="icon-input" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="example" />
+                    <small class="text-red-700 pl-2"></small>
+                    <div id="icon-container" class="relative p-4 border border-gray-200 rounded-lg bg-white mb-3"></div>
+                    <div id="icon-search-results" class="mt-2"></div>
+                  </div>
+                  <button id="addCategoriesBtn" type="submit" class="inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto">Add </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-between items-center mb-8">
+    <div class="ml-4">
+      <h4 class="text-2xl font-bold text-gray-800">Categories</h4>
+      <p class="text-gray-500 mt-1">Manage your categories database</p>
+    </div >
+    <button class="mr-4 bg-blue-500 text-white px-6 py-3 rounded-xl hover:bg-blue-600 transform hover:scale-[1.02] transition-all duration-200 flex items-center gap-2" onclick="openModal(addCategoryModal)">
+      <i class="fa-solid fa-plus"></i>
+      Add New categories
+    </button>
+  </div>
+   {% include "components/alert.twig" %}
+
+   <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 rounded-xl">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">icon</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">titel</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryTableBody" class="divide-y divide-gray-100">
+                           
+                        </tbody>
+                    </table>
+   </div>
+
+  <div id="updateCategoryModal" class="hidden fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50" aria-labelledby="modal-title" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true">
+      <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div class="flex justify-between items-center p-6 border-b">
+                <h5 class="text-2xl font-semibold text-gray-800 ">Update Categories</h5>
+
+                <button class="text-gray-400 hover:text-gray-600 transition-colors" onclick="closeModal(updateCategoryModal,formAdd)"><i class="fa-solid fa-x"></i></button>
+              </div>
+              <div class="p-6">
+                <form id="updatCategorysForm" class="space-y-6" novalidate>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Titel</label>
+                    <input type="text" name="title" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="example" required />
+                    <small class="text-red-700 pl-2"></small>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Icon</label>
+                    <div id="icon-container" class="relative p-4 border border-gray-200 rounded-lg bg-white mb-3"></div>
+                    <input type="text" name="icon" id="icon-input" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="example" />
+                    <small class="text-red-700 pl-2"></small>
+                    <div id="icon-container" class="relative p-4 border border-gray-200 rounded-lg bg-white mb-3"></div>
+                    <div id="icon-search-results" class="mt-2"></div>
+                  </div>
+                  <button id="addCategoriesBtn" type="submit" class="inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto">Save</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script  src="../../../../public/js/categorys.js"></script>
+  <script  src="../../../../public/js/iconifyApi.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>
+{% endblock %}

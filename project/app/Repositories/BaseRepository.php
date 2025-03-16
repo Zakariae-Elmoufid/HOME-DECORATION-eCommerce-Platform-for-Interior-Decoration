@@ -31,8 +31,9 @@ class BaseRepository implements RepositoryInterface {
     }
 
 
-    public function getAll(){
-
+    public function getAll($table){
+        $stmt = $this->query("SELECT * FROM $table");
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function findById($table ,int $id){
@@ -49,13 +50,16 @@ class BaseRepository implements RepositoryInterface {
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
     
-    public function create(array $data){
-
+ 
+    public function update($table ,int $id, array $data){
+        $setPart = implode('=?, ', array_keys($data)) . '=?';
+        $values = array_values($data);
+        $values[] = $id;
+        $stmt = $this->query("UPDATE $table SET $setPart WHERE id = ?", $values);
+        return $stmt->rowCount();
     }
-    public function update(int $id, array $data){
-
-    }
-    public function delete(int $id){
-        
+    public function delete($table ,int $id){
+        $stmt = $this->query("DELETE FROM $table WHERE id = ?", [$id]);
+        return $stmt->rowCount();
     }
 } 
