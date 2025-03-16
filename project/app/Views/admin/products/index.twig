@@ -72,9 +72,9 @@
           <div>
             <label for="category-filter" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
             <select id="category-filter" class="w-full md:w-48 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
-              <option value="">All Categories</option>
-              <option value="1">Lighting</option>
-              <option value="2">Furniture</option>
+              <option value="All Categories">All Categories</option>
+              <option value="Lighting">Lighting</option>
+              <option value="Furniture">Furniture</option>
               <option value="3">Textiles</option>
               <option value="4">Wall Art</option>
               <option value="5">Decorative Items</option>
@@ -128,193 +128,73 @@
               </th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <!-- Product 1 -->
-            <tr>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 h-10 w-10">
-                    <img class="h-10 w-10 rounded-lg object-cover" src="/api/placeholder/40/40" alt="Nordic Lamp">
-                  </div>
-                  <div class="ml-4">
-                    <div class="text-sm font-medium text-navy">Nordic Table Lamp</div>
-                    <div class="text-xs text-gray-500">ID: 1</div>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">Lighting</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">$89.99</div>
-                <div class="text-xs text-gray-500">+$30.00 (Large)</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">In stock</div>
-                <div class="text-xs text-gray-500">Small: 25, Large: 15</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                  Available
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <div class="flex space-x-3">
-                  <button class="text-blue hover:text-blue-dark" title="Edit">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button class="text-blue hover:text-blue-dark" title="Manage Images">
-                    <i class="fas fa-images"></i>
-                  </button>
-                  <button class="text-blue hover:text-blue-dark" title="Manage Sizes">
-                    <i class="fas fa-ruler-combined"></i>
-                  </button>
-                  <button class="text-red-500 hover:text-red-700" title="Delete">
-                    <i class="fas fa-trash-alt"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-
-            <!-- Product 2 -->
-            <tr>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 h-10 w-10">
-                    <img class="h-10 w-10 rounded-lg object-cover" src="/api/placeholder/40/40" alt="Side Table">
-                  </div>
-                  <div class="ml-4">
-                    <div class="text-sm font-medium text-navy">Minima Side Table</div>
-                    <div class="text-xs text-gray-500">ID: 2</div>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">Furniture</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">$149.50</div>
-                <div class="text-xs text-gray-500">+$15.00 (Square)</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">In stock</div>
-                <div class="text-xs text-gray-500">Round: 20, Square: 12</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                  Available
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <div class="flex space-x-3">
-                  <button class="text-blue hover:text-blue-dark" title="Edit">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button class="text-blue hover:text-blue-dark" title="Manage Images">
-                    <i class="fas fa-images"></i>
-                  </button>
-                  <button class="text-blue hover:text-blue-dark" title="Manage Sizes">
-                    <i class="fas fa-ruler-combined"></i>
-                  </button>
-                  <button class="text-red-500 hover:text-red-700" title="Delete">
-                    <i class="fas fa-trash-alt"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-
-            <!-- Product 3 -->
-            <tr>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 h-10 w-10">
-                    <img class="h-10 w-10 rounded-lg object-cover" src="/api/placeholder/40/40" alt="Velvet Cushion">
-                  </div>
-                  <div class="ml-4">
-                    <div class="text-sm font-medium text-navy">Velvet Cushion</div>
-                    <div class="text-xs text-gray-500">ID: 3</div>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">Textiles</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">$35.99</div>
-                <div class="text-xs text-gray-500">+$10.00 (50x50cm)</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">In stock</div>
-                <div class="text-xs text-gray-500">40x40cm: 34, 50x50cm: 43</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                  Available
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <div class="flex space-x-3">
-                  <button class="text-blue hover:text-blue-dark" title="Edit">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button class="text-blue hover:text-blue-dark" title="Manage Images">
-                    <i class="fas fa-images"></i>
-                  </button>
-                  <button class="text-blue hover:text-blue-dark" title="Manage Sizes">
-                    <i class="fas fa-ruler-combined"></i>
-                  </button>
-                  <button class="text-red-500 hover:text-red-700" title="Delete">
-                    <i class="fas fa-trash-alt"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-
-            <!-- Product 4 (unavailable) -->
-            <tr>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 h-10 w-10">
-                    <img class="h-10 w-10 rounded-lg object-cover" src="/api/placeholder/40/40" alt="Modular Shelf">
-                  </div>
-                  <div class="ml-4">
-                    <div class="text-sm font-medium text-navy">Modular Shelf</div>
-                    <div class="text-xs text-gray-500">ID: 7</div>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">Furniture</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">$220.00</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-red-600">Out of stock</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                  Unavailable
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <div class="flex space-x-3">
-                  <button class="text-blue hover:text-blue-dark" title="Edit">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button class="text-blue hover:text-blue-dark" title="Manage Images">
-                    <i class="fas fa-images"></i>
-                  </button>
-                  <button class="text-blue hover:text-blue-dark" title="Manage Sizes">
-                    <i class="fas fa-ruler-combined"></i>
-                  </button>
-                  <button class="text-red-500 hover:text-red-700" title="Delete">
-                    <i class="fas fa-trash-alt"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
+<tbody class="bg-white divide-y divide-gray-200">
+  {% for product in products %}
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap">
+        <div class="flex items-center">
+          {% for image in product.images %}
+            {% if image.is_primary == 1 %}
+              <div class="flex-shrink-0 h-10 w-10">
+                <img class="h-10 w-10 rounded-lg object-cover" src="{{image.image_path}}" alt="{{product.title}}">
+              </div>
+            {% endif %}
+          {% endfor %}
+          <div class="ml-4">
+            <div class="text-sm font-medium text-navy">{{ product.title }}</div>
+            <div class="text-xs text-gray-500">ID: {{ product.id }}</div>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap" id="category">
+        <div class="category-value  text-sm text-gray-900">{{ product.category_name }}</div>
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap">
+        <div class="text-sm text-gray-900">${{ product.base_price }}</div>
+        {% if product.sizes|length > 0 %}
+          <div class="text-xs text-gray-500">
+            {% for size in product.sizes %}
+              {% if size.price_adjustment > 0 %}
+                ${{ size.price_adjustment }} ({{ size.size_name }}){% if not loop.last %}, {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap">
+        <div class="text-sm text-gray-900">{% if product.stock > 0 %}In stock{% else %}Out of stock{% endif %}</div>
+        {% if product.sizes|length > 0 %}
+          <div class="text-xs text-gray-500">
+            {% for size in product.sizes %}
+              {{ size.size_name }}: {{ size.stock_quantity }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap">
+        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {% if product.isAvailable %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+          {% if product.isAvailable %}Available{% else %}Unavailable{% endif %}
+        </span>
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+        <div class="flex space-x-3">
+          <a href="/admin/products/edit/{{ product.id }}" class="text-blue hover:text-blue-dark" title="Edit">
+            <i class="fas fa-edit"></i>
+          </a>
+          <a href="/admin/products/images/{{ product.id }}" class="text-blue hover:text-blue-dark" title="Manage Images">
+            <i class="fas fa-images"></i>
+          </a>
+          <a href="/admin/products/sizes/{{ product.id }}" class="text-blue hover:text-blue-dark" title="Manage Sizes">
+            <i class="fas fa-ruler-combined"></i>
+          </a>
+          <button data-product-id="{{ product.id }}" class="delete-product text-red-500 hover:text-red-700" title="Delete">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+  {% endfor %}
+</tbody>
         </table>
       </div>
       
@@ -351,9 +231,9 @@
   </div>
 
   <!-- Add Product Modal -->
-  <div id="productModal" class="fixed inset-0 bg-navy bg-opacity-50 z-50 hidden">
+  <div id="productModal" class="fixed inset-0 bg-navy bg-opacity-50 z-50 hidden overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen p-4">
-      <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl  my-8">
         <div class="flex justify-between items-center px-6 py-4 border-b">
           <h3 class="text-lg font-medium text-navy">Add New Product</h3>
           <button id="closeModalBtn" class="text-gray-400 hover:text-gray-500">
@@ -361,7 +241,7 @@
           </button>
         </div>
         
-        <div class="p-6">
+        <div class="p-6 " >
           <form id="productForm">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Basic Information -->
@@ -469,61 +349,6 @@
     </div>
   </div>
 
-  <script>
-    // Modal functionality
-    const addProductBtn = document.getElementById('addProductBtn');
-    const productModal = document.getElementById('productModal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-    
-    addProductBtn.addEventListener('click', () => {
-      productModal.classList.remove('hidden');
-    });
-    
-    function closeModal() {
-      productModal.classList.add('hidden');
-    }
-    
-    closeModalBtn.addEventListener('click', closeModal);
-    cancelBtn.addEventListener('click', closeModal);
-    
-    // Close modal when clicking outside
-    productModal.addEventListener('click', (e) => {
-      if (e.target === productModal) {
-        closeModal();
-      }
-    });
-    
-    // Add size functionality
-    const addSizeBtn = document.getElementById('addSizeBtn');
-    const sizesContainer = document.getElementById('sizesContainer');
-    
-    addSizeBtn.addEventListener('click', () => {
-      const sizeRow = document.querySelector('.size-row').cloneNode(true);
-      const inputs = sizeRow.querySelectorAll('input');
-      inputs.forEach(input => input.value = '');
-      
-      const removeBtn = sizeRow.querySelector('.remove-size');
-      removeBtn.addEventListener('click', () => {
-        sizeRow.remove();
-      });
-      
-      sizesContainer.appendChild(sizeRow);
-    });
-    
-    // Initial remove size button
-    document.querySelector('.remove-size').addEventListener('click', function(e) {
-      if (document.querySelectorAll('.size-row').length > 1) {
-        e.target.closest('.size-row').remove();
-      }
-    });
-    
-    // Form submission (prevent default for demo)
-    document.getElementById('productForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      // Here you would normally send the form data to the server
-      alert('Product saved successfully!');
-      closeModal();
-    });
-  </script>
+  <script src="../../../../public/js/adminProducts.js"></script>
+
 {% endblock %}

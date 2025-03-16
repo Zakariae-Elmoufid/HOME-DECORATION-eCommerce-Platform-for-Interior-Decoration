@@ -3,10 +3,17 @@
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
+use App\Services\ProductService;
 
 class ProductController extends Controller{
 
+    private $ProductService ;
+
+    public function __construct(){
+        $this->ProductService = new ProductService() ; 
+    }
+
     public function index(){
-        $this->render('admin/products/index');
+        $this->ProductService->fetchAll();
     }
 }
