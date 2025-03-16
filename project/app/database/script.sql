@@ -43,4 +43,46 @@ CREATE TABLE categorys (
     icon VARCHAR(255) 
 );
 
+CREATE TABLE Products (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    stock int,
+    category_id INT,
+    base_price DECIMAL(10, 2) NOT NULL,
+    isAvailable bool ,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP null,
+    FOREIGN KEY (category_id) REFERENCES categorys(id)
+);
+
+CREATE TABLE Product_sizes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    size_name VARCHAR(50) NOT NULL,
+    price_adjustment DECIMAL(10, 2) DEFAULT 0.00,
+    stock_quantity INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (product_id) REFERENCES Products(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Product_colors (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    color_name VARCHAR(50) NOT NULL,
+    price_adjustment DECIMAL(10, 2) DEFAULT 0.00,
+    stock_quantity INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (product_id) REFERENCES Products(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Product_images (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    image_path VARCHAR(255) NOT NULL,
+    is_primary BOOLEAN DEFAULT false,
+    size_id INT,
+    FOREIGN KEY (product_id) REFERENCES Products(id) ON DELETE CASCADE,
+    FOREIGN KEY (size_id) REFERENCES Product_sizes(id) ON DELETE SET NULL
+);
+
 

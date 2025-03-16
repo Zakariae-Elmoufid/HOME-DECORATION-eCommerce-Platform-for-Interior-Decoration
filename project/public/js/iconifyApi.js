@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     async function searchIcons(query) {
         try {
-            const url = `https://api.iconify.design/search?prefix=${currentPrefix}&query=${encodeURIComponent(query)}&limit=40`;
+            const url = `https://api.iconify.design/search?prefix=${currentPrefix}&query=${encodeURIComponent(query)}.svg`;
             
             const response = await fetch(url);
             const data = await response.json();

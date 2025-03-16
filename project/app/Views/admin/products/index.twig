@@ -1,0 +1,529 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}
+  Product Management - Admin Dashboard
+{% endblock %}
+
+{% block content %}
+  <div class="p-6 bg-gray-light flex-1">
+    <!-- Page Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-semibold text-navy">Product Management</h1>
+      <button id="addProductBtn" class="bg-blue hover:bg-blue-dark text-white px-4 py-2 rounded-lg flex items-center">
+        <i class="fas fa-plus mr-2"></i> Add New Product
+      </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <div class="bg-white rounded-lg shadow-sm p-5">
+        <div class="flex justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">Total Products</p>
+            <h3 class="text-3xl font-semibold text-navy mt-1">10</h3>
+          </div>
+          <div class="h-12 w-12 rounded-full bg-blue-light bg-opacity-20 flex items-center justify-center">
+            <i class="fas fa-box-open text-blue-dark text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-5">
+        <div class="flex justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">Available Products</p>
+            <h3 class="text-3xl font-semibold text-navy mt-1">9</h3>
+          </div>
+          <div class="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
+            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-5">
+        <div class="flex justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">Categories</p>
+            <h3 class="text-3xl font-semibold text-navy mt-1">5</h3>
+          </div>
+          <div class="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
+            <i class="fa-solid fa-icons text-purple-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-5">
+        <div class="flex justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">Product Images</p>
+            <h3 class="text-3xl font-semibold text-navy mt-1">35</h3>
+          </div>
+          <div class="h-12 w-12 rounded-full bg-yellow-100 flex items-center justify-center">
+            <i class="fas fa-images text-yellow-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm p-5 mb-6">
+      <div class="flex flex-col md:flex-row justify-between space-y-4 md:space-y-0">
+        <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+          <div>
+            <label for="category-filter" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <select id="category-filter" class="w-full md:w-48 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+              <option value="">All Categories</option>
+              <option value="1">Lighting</option>
+              <option value="2">Furniture</option>
+              <option value="3">Textiles</option>
+              <option value="4">Wall Art</option>
+              <option value="5">Decorative Items</option>
+            </select>
+          </div>
+          <div>
+            <label for="status-filter" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <select id="status-filter" class="w-full md:w-48 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+              <option value="">All Statuses</option>
+              <option value="1">Available</option>
+              <option value="0">Unavailable</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="sort-by" class="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+          <select id="sort-by" class="w-full md:w-48 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+            <option value="newest">Newest</option>
+            <option value="name-asc">Name (A-Z)</option>
+            <option value="name-desc">Name (Z-A)</option>
+            <option value="price-asc">Price (Low to High)</option>
+            <option value="price-desc">Price (High to Low)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Table -->
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Product
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Category
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Price
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Stock
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <!-- Product 1 -->
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10">
+                    <img class="h-10 w-10 rounded-lg object-cover" src="/api/placeholder/40/40" alt="Nordic Lamp">
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-navy">Nordic Table Lamp</div>
+                    <div class="text-xs text-gray-500">ID: 1</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">Lighting</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">$89.99</div>
+                <div class="text-xs text-gray-500">+$30.00 (Large)</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">In stock</div>
+                <div class="text-xs text-gray-500">Small: 25, Large: 15</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  Available
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <div class="flex space-x-3">
+                  <button class="text-blue hover:text-blue-dark" title="Edit">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="text-blue hover:text-blue-dark" title="Manage Images">
+                    <i class="fas fa-images"></i>
+                  </button>
+                  <button class="text-blue hover:text-blue-dark" title="Manage Sizes">
+                    <i class="fas fa-ruler-combined"></i>
+                  </button>
+                  <button class="text-red-500 hover:text-red-700" title="Delete">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Product 2 -->
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10">
+                    <img class="h-10 w-10 rounded-lg object-cover" src="/api/placeholder/40/40" alt="Side Table">
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-navy">Minima Side Table</div>
+                    <div class="text-xs text-gray-500">ID: 2</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">Furniture</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">$149.50</div>
+                <div class="text-xs text-gray-500">+$15.00 (Square)</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">In stock</div>
+                <div class="text-xs text-gray-500">Round: 20, Square: 12</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  Available
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <div class="flex space-x-3">
+                  <button class="text-blue hover:text-blue-dark" title="Edit">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="text-blue hover:text-blue-dark" title="Manage Images">
+                    <i class="fas fa-images"></i>
+                  </button>
+                  <button class="text-blue hover:text-blue-dark" title="Manage Sizes">
+                    <i class="fas fa-ruler-combined"></i>
+                  </button>
+                  <button class="text-red-500 hover:text-red-700" title="Delete">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Product 3 -->
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10">
+                    <img class="h-10 w-10 rounded-lg object-cover" src="/api/placeholder/40/40" alt="Velvet Cushion">
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-navy">Velvet Cushion</div>
+                    <div class="text-xs text-gray-500">ID: 3</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">Textiles</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">$35.99</div>
+                <div class="text-xs text-gray-500">+$10.00 (50x50cm)</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">In stock</div>
+                <div class="text-xs text-gray-500">40x40cm: 34, 50x50cm: 43</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  Available
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <div class="flex space-x-3">
+                  <button class="text-blue hover:text-blue-dark" title="Edit">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="text-blue hover:text-blue-dark" title="Manage Images">
+                    <i class="fas fa-images"></i>
+                  </button>
+                  <button class="text-blue hover:text-blue-dark" title="Manage Sizes">
+                    <i class="fas fa-ruler-combined"></i>
+                  </button>
+                  <button class="text-red-500 hover:text-red-700" title="Delete">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Product 4 (unavailable) -->
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10">
+                    <img class="h-10 w-10 rounded-lg object-cover" src="/api/placeholder/40/40" alt="Modular Shelf">
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-navy">Modular Shelf</div>
+                    <div class="text-xs text-gray-500">ID: 7</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">Furniture</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">$220.00</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-red-600">Out of stock</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                  Unavailable
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <div class="flex space-x-3">
+                  <button class="text-blue hover:text-blue-dark" title="Edit">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="text-blue hover:text-blue-dark" title="Manage Images">
+                    <i class="fas fa-images"></i>
+                  </button>
+                  <button class="text-blue hover:text-blue-dark" title="Manage Sizes">
+                    <i class="fas fa-ruler-combined"></i>
+                  </button>
+                  <button class="text-red-500 hover:text-red-700" title="Delete">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination -->
+      <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+        <div class="flex items-center justify-between">
+          <div class="text-sm text-gray-700">
+            Showing <span class="font-medium">1</span> to <span class="font-medium">4</span> of <span class="font-medium">10</span> products
+          </div>
+          <div class="flex-1 flex justify-center sm:justify-end">
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+              <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <span class="sr-only">Previous</span>
+                <i class="fas fa-chevron-left text-xs"></i>
+              </a>
+              <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue text-sm font-medium text-white">
+                1
+              </a>
+              <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                2
+              </a>
+              <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                3
+              </a>
+              <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <span class="sr-only">Next</span>
+                <i class="fas fa-chevron-right text-xs"></i>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Product Modal -->
+  <div id="productModal" class="fixed inset-0 bg-navy bg-opacity-50 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl">
+        <div class="flex justify-between items-center px-6 py-4 border-b">
+          <h3 class="text-lg font-medium text-navy">Add New Product</h3>
+          <button id="closeModalBtn" class="text-gray-400 hover:text-gray-500">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <div class="p-6">
+          <form id="productForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Basic Information -->
+              <div class="col-span-2">
+                <h4 class="font-medium text-navy mb-4">Basic Information</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                    <input type="text" id="title" name="title" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                  </div>
+                  
+                  <div>
+                    <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <select id="category" name="category_id" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                      <option value="1">Lighting</option>
+                      <option value="2">Furniture</option>
+                      <option value="3">Textiles</option>
+                      <option value="4">Wall Art</option>
+                      <option value="5">Decorative Items</option>
+                    </select>
+                  </div>
+                  
+                  <div class="md:col-span-2">
+                    <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="description" name="description" rows="3" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue"></textarea>
+                  </div>
+                  
+                  <div>
+                    <label for="base_price" class="block text-sm font-medium text-gray-700 mb-1">Base Price ($)</label>
+                    <input type="number" step="0.01" id="base_price" name="base_price" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                  </div>
+                  
+                  <div>
+                    <label for="stock" class="block text-sm font-medium text-gray-700 mb-1">Stock Status</label>
+                    <input type="text" id="stock" name="stock" placeholder="e.g. In stock, Limited, etc." class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                  </div>
+                  
+                  <div class="flex items-center mt-4">
+                    <input type="checkbox" id="isAvailable" name="isAvailable" class="h-4 w-4 text-blue focus:ring-blue border-gray-300 rounded">
+                    <label for="isAvailable" class="ml-2 block text-sm text-gray-700">Product Available</label>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Product Sizes -->
+              <div class="col-span-2">
+                <div class="flex justify-between items-center mb-4">
+                  <h4 class="font-medium text-navy">Product Sizes</h4>
+                  <button type="button" id="addSizeBtn" class="text-blue hover:text-blue-dark text-sm flex items-center">
+                    <i class="fas fa-plus mr-1"></i> Add Size
+                  </button>
+                </div>
+                
+                <div id="sizesContainer">
+                  <div class="size-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Size Name</label>
+                        <input type="text" name="size_name[]" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                      </div>
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Price Adjustment ($)</label>
+                        <input type="number" step="0.01" name="price_adjustment[]" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                      </div>
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
+                        <input type="number" name="stock_quantity[]" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                      </div>
+                    </div>
+                    <button type="button" class="remove-size mt-3 text-red-500 hover:text-red-700 text-sm">
+                      <i class="fas fa-trash-alt mr-1"></i> Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Product Images -->
+              <div class="col-span-2">
+                <h4 class="font-medium text-navy mb-4">Product Images</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  <div class="relative border-2 border-dashed border-gray-300 rounded-md p-4 text-center hover:bg-gray-50 cursor-pointer">
+                    <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                    <div class="flex flex-col items-center justify-center h-32">
+                      <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                      <p class="text-sm text-gray-500">Click to upload</p>
+                      <p class="text-xs text-gray-400">PNG, JPG (Max 5MB)</p>
+                    </div>
+                  </div>
+                  <!-- Preview images will be added here dynamically -->
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 flex justify-end space-x-3">
+              <button type="button" id="cancelBtn" class="py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                Cancel
+              </button>
+              <button type="submit" class="py-2 px-4 bg-blue hover:bg-blue-dark text-white rounded-md text-sm font-medium">
+                Save Product
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Modal functionality
+    const addProductBtn = document.getElementById('addProductBtn');
+    const productModal = document.getElementById('productModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    
+    addProductBtn.addEventListener('click', () => {
+      productModal.classList.remove('hidden');
+    });
+    
+    function closeModal() {
+      productModal.classList.add('hidden');
+    }
+    
+    closeModalBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    
+    // Close modal when clicking outside
+    productModal.addEventListener('click', (e) => {
+      if (e.target === productModal) {
+        closeModal();
+      }
+    });
+    
+    // Add size functionality
+    const addSizeBtn = document.getElementById('addSizeBtn');
+    const sizesContainer = document.getElementById('sizesContainer');
+    
+    addSizeBtn.addEventListener('click', () => {
+      const sizeRow = document.querySelector('.size-row').cloneNode(true);
+      const inputs = sizeRow.querySelectorAll('input');
+      inputs.forEach(input => input.value = '');
+      
+      const removeBtn = sizeRow.querySelector('.remove-size');
+      removeBtn.addEventListener('click', () => {
+        sizeRow.remove();
+      });
+      
+      sizesContainer.appendChild(sizeRow);
+    });
+    
+    // Initial remove size button
+    document.querySelector('.remove-size').addEventListener('click', function(e) {
+      if (document.querySelectorAll('.size-row').length > 1) {
+        e.target.closest('.size-row').remove();
+      }
+    });
+    
+    // Form submission (prevent default for demo)
+    document.getElementById('productForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Here you would normally send the form data to the server
+      alert('Product saved successfully!');
+      closeModal();
+    });
+  </script>
+{% endblock %}

@@ -80,7 +80,7 @@ class Router {
                         return $controllerInstance->$method();
                     } else {
                         http_response_code(404);
-                        echo "404 - Controller ou méthode introuvable";
+                        echo "404 - Controller Or methode not found";
                         return;
                     }
                 }
