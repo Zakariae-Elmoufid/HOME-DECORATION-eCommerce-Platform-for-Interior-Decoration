@@ -23,8 +23,17 @@ class ProductService {
         $product->images = !is_null($product->images) ?  json_decode($product->images, true) : [];
         $product->colors = !is_null($product->colors) ?  json_decode($product->colors, true) : [];
     }
-    $this->response->render('admin/products/index', ['products' => $products]);
+    $categories = $this->productRepository->selectCategories();
+    $countProducts = $this->productRepository->countProducts();
+    $countAvailable = $this->productRepository->countAvailable();
+    $countCategories = $this->productRepository->countCategories();
+    
+    dump(['products' => $products , 'categories' => $categories ,  $countProducts]);
+    $this->response->render('admin/products/index', ['products' => $products , 'categories' => $categories , "countProducts" => $countProducts, "countAvailable" => $countAvailable  , "countCategories" => $countCategories]);
    }
+
+
+   
 
 
  

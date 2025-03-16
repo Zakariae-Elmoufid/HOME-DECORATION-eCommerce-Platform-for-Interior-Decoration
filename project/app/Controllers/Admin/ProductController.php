@@ -16,4 +16,5 @@ class ProductController extends Controller{
     public function index(){
         $this->ProductService->fetchAll();
     }
+
 }

@@ -20,7 +20,6 @@ class CategoryController extends Controller{
 
     public function fech(){
         $this->CategoryService->fechAll();
-
     }
     public function show(Request $request){
         $body = $request->getbody();

@@ -92,7 +92,6 @@ const categoryFilter =  document.getElementById('category-filter');
 
 categoryFilter.addEventListener('change', function() {
     const category = this.value;
-    console.log(category);
     const rows = productsTable.querySelectorAll('tr');
     rows.forEach(row => {
         const rowCategory = row.querySelector('.category-value').textContent;
@@ -107,7 +106,24 @@ categoryFilter.addEventListener('change', function() {
     });  
 })
 
+const statusFilter = document.getElementById('status-filter');
 
+statusFilter.addEventListener('change', function(){
+     const status = this.value;
+     const rows = productsTable.querySelectorAll('tr');
+     rows.forEach(row => {
+         const rowStatus = row.querySelector('.status-value').textContent.trim();
+        //  row.classList.add('hidden'); 
+         
+         if(status === 'All' || status === rowStatus) {
+            row.classList.remove('hidden'); 
+        } else {
+            row.classList.add('hidden'); 
+        }
+        
+    });  
+
+})
 
 
 });
