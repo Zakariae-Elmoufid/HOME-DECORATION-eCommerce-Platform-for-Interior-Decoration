@@ -1,33 +1,16 @@
-const addProductBtn = document.getElementById('addProductBtn');
-const productModal = document.getElementById('productModal');
-const closeModalBtn = document.getElementById('closeModalBtn');
-const cancelBtn = document.getElementById('cancelBtn');
 
-addProductBtn.addEventListener('click', () => {
-  productModal.classList.remove('hidden');
-});
-
-function closeModal() {
-  productModal.classList.add('hidden');
-}
-
-closeModalBtn.addEventListener('click', closeModal);
-cancelBtn.addEventListener('click', closeModal);
-
-productModal.addEventListener('click', (e) => {
-  if (e.target === productModal) {
-    closeModal();
-  }
-});
 
 const addSizeBtn = document.getElementById('addSizeBtn');
 const sizesContainer = document.getElementById('sizesContainer');
-
 addSizeBtn.addEventListener('click', () => {
   const sizeRow = document.querySelector('.size-row').cloneNode(true);
-  const inputs = sizeRow.querySelectorAll('input');
-  inputs.forEach(input => input.value = '');
   
+  const inputs = sizeRow.querySelectorAll('input');
+  inputs.forEach((input ) => {
+      input.value = '' ;
+  });
+ 
+
   const removeBtn = sizeRow.querySelector('.remove-size');
   removeBtn.addEventListener('click', () => {
     sizeRow.remove();
@@ -36,17 +19,52 @@ addSizeBtn.addEventListener('click', () => {
   sizesContainer.appendChild(sizeRow);
 });
 
+// let countSizeRow =  localStorage.getItem("countSizeRow");
+// console.log(countSizeRow);
+// addSizeBtn.addEventListener('click', () => {
+//   const sizeRow = document.querySelector('.size-row').cloneNode(true);
+
+//   const sizeNameInput = sizeRow.querySelector('[name="size_name[]"]');
+//   sizeNameInput.value = '';
+ 
+//   sizesContainer.appendChild(sizeRow);
+  
+
+// });
 document.querySelector('.remove-size').addEventListener('click', function(e) {
   if (document.querySelectorAll('.size-row').length > 1) {
     e.target.closest('.size-row').remove();
   }
 });
 
-document.getElementById('productForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  alert('Product saved successfully!');
-  closeModal();
+
+
+//clore
+
+const addColorBtn = document.getElementById('addColorBtn');
+const coloresContainer = document.getElementById('coloresContainer');
+
+
+addColorBtn.addEventListener('click', () => {
+  const colorRow = document.querySelector('.color-row').cloneNode(true);
+  const inputs = colorRow.querySelectorAll('input');
+  inputs.forEach(input => input.value = '');
+  
+  const removeBtn = colorRow.querySelector('.remove-color');
+  removeBtn.addEventListener('click', () => {
+    colorRow.remove();
+  });
+  
+  coloresContainer.appendChild(colorRow);
 });
+
+document.querySelector('.remove-color').addEventListener('click', function(e) {
+  if (document.querySelectorAll('.color-row').length > 1) {
+    e.target.closest('.color-row').remove();
+  }
+});
+
+
 
 //sorting
 document.addEventListener('DOMContentLoaded', function() {
@@ -113,7 +131,6 @@ statusFilter.addEventListener('change', function(){
      const rows = productsTable.querySelectorAll('tr');
      rows.forEach(row => {
          const rowStatus = row.querySelector('.status-value').textContent.trim();
-        //  row.classList.add('hidden'); 
          
          if(status === 'All' || status === rowStatus) {
             row.classList.remove('hidden'); 
@@ -125,5 +142,59 @@ statusFilter.addEventListener('change', function(){
 
 })
 
-
 });
+
+const previewContainer = document.getElementById('imagePreviews');
+let uploadedImages = [];
+document.getElementById('imageInput').addEventListener('change', function(event) {
+    const files = event.target.files;
+    
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file && file.type.startsWith('image/')) { 
+            const reader = new FileReader(); 
+            
+            reader.onload = function(e) {
+                const imgElement = document.createElement('img');
+                imgElement.src = e.target.result;
+                imgElement.style.maxWidth = '150px';
+                imgElement.style.maxHeight = '150px';
+                imgElement.classList.add('m-2', 'rounded');
+                
+                uploadedImages.push(e.target.result);
+                
+                const imgContainer = document.createElement('div');
+                imgContainer.classList.add('relative', 'inline-block');
+                
+                imgContainer.appendChild(imgElement);
+                
+                previewContainer.appendChild(imgContainer);
+                
+            };
+            
+            reader.readAsDataURL(file); 
+        }
+    }
+});
+
+const form = document.getElementById('productForm');
+
+
+form.addEventListener("submit" ,  async (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
+  const data = {};
+  formData.forEach((value, key) => {
+      data[key] = value;
+    });
+    console.log(data);
+    const response = await fetch("/products/store", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+  });
+  const result = await response.json();
+
+})

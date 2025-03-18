@@ -196,7 +196,7 @@ class Validator {
      * @param string $field Field with error
      * @param string $message Error message
      */
-    private function addError(string $field, string $message)
+    public function addError(string $field, string $message)
     {
         $this->errors[$field][] = $message;
     }
@@ -224,4 +224,6 @@ class Validator {
         }
         return $validatedData;
     }
+
+    
 }

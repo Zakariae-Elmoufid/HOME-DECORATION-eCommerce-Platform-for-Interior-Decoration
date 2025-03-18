@@ -10,6 +10,7 @@ use App\Controllers\Customer\CustomerController;
 use App\Controllers\Auth\LogoutController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\CategoryController;
+use App\Controllers\Admin\ProductController;
 
 
 
@@ -36,6 +37,8 @@ $app->router->patch('/categorys/update',[CategoryController::class ,'update']);
 $app->router->delete('/categorys/delete',[CategoryController::class ,'delete']);
 
 $app->router->get('/products' ,'Admin\ProductController@index');
+$app->router->get('/products/create' , 'Admin\ProductController@create');
+$app->router->post('/products/store' ,[ProductController::class , 'store']);
 
 
 

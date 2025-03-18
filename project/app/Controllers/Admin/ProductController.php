@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
+use App\Core\Request;
 use App\Services\ProductService;
 
 class ProductController extends Controller{
@@ -15,6 +16,16 @@ class ProductController extends Controller{
 
     public function index(){
         $this->ProductService->fetchAll();
+    }
+    
+    public function create(){
+        $this->ProductService->fetchCategory();
+    }
+
+
+    public function store(Request $request){
+        $data = $request->getbody();
+       $this->ProductService->store($data);
     }
 
 }
