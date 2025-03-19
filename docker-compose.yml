@@ -33,6 +33,8 @@ services:
     restart: always
     volumes:
       - ./project:/var/www/html/
+      - ./php/php.ini:/usr/local/etc/php/php.ini  # Monte php.ini dans le conteneur
+
     ports:
       - "8080:80"
     depends_on:

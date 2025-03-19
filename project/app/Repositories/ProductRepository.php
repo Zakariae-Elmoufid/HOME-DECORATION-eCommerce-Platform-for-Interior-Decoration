@@ -87,6 +87,33 @@ class ProductRepository extends BaseRepository {
        }
 
 
+    public function  insertProduct($data){
+         $product = [
+            "title" => $data["title"],
+            "category_id" => $data["category_id"],
+            "description" => $data["description"],
+            "base_price" => $data["base_price"],
+            "stock" => $data["stock"],
+            "isAvailable" => $data["isAvailable"]  == 'on' ? 1 : 0,
+         ] ;
+         
+         dump($data);
+         $product_id = $this->insert($this->table, $product );
+        //  $product_color = [
+
+        //  ]
+        if (!empty($data["size_name"])) {
+            foreach ($data["size_name"] as $index => $sizeName) {
+                $size = [
+                    "size_name" => $sizeName,
+                    "size_price_adjustment" =>  $data["size_price_adjustment"][$index]
+                ]
+            }
+        }
+    
+    }   
+
+
 }
 
 

@@ -15,15 +15,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Size Name</label>
-                        <input type="text" name="size_name[]" class="size-name w-full border border-gray-300 rounded-md py-2 px-3">
+                        <input type="text" name="size_name[${sizeIndex}]" class="size-name w-full border border-gray-300 rounded-md py-2 px-3">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Price Adjustment ($)</label>
-                        <input type="number" step="0.01" name="size_price_adjustment[]" class="size-price w-full border border-gray-300 rounded-md py-2 px-3">
+                        <input type="number" step="0.01" name="size_price_adjustment[${sizeIndex}]" class="size-price w-full border border-gray-300 rounded-md py-2 px-3">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
-                        <input type="number" name="size_stock[]" class="size-stock w-full border border-gray-300 rounded-md py-2 px-3">
+                        <input type="number" name="stock_quantity_size[${sizeIndex}]" class="size-stock w-full border border-gray-300 rounded-md py-2 px-3">
                     </div>
                 </div>
                 <button type="button" class="remove-size mt-3 text-red-500 hover:text-red-700 text-sm">
@@ -42,19 +42,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Color Name</label>
-                        <input type="text" name="color_name[]" class="color-name w-full border border-gray-300 rounded-md py-2 px-3">
+                        <input type="text" name="color_name[${colorIndex}]" class="color-name w-full border border-gray-300 rounded-md py-2 px-3">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Color Picker</label>
-                        <input type="color" name="color_code[]" class="color-code w-full h-10 cursor-pointer border border-gray-300 rounded-md">
+                        <input type="color" name="color_code[${colorIndex}]" class="color-code w-full h-10 cursor-pointer border border-gray-300 rounded-md">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Price Adjustment ($)</label>
-                        <input type="number" step="0.01" name="color_price_adjustment[]" class="color-price w-full border border-gray-300 rounded-md py-2 px-3">
+                        <input type="number" step="0.01" name="color_price_adjustment[${colorIndex}]" class="color-price w-full border border-gray-300 rounded-md py-2 px-3">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
-                        <input type="number" name="color_stock[]" class="color-stock w-full border border-gray-300 rounded-md py-2 px-3">
+                        <input type="number" name="stock_quantity_color[${colorIndex}]" class="color-stock w-full border border-gray-300 rounded-md py-2 px-3">
                     </div>
                 </div>
                 <button type="button" class="remove-color mt-3 text-red-500 hover:text-red-700 text-sm">
@@ -78,10 +78,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Gérer la soumission du formulaire
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
+        clearErrors();
+
         // Créer un nouvel objet FormData
         const formData = new FormData(form);
-         console.log(formData); 
         // Collecter les données des tailles
         const sizes = [];
         document.querySelectorAll('.size-row').forEach(row => {
@@ -97,8 +97,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         });
-
-        // Collecter les données des couleurs
+        const isAvailable = document.getElementById('isAvailable').checked;
+        formData.append('isAvailable', isAvailable);
         const colors = [];
         document.querySelectorAll('.color-row').forEach(row => {
             const colorName = row.querySelector('.color-name')?.value;
@@ -124,22 +124,19 @@ document.addEventListener('DOMContentLoaded', function() {
         //     console.log(pair[0], pair[1]);
         // }
 
-        try {
+        
             const response = await fetch('/products/store', {
                 method: 'POST',
                 body: formData
             });
 
             const result = await response.json();
-            console.log(result.errors);
          
                 if (result.errors) {
-                    displayErrors(result.errors ,formData);
+                    displayErrors(result.errors );
                 }
             
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        
     });
 
     // Prévisualisation des images
@@ -162,7 +159,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    function displayErrors(errors ,formInput) {
-        
+    function displayErrors(errors) {
+        const inputs = document.querySelectorAll("input ,textarea");
+    
+        inputs.forEach((input , index) => {
+            const inputName = input.getAttribute('name'); 
+    
+            if (inputName && errors[inputName]) { 
+                const errorMessage =  errors[inputName][index] ||  errors[inputName][0]; // Récupère le message d'erreur
+                
+                // Vérifie si l'élément suivant existe et s'il est un message d'erreur
+                if (input.nextElementSibling && input.nextElementSibling.classList.contains('error-message')) {
+                    input.nextElementSibling.textContent = errorMessage;
+                }else{
+                    const errorSpan = document.createElement('small');
+                    errorSpan.classList.add('error-message', 'text-red-500', 'text-sm');
+                    errorSpan.textContent = errorMessage;
+                    input.parentNode.appendChild(errorSpan);
+                }
+            }
+        });
     }
+    
 });
+
+function clearErrors() {
+    const errorMessages = document.querySelectorAll('.error-message');
+    errorMessages.forEach(error => {
+        error.remove();
+    });
+}

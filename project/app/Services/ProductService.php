@@ -51,7 +51,6 @@ class ProductService {
     //     return $this->response->jsonEncode(["data" => $data]);
 
     // }
-    $validator = new Validator($data);
     $errors = [];
     $validator = new Validator($data);
     $validator->setRules([
@@ -80,8 +79,8 @@ class ProductService {
         }
     }
     
-    if (isset($data['price_adjustment']) && is_array($data['price_adjustment'])) {
-        foreach ($data['price_adjustment'] as $index => $price) {
+    if (isset($data['size_price_adjustment']) && is_array($data['price_adjustment'])) {
+        foreach ($data['size_price_adjustment'] as $index => $price) {
             $priceValidator = new Validator(['price' => $price]);
             $priceValidator->setRules(['price' => 'required|numeric']);
             
@@ -89,7 +88,7 @@ class ProductService {
                 $errors = $priceValidator->getErrors();
                 if (!empty($errors['price'])) {
                     foreach ($errors['price'] as $error) {
-                        $validator->addError("price_adjustment[$index]", str_replace('price', "price_adjustment[$index]", $error));
+                        $validator->addError("size_price_adjustment[$index]", str_replace('price', "price_adjustment[$index]", $error));
                     }
                 }
             }
@@ -143,14 +142,29 @@ class ProductService {
     }
 
     if (isset($data["stock_quantity_color"]) && is_array($data['stock_quantity_color'])) {
-        foreach ($data['stock_quantity_color'] as $index => $color) {
-            $priceValidator = new Validator(['color' => $color]);
-            $priceValidator->setRules(['color' => 'required|string']);
+        foreach ($data['stock_quantity_color'] as $index => $quantity_color) {
+            $priceValidator = new Validator(['quantity_color' => $quantity_color]);
+            $priceValidator->setRules(['quantity_color' => 'required|string']);
             if (!$priceValidator->validate()) {
                 $errors = $priceValidator->getErrors();
-                if (!empty($errors['color'])) {
-                    foreach ($errors['color'] as $error) {
-                        $validator->addError("stock_quantity_color[$index]", str_replace('color', "stock_quantity_color[$index]", $error));
+                if (!empty($errors['quantity_color'])) {
+                    foreach ($errors['quantity_color'] as $error) {
+                        $validator->addError("stock_quantity_color[$index]", str_replace('quantity_color', "stock_quantity_color[$index]", $error));
+                    }
+                }
+            }
+        }
+    }
+
+    if (isset($data["color_price_adjustment"]) && is_array($data['color_price_adjustment'])) {
+        foreach ($data['color_price_adjustment'] as $index => $price_color) {
+            $priceValidator = new Validator(['price_color' => $price_color]);
+            $priceValidator->setRules(['price_color' => 'required|string']);
+            if (!$priceValidator->validate()) {
+                $errors = $priceValidator->getErrors();
+                if (!empty($errors['price_color'])) {
+                    foreach ($errors['price_color'] as $error) {
+                        $validator->addError("color_price_adjustment[$index]", str_replace('price_color', "color_price_adjustment[$index]", $error));
                     }
                 }
             }
@@ -166,8 +180,8 @@ class ProductService {
         return $this->response->jsonEncode(["errors" => $errors , "oldData" => $oldData ]);
 
     }
-     
-                return $this->response->render('admin/products/index', [$data]);
+        $this->productRepository->insertProduct($data);
+        // return $this->response->render('admin/products/index', [$data]);
 }
 
    
