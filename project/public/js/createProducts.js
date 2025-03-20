@@ -1,3 +1,7 @@
+import displayMessage from "./alert.js"
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('productForm');
     const addSizeBtn = document.getElementById('addSizeBtn');
@@ -120,9 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('colors', JSON.stringify(colors));
 
       
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0], pair[1]);
-        // }
+       
 
         
             const response = await fetch('/products/store', {
@@ -131,7 +133,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             const result = await response.json();
-         
+                if(result.success) {
+                    displayMessage(result.success,"/products");
+                }
                 if (result.errors) {
                     displayErrors(result.errors );
                 }
@@ -139,7 +143,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
     });
 
-    // Prévisualisation des images
     imageInput?.addEventListener('change', function(e) {
         imagePreviews.innerHTML = '';
         [...e.target.files].forEach(file => {
@@ -168,7 +171,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (inputName && errors[inputName]) { 
                 const errorMessage =  errors[inputName][index] ||  errors[inputName][0]; // Récupère le message d'erreur
                 
-                // Vérifie si l'élément suivant existe et s'il est un message d'erreur
                 if (input.nextElementSibling && input.nextElementSibling.classList.contains('error-message')) {
                     input.nextElementSibling.textContent = errorMessage;
                 }else{

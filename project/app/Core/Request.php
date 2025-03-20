@@ -77,6 +77,8 @@ class Request {
                     
                 }    
                 if (!empty($_FILES)) {
+                    // dump($_FILES);
+                    // exit();
                     foreach($_FILES as $key => $value){
                         $body[$key] = $value;
                     }

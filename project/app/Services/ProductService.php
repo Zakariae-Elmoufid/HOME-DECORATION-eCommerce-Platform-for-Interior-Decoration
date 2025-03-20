@@ -79,7 +79,7 @@ class ProductService {
         }
     }
     
-    if (isset($data['size_price_adjustment']) && is_array($data['price_adjustment'])) {
+    if (isset($data['size_price_adjustment']) && is_array($data['size_price_adjustment'])) {
         foreach ($data['size_price_adjustment'] as $index => $price) {
             $priceValidator = new Validator(['price' => $price]);
             $priceValidator->setRules(['price' => 'required|numeric']);
@@ -88,7 +88,7 @@ class ProductService {
                 $errors = $priceValidator->getErrors();
                 if (!empty($errors['price'])) {
                     foreach ($errors['price'] as $error) {
-                        $validator->addError("size_price_adjustment[$index]", str_replace('price', "price_adjustment[$index]", $error));
+                        $validator->addError("size_price_adjustment[$index]", str_replace('price', "size_price_adjustment[$index]", $error));
                     }
                 }
             }
@@ -170,7 +170,27 @@ class ProductService {
             }
         }
     }
+ 
 
+    $uploadedImages = [];
+
+    if (!empty($data["images"]["name"])) {
+        foreach ($data["images"]["name"] as $index => $fileName) {
+            $tmpPath = $data["images"]["tmp_name"][$index];
+            $destinationPath = dirname(__DIR__)."/../public/uploads/" . $fileName; 
+            move_uploaded_file($tmpPath, $destinationPath) ;
+                $uploadedImages[] = [
+                    "path" => "uploads/". $fileName,
+                    "is_primary" => $index === 0 ? 1 : 0, 
+                ];
+         
+            
+        }
+    }
+    
+    $data["images"] = $uploadedImages;
+
+  
     $oldData = $data;
 
     $isValid = $isValid && empty($validator->getErrors());
@@ -180,8 +200,10 @@ class ProductService {
         return $this->response->jsonEncode(["errors" => $errors , "oldData" => $oldData ]);
 
     }
-        $this->productRepository->insertProduct($data);
-        // return $this->response->render('admin/products/index', [$data]);
+        $result =$this->productRepository->insertProduct($data);
+        if($result){
+             $this->response->jsonEncode(["success" => "create produt is succusful"]);
+        }
 }
 
    

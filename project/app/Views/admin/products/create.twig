@@ -16,7 +16,8 @@
             <a href="/products"><i class="fas fa-times"></i></a>
           </button>
         </div>
-        
+           {% include "components/alert.twig" %}
+
         <div class="p-6">
           <form id="productForm"  enctype="multipart/form-data">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -183,6 +184,6 @@
 <script>
     window.formErrors = {{ errors|json_encode|raw }};
 </script>
-  <script src="../../../../public/js/createProducts.js"></script>
+  <script src="../../../../public/js/createProducts.js" type="module"></script>
 </div>
 {% endblock %}
