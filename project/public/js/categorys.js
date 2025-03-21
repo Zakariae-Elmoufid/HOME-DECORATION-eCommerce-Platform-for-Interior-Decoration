@@ -22,7 +22,6 @@ formAdd.addEventListener("submit" , async (e) => {
     formData.forEach((value, key) => {
         data[key] = value;
       });
-
     const response = await fetch("/categorys/store", {
         method: "POST",
         headers: {
