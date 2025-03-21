@@ -54,9 +54,8 @@ class Request {
         {   
                 $rawData = file_get_contents("php://input");
                 $jsonData = json_decode($rawData, true);
-                
+
                 if ($jsonData) {
-                    dump($jsonData);
                     foreach ($jsonData as $key => $value) {
                         if (is_array($value)) {
                             $body[$key] = $this->sanitizeRecursive($value);
@@ -77,8 +76,6 @@ class Request {
                     
                 }    
                 if (!empty($_FILES)) {
-                    // dump($_FILES);
-                    // exit();
                     foreach($_FILES as $key => $value){
                         $body[$key] = $value;
                     }
@@ -87,14 +84,30 @@ class Request {
         
         if($this->getMethod()==='patch'){
             $rawData = file_get_contents("php://input");
-            $jsonData = json_decode($rawData, true);            
+            $jsonData = json_decode($rawData, true);   
+           
             if ($jsonData) {
                 foreach ($jsonData as $key => $value) {
-                    $body[$key] = filter_var($value, FILTER_SANITIZE_SPECIAL_CHARS);
-                }
-            } else {
-                foreach ($_POST as $key => $value) {
-                    $body[$key] = filter_input(INPUT_PATCH, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                    if (is_array($value)) {
+                        $body[$key] = $this->sanitizeRecursive($value);
+                    } else {
+                        $body[$key] = filter_var($value, FILTER_SANITIZE_SPECIAL_CHARS);
+                    }         
+                }           
+            }
+            else if (!empty($_POST)) {
+                    foreach ($_POST as $key => $value) {
+                        if (is_array($value)) {
+                            $body[$key] = $this->sanitizeRecursive($value);
+                        } else {
+                            $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                        }
+                    }
+            }    
+
+            if (!empty($_FILES)) {
+                foreach($_FILES as $key => $value){
+                    $body[$key] = $value;
                 }
             }
         }

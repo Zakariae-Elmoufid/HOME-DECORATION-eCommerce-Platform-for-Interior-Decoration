@@ -26,7 +26,6 @@ class CategoryController extends Controller{
         $id = isset($body['id']) ? (int) $body['id'] : null;
 
         $this->CategoryService->show($id);
-
     }
 
 

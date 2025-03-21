@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const imageInput = document.getElementById('imageInput');
     const imagePreviews = document.getElementById('imagePreviews');
 
-    // Gérer l'ajout de tailles
     addSizeBtn.addEventListener('click', function() {
         const sizeIndex = document.querySelectorAll('.size-row').length;
         const sizeHtml = `
@@ -38,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
         sizesContainer.insertAdjacentHTML('beforeend', sizeHtml);
     });
 
-    // Gérer l'ajout de couleurs
     addColorBtn.addEventListener('click', function() {
         const colorIndex = document.querySelectorAll('.color-row').length;
         const colorHtml = `
@@ -69,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
         coloresContainer.insertAdjacentHTML('beforeend', colorHtml);
     });
 
-    // Gérer la suppression
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('remove-size')) {
             e.target.closest('.size-row').remove();
@@ -79,14 +76,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Gérer la soumission du formulaire
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         clearErrors();
 
-        // Créer un nouvel objet FormData
         const formData = new FormData(form);
-        // Collecter les données des tailles
         const sizes = [];
         document.querySelectorAll('.size-row').forEach(row => {
             const sizeName = row.querySelector('.size-name')?.value;
@@ -125,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
       
        
-
         
             const response = await fetch('/products/store', {
                 method: 'POST',
@@ -169,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const inputName = input.getAttribute('name'); 
     
             if (inputName && errors[inputName]) { 
-                const errorMessage =  errors[inputName][index] ||  errors[inputName][0]; // Récupère le message d'erreur
+                const errorMessage =  errors[inputName][index] ||  errors[inputName][0];
                 
                 if (input.nextElementSibling && input.nextElementSibling.classList.contains('error-message')) {
                     input.nextElementSibling.textContent = errorMessage;
