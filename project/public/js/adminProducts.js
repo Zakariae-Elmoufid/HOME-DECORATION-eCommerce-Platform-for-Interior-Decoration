@@ -198,3 +198,33 @@ form.addEventListener("submit" ,  async (e) => {
   const result = await response.json();
 
 })
+
+
+const deleteButtons = document.querySelectorAll('.delete-product');
+  
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+        const productId = this.getAttribute('data-product-id');
+        const data = {};
+        data.id = productId;
+        fetch(`/products/delete`, {
+          method: 'DELETE',
+          body: JSON.stringify(data),
+
+        })
+        // .then(response => {
+        //   if (response.ok) {
+        //     // Supprimer l'élément du DOM ou rediriger
+        //     window.location.reload();
+        //   } else {
+        //     alert('Failed to delete the product.');
+        //   }
+        // })
+        // .catch(error => {
+        //   console.error('Error:', error);
+        // });
+      
+    });
+  });
