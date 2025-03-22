@@ -36,9 +36,13 @@ class ProductController extends Controller{
 
     public function update(Request $request){
         $data = $request->getbody();
-      
         $this->ProductService->update($data);
+    }
 
+    public function delete(Request $request){
+        $data = $request->getbody();
+        $id = $data['id'];
+        $this->ProductService->delete($id);
     }
 
 }

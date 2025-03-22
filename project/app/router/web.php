@@ -41,7 +41,7 @@ $app->router->get('/products/create' , 'Admin\ProductController@create');
 $app->router->post('/products/store' ,[ProductController::class , 'store']);
 $app->router->get('/products/edit', [ProductController::class ,'show']);
 $app->router->post('/products/update', [ProductController::class ,'update']);
-// $app->router->post('/products/update' ,[ProductController::class , 'update']);
+$app->router->delete('/products/delete' ,[ProductController::class , 'delete']);
 
 
 

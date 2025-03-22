@@ -88,14 +88,14 @@ class ProductRepository extends BaseRepository {
 
 
     public function  insertProduct($data){
-       
+
          $product = [
             "title" => $data["title"],
             "category_id" => $data["category_id"],
             "description" => $data["description"],
             "base_price" => $data["base_price"],
             "stock" => $data["stock"],
-            "isAvailable" => $data["isAvailable"]  == 'on' ? 1 : 0,
+            "isAvailable" => $data["isAvailable"]   ? 1 : 0
          ] ;
          
          $product_id = $this->insert($this->table, $product );
@@ -196,7 +196,7 @@ class ProductRepository extends BaseRepository {
             "description" => $data["description"],
             "base_price" => $data["base_price"],
             "stock" => $data["stock"],
-            "isAvailable" => $data["isAvailable"]  == 'on' ? 1 : 0,
+            "isAvailable" => $data["isAvailable"] ? 1 : 0,
          ] ;
          
          $this->update($this->table,$id, $product );
@@ -240,6 +240,11 @@ class ProductRepository extends BaseRepository {
 
 
 
+    }
+
+
+    public function remove($id){
+        return $this->delete($this->table ,$id);
     }
 
 

@@ -12,14 +12,12 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Produit chargé:', product);
     
     if (product && product.id) {
-        // Remplir les informations de base
         document.getElementById('title').value = product.title || '';
         document.getElementById('description').value = product.description || '';
         document.getElementById('base_price').value = product.base_price || '';
         document.getElementById('stock').value = product.stock || '';
         document.getElementById('isAvailable').checked = product.isAvailable == 1;
         
-        // Sélectionner la catégorie
         if (product.category_id) {
             const categorySelect = document.getElementById('category');
             const optionToSelect = categorySelect.querySelector(`option[value="${product.category_id}"]`);
@@ -109,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const isPrimary = image.is_primary == 1 || image.is_primary === true;
                     const preview = `
                         <div class="relative" data-image-id="${image.id || ''}">
-                            <img src="../${image.image_path}" class="w-32 h-32 object-cover rounded-md">
+                            <img src="/uploads/${image.image_path}" class="w-32 h-32 object-cover rounded-md">
                             <button type="button" class="remove-image absolute top-1 right-1 bg-red-500 text-white rounded-full p-1">
                                 <i class="fas fa-times"></i>
                             </button>
@@ -124,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Ajouter une nouvelle taille
     addSizeBtn.addEventListener('click', function() {
         const sizeIndex = document.querySelectorAll('.size-row').length;
         const sizeHtml = `
@@ -152,7 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
         sizesContainer.insertAdjacentHTML('beforeend', sizeHtml);
     });
 
-    // Ajouter une nouvelle couleur
     addColorBtn.addEventListener('click', function() {
         const colorIndex = document.querySelectorAll('.color-row').length;
         const colorHtml = `
@@ -184,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
         coloresContainer.insertAdjacentHTML('beforeend', colorHtml);
     });
 
-    // Gérer la suppression des éléments
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('remove-size') || e.target.closest('.remove-size')) {
             e.target.closest('.size-row').remove();
@@ -194,15 +189,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Soumettre le formulaire
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         clearErrors();
         
-        // Utiliser FormData pour les fichiers
         const formData = new FormData(form);
-        
-        // Ajouter l'ID du produit
         formData.append("id", product_id);
         
         // Gérer la disponibilité
