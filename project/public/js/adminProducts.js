@@ -19,18 +19,7 @@ addSizeBtn.addEventListener('click', () => {
   sizesContainer.appendChild(sizeRow);
 });
 
-// let countSizeRow =  localStorage.getItem("countSizeRow");
-// console.log(countSizeRow);
-// addSizeBtn.addEventListener('click', () => {
-//   const sizeRow = document.querySelector('.size-row').cloneNode(true);
 
-//   const sizeNameInput = sizeRow.querySelector('[name="size_name[]"]');
-//   sizeNameInput.value = '';
- 
-//   sizesContainer.appendChild(sizeRow);
-  
-
-// });
 document.querySelector('.remove-size').addEventListener('click', function(e) {
   if (document.querySelectorAll('.size-row').length > 1) {
     e.target.closest('.size-row').remove();
