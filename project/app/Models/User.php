@@ -9,14 +9,14 @@ class User {
     private $username;
     private $email;
     private $password;
-    private $role;
+    private  $role;
 
-    public function __construct( $username , $email , $password ,$role_id , $id = null){
+    public function __construct( $username , $email , $password , $role , $id = null){
       $this->id = $id ;
       $this->username = $username;
       $this->email = $email;
       $this->password = $password;
-      $this->role  = $role_id;
+      $this->role  = $role;
     } 
     
 

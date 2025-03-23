@@ -28,13 +28,15 @@ class ProductService {
     $countAvailable = $this->productRepository->countAvailable();
     $countCategories = $this->productRepository->countCategories();
     
-    $this->response->render('admin/products/index', [
+    return $data =  [
         'products' => $products ,
         'categories' => $categories ,
         "countProducts" => $countProducts,
         "countAvailable" => $countAvailable ,
-        "countCategories" => $countCategories]
-    );
+        "countCategories" => $countCategories
+    ];
+    
+   
    }
 
    public function fetchCategory(){
@@ -193,12 +195,11 @@ class ProductService {
     
     if (!$isValid) {
         $errors = $validator->getErrors();
-        return $this->response->jsonEncode(["errors" => $errors , "oldData" => $oldData ]);
-
+        return $this->response->jsonEncode(["errors" => $errors , "oldData" => $oldData]);
     }  
         $result =$this->productRepository->insertProduct($data);
         if($result){
-             $this->response->jsonEncode(["success" => "create produt is succusful"]);
+            $this->response->jsonEncode(["success" => "create produt is succusful"]);
         }
     }
     
@@ -339,7 +340,7 @@ class ProductService {
                 $destinationPath = dirname(__DIR__)."/../public/uploads/" . $fileName; 
                 move_uploaded_file($tmpPath, $destinationPath) ;
                     $uploadedImages[] = [
-                        "path" => "uploads/". $fileName,
+                        "path" =>  $fileName,
                         "is_primary" => $index === 0 ? 1 : 0, 
                     ];
             
@@ -348,8 +349,7 @@ class ProductService {
         }
         
         $data["images"] = $uploadedImages;
-
-    
+     
         $oldData = $data;
 
         $isValid = $isValid && empty($validator->getErrors());

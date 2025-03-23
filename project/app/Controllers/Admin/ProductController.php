@@ -4,18 +4,22 @@ namespace App\Controllers\Admin;
 
 use App\Core\Controller;
 use App\Core\Request;
+use App\Core\response;
 use App\Services\ProductService;
 
 class ProductController extends Controller{
 
     private $ProductService ;
+    private $response ;
 
     public function __construct(){
         $this->ProductService = new ProductService() ; 
+        $this->response = new Response();
     }
 
     public function index(){
-        $this->ProductService->fetchAll();
+       $products = $this->ProductService->fetchAll();
+       $this->response->render('admin/products/index',  $products);
     }
     
     public function create(){

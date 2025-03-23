@@ -1,16 +1,21 @@
 <?php 
 
-namespace App\Modeles;
+namespace App\Models;
 
 class Role {
   
-    private $role ;
+    private $id ;
+    private $title;
     
-    public function __construct(){
-        
+    public function __construct($id,$title){
+        $this->id = $id;
+        $this->title = $title;
     }
 
-    public function getRole(): Role {
-        return $this->role;
+    public function getId() {
+        return $this->id;
+    }
+    public function getTitle() {
+        return $this->title;
     }
 }

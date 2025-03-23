@@ -17,8 +17,7 @@ class CategoryService {
    } 
 
    public function fechAll(){
-    $result = $this->categoryRepository->fechAll();
-    return $this->response->jsonEncode($result);
+    return  $this->categoryRepository->fechAll();
 
    }
 

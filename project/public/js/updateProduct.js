@@ -1,3 +1,5 @@
+import displayMessage from "./alert.js"
+
 document.addEventListener('DOMContentLoaded', function() {
     const product = window.ProductData || {};
     const product_id = product.id;
@@ -9,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const imageInput = document.getElementById('imageInput');
     const imagePreviews = document.getElementById('imagePreviews');
     
-    console.log('Produit chargé:', product);
     
     if (product && product.id) {
         document.getElementById('title').value = product.title || '';
@@ -26,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Charger les tailles
         if (product.sizes && Array.isArray(product.sizes) && product.sizes.length > 0) {
             sizesContainer.innerHTML = '';
             
@@ -57,10 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             sizesContainer.innerHTML = sizesHTML;
-            console.log(`${product.sizes.length} tailles chargées`);
         }
         
-        // Charger les couleurs
         if (product.colors && Array.isArray(product.colors) && product.colors.length > 0) {
             coloresContainer.innerHTML = '';
             
@@ -98,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(`${product.colors.length} couleurs chargées`);
         }
         
-        // Charger les images
         if (product.images && Array.isArray(product.images) && product.images.length > 0) {
             imagePreviews.innerHTML = '';
             
@@ -107,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const isPrimary = image.is_primary == 1 || image.is_primary === true;
                     const preview = `
                         <div class="relative" data-image-id="${image.id || ''}">
-                            <img src="/uploads/${image.image_path}" class="w-32 h-32 object-cover rounded-md">
+                            <img src="/public/uploads/${image.image_path}" class="w-32 h-32 object-cover rounded-md">
                             <button type="button" class="remove-image absolute top-1 right-1 bg-red-500 text-white rounded-full p-1">
                                 <i class="fas fa-times"></i>
                             </button>
@@ -196,11 +193,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(form);
         formData.append("id", product_id);
         
-        // Gérer la disponibilité
         const isAvailable = document.getElementById('isAvailable').checked;
         formData.append('isAvailable', isAvailable ? 1 : 0);
         
-        // Gérer les tailles
         const sizes = [];
         document.querySelectorAll('.size-row').forEach((row, index) => {
             const sizeName = row.querySelector('.size-name')?.value;
@@ -218,7 +213,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Gérer les couleurs
         const colors = [];
         document.querySelectorAll('.color-row').forEach((row, index) => {
             const colorName = row.querySelector('.color-name')?.value;
@@ -245,11 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Convertir les tableaux en JSON avant de les ajouter à FormData
-        // formData.append('sizes', JSON.stringify(sizes));
-        // formData.append('colors', JSON.stringify(colors));
-        // formData.append('existing_images', JSON.stringify(existingImages));
-
+       
         
             const response = await fetch(`/products/update`, {
                 method: 'POST',
@@ -278,6 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <button type="button" class="remove-image absolute top-1 right-1 bg-red-500 text-white rounded-full p-1">
                             <i class="fas fa-times"></i>
                         </button>
+
                     </div>
                 `;
                 imagePreviews.insertAdjacentHTML('beforeend', preview);
@@ -299,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const inputName = input.getAttribute('name'); 
     
             if (inputName && errors[inputName]) { 
-                const errorMessage = errors[inputName][index] || errors[inputName][0]; // Récupère le message d'erreur
+                const errorMessage = errors[inputName][index] || errors[inputName][0]; 
                 
                 if (input.nextElementSibling && input.nextElementSibling.classList.contains('error-message')) {
                     input.nextElementSibling.textContent = errorMessage;

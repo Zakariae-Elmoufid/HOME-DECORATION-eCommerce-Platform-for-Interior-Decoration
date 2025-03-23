@@ -88,3 +88,7 @@
   .text-cream-dark { color: var(--cream-dark); }
   .border-gold { border-color: var(--gold); }
 
+  
+#categorySlider::-webkit-scrollbar {
+  width: 10px;
+}
