@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 use App\Models\User;
+use App\Models\Role;
 use PDO;
 
 class UserRepository extends BaseRepository {
@@ -9,19 +10,21 @@ class UserRepository extends BaseRepository {
     private $table = "users";
 
     public function createUser($data) {
-        
+        $role = new Role(2,"customer");
+        $roleId = $role->getId();
         $userdata = [
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => password_hash($data['password'], PASSWORD_DEFAULT),
-            'role_id' => 2
+            'role_id' => $roleId
         ];
         
         
         $create_user = $this->insert($this->table,$userdata );
         
         if($create_user){
-            $user = new User($data['username'],$data['email'],$data['password'],2,$create_user);
+           
+            $user = new User($data['username'],$data['email'],$data['password'],$roleId,$create_user);
             return $user;
         }
 
@@ -31,6 +34,7 @@ class UserRepository extends BaseRepository {
     public function findUser($data){
 
           $user = $this->findBy($this->table , ['email' => $data['email']]);
+      
           $errors = [];
 
           if (!$user) {
@@ -42,7 +46,8 @@ class UserRepository extends BaseRepository {
           if (!empty($errors)) {
               return $errors;
           }
-      
+          
+         
           return ['user' => new User($user->username, $user->email, $user->password, $user->role_id)];
         
     }

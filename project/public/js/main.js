@@ -15,4 +15,6 @@ furniture.addEventListener('click', function(){
 
 
 
+
+
 });

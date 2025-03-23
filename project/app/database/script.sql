@@ -70,6 +70,7 @@ CREATE TABLE Product_colors (
     id INT PRIMARY KEY AUTO_INCREMENT,
     product_id INT NOT NULL,
     color_name VARCHAR(50) NOT NULL,
+    color_code VARCHAR(50) not null ,
     price_adjustment DECIMAL(10, 2) DEFAULT 0.00,
     stock_quantity INT NOT NULL DEFAULT 0,
     FOREIGN KEY (product_id) REFERENCES Products(id) ON DELETE CASCADE

@@ -23,8 +23,8 @@ $app->router->post('/store_user',[RegisterController::class, 'store']);
 $app->router->post('/find_user',[LoginController::class, 'login']);
 $app->router->post('/login_google',[LoginController::class, 'loginGoogle']);
 $app->router->post('/register_google', [RegisterController::class, 'registerGoogle']);
-$app->router->get('/customer',[CustomerController::class,'index'])
-->middleware('/customer', AuthMiddleware::class);
+$app->router->get('/customer',[CustomerController::class,'index']);
+// ->middleware('/customer', AuthMiddleware::class);
 $app->router->get('/logout', 'Auth\LogoutController@logout' );
 
 $app->router->get('/admin' ,'Admin\DashboardController@index');
@@ -36,12 +36,15 @@ $app->router->get('/categorys/show', [CategoryController::class ,'show']);
 $app->router->patch('/categorys/update',[CategoryController::class ,'update']);
 $app->router->delete('/categorys/delete',[CategoryController::class ,'delete']);
 
-$app->router->get('/products' ,'Admin\ProductController@index');
+$app->router->get('/admin/products' ,'Admin\ProductController@index');
 $app->router->get('/products/create' , 'Admin\ProductController@create');
 $app->router->post('/products/store' ,[ProductController::class , 'store']);
 $app->router->get('/products/edit', [ProductController::class ,'show']);
 $app->router->post('/products/update', [ProductController::class ,'update']);
 $app->router->delete('/products/delete' ,[ProductController::class , 'delete']);
+
+
+$app->router->get('/products' , 'HomeController@product');
 
 
 

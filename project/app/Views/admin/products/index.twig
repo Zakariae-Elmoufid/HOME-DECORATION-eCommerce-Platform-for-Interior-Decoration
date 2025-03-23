@@ -120,7 +120,7 @@
                     {% for image in product.images %}
                       {% if image.is_primary == 1 %}
                         <div class="flex-shrink-0 h-10 w-10">
-                          <img class="h-10 w-10 rounded-lg object-cover" src="{{ image.image_path }}" alt="{{ product.title }}" />
+                          <img class="h-10 w-10 rounded-lg object-cover" src="/public/uploads/{{ image.image_path }}" alt="{{ product.title }}" />
                         </div>
                       {% endif %}
                     {% endfor %}
@@ -350,5 +350,5 @@
     </div>
   </div>
 
-  <script src="../../../../public/js/adminProducts.js"></script>
+  <script src="../../../../public/js/adminProducts.js" type="module"></script>
 {% endblock %}

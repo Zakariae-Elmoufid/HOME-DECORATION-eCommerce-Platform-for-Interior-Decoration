@@ -226,18 +226,23 @@ class ProductRepository extends BaseRepository {
            }
         }
 
-         if(!empty($data["images"])){
-            foreach($data["images"] as  $image){
-                $image = [
-                    "is_primary" => $image["is_primary"],
+        if (!empty($data["images"])) {
+            foreach ($data["images"] as $image) {
+                $existingImage = $this->findBy("Product_images", [
                     "product_id" => $id,
-                    "image_path" => $image["path"],
-                ];
-                $this->insert("Product_images",$image);
+                    "image_path" => $image["path"]
+                ]);
+                if (empty($existingImage)) {
+                    $newImage = [
+                        "product_id" => $id,
+                        "image_path" => $image["path"],
+                    ];
+                    $this->insert("Product_images", $newImage);
+                } 
             }
         }
+        
         return true;
-
 
 
     }

@@ -5,13 +5,17 @@ namespace App\Controllers\Admin;
 use App\Core\Controller;
 use App\Core\Request;
 use App\Services\CategoryService;
+use App\Core\Response;
 
 class CategoryController extends Controller{
 
     private $CategoryService ;
+    private $response;
 
     public function __construct(){
         $this->CategoryService = new CategoryService() ; 
+        $this->response = new Response();
+
     }
 
     public function index(){
@@ -19,7 +23,8 @@ class CategoryController extends Controller{
     }
 
     public function fech(){
-        $this->CategoryService->fechAll();
+       $result = $this->CategoryService->fechAll();
+       return $this->response->jsonEncode($result);
     }
     public function show(Request $request){
         $body = $request->getbody();

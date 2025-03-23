@@ -41,9 +41,6 @@ public function loginGoogle(Request $request) {
 
   $result  = $this->authService->loginGoogle($postData);
 
-
-
-
 }
 
 

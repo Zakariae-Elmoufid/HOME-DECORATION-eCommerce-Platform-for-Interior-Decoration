@@ -1,4 +1,4 @@
-
+import displayMessage from "./alert.js"
 
 const addSizeBtn = document.getElementById('addSizeBtn');
 const sizesContainer = document.getElementById('sizesContainer');
@@ -144,60 +144,11 @@ statusFilter.addEventListener('change', function(){
 
 });
 
-const previewContainer = document.getElementById('imagePreviews');
-let uploadedImages = [];
-document.getElementById('imageInput').addEventListener('change', function(event) {
-    const files = event.target.files;
-    
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (file && file.type.startsWith('image/')) { 
-            const reader = new FileReader(); 
-            
-            reader.onload = function(e) {
-                const imgElement = document.createElement('img');
-                imgElement.src = e.target.result;
-                imgElement.style.maxWidth = '150px';
-                imgElement.style.maxHeight = '150px';
-                imgElement.classList.add('m-2', 'rounded');
-                
-                uploadedImages.push(e.target.result);
-                
-                const imgContainer = document.createElement('div');
-                imgContainer.classList.add('relative', 'inline-block');
-                
-                imgContainer.appendChild(imgElement);
-                
-                previewContainer.appendChild(imgContainer);
-                
-            };
-            
-            reader.readAsDataURL(file); 
-        }
-    }
-});
-
-const form = document.getElementById('productForm');
 
 
-form.addEventListener("submit" ,  async (e) => {
-  e.preventDefault();
-  const formData = new FormData(form);
-  const data = {};
-  formData.forEach((value, key) => {
-      data[key] = value;
-    });
-    console.log(data);
-    const response = await fetch("/products/store", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-  });
-  const result = await response.json();
 
-})
+
+
 
 
 const deleteButtons = document.querySelectorAll('.delete-product');
@@ -214,17 +165,15 @@ const deleteButtons = document.querySelectorAll('.delete-product');
           body: JSON.stringify(data),
 
         })
-        // .then(response => {
-        //   if (response.ok) {
-        //     // Supprimer l'élément du DOM ou rediriger
-        //     window.location.reload();
-        //   } else {
-        //     alert('Failed to delete the product.');
-        //   }
-        // })
-        // .catch(error => {
-        //   console.error('Error:', error);
-        // });
+        
+        .then(response => {
+          if (response.ok) {
+            displayMessage(response.success,"/products");
+          } else {
+            alert('Failed to delete the product.');
+          }
+        })
+      
       
     });
   });

@@ -154,12 +154,18 @@ document.addEventListener('DOMContentLoaded', function() {
             reader.readAsDataURL(file);
         });
     });
+    imagePreviews.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-image')) {
+            e.target.closest('.relative').remove();
+        }
+    });
 
     function displayErrors(errors) {
         const inputs = document.querySelectorAll("input ,textarea");
     
         inputs.forEach((input , index) => {
             const inputName = input.getAttribute('name'); 
+          
     
             if (inputName && errors[inputName]) { 
                 const errorMessage =  errors[inputName][index] ||  errors[inputName][0];
