@@ -44,6 +44,9 @@ $app->router->post('/products/update', [ProductController::class ,'update']);
 $app->router->delete('/products/delete' ,[ProductController::class , 'delete']);
 
 
+$app->router->get('/products' , 'HomeController@product');
+
+
 
 
 // $app->get('/dashboard', [DashboardController::class, 'index']
