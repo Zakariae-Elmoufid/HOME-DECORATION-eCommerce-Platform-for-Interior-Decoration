@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', function() {
 const productsCard = Array.from(document.querySelectorAll('.product-card '));
 const productContainer = document.getElementById("product-container");
 
@@ -50,3 +51,33 @@ sortSelect.addEventListener("change" , function() {
   productsCard.forEach(card => productContainer.appendChild(card));
 });
 
+
+
+    const searchBar = document.getElementById("search-bar");
+    const resultsContainer = document.getElementById("search-results");
+    const searchInput = searchBar.querySelector("input");
+
+searchBar.addEventListener("submit" , async (e)=>{
+    e.preventDefault();
+    const query = searchInput.value.trim();
+
+
+        const data = {
+            keyword: query
+        };
+
+       
+          console.log(data);
+          const response = await fetch(`/products/search`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+              },
+            body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        console.log(result);
+
+
+})
+})

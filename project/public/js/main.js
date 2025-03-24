@@ -13,8 +13,4 @@ furniture.addEventListener('click', function(){
   document.getElementById('furniture-submenu').classList.toggle('hidden');
 })
 
-
-
-
-
 });

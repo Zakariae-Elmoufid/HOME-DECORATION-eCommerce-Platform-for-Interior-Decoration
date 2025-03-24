@@ -45,6 +45,7 @@ $app->router->delete('/products/delete' ,[ProductController::class , 'delete']);
 
 
 $app->router->get('/products' , 'HomeController@product');
+$app->router->post('/products/search' , [HomeController::class , 'search']);
 
 
 

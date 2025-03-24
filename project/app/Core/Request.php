@@ -42,6 +42,7 @@ class Request {
 
     public function getbody()
     {
+        
         $body = [];
         if($this->getMethod()==='get')
         {   
@@ -51,10 +52,10 @@ class Request {
         }
 
         if($this->getMethod()==='post')
-        {   
+        {       
                 $rawData = file_get_contents("php://input");
                 $jsonData = json_decode($rawData, true);
-
+              
                 if ($jsonData) {
                     foreach ($jsonData as $key => $value) {
                         if (is_array($value)) {
@@ -65,6 +66,7 @@ class Request {
                     }
                 }    
                 else if (!empty($_POST)) {
+                
                         foreach ($_POST as $key => $value) {
                             if (is_array($value)) {
                                 $body[$key] = $this->sanitizeRecursive($value);
