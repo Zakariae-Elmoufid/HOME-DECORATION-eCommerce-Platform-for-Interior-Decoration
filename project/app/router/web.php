@@ -39,13 +39,14 @@ $app->router->delete('/categorys/delete',[CategoryController::class ,'delete']);
 $app->router->get('/admin/products' ,'Admin\ProductController@index');
 $app->router->get('/products/create' , 'Admin\ProductController@create');
 $app->router->post('/products/store' ,[ProductController::class , 'store']);
-$app->router->get('/products/edit', [ProductController::class ,'show']);
+$app->router->get('/products/edit', [ProductController::class ,'getProduct']);
+$app->router->get('/product', [ProductController::class ,'show']);
 $app->router->post('/products/update', [ProductController::class ,'update']);
 $app->router->delete('/products/delete' ,[ProductController::class , 'delete']);
 
 
 $app->router->get('/products' , 'HomeController@product');
-
+$app->router->post('/products/search' , [HomeController::class , 'search']);
 
 
 

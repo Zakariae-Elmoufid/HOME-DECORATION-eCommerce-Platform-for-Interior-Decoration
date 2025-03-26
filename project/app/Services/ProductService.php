@@ -207,7 +207,12 @@ class ProductService {
     public function show($id){
         $result = $this->productRepository->fetchById($id);
         $categories = $this->productRepository->selectCategories();
-        return $this->response->render("admin/products/edit",["categories" => $categories,"product" => $result]);
+        $data = [
+            "categories" => $categories,
+            "product" => $result
+        ];
+        return $data;
+        // return $this->response->render("admin/products/edit",["categories" => $categories,"product" => $result]);
     }
 
     public function update($data){
