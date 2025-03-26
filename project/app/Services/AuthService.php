@@ -147,7 +147,8 @@ class AuthService {
                 ];
                  
                 $result = $this->userRepository->findUser($data);
-
+            
+                
                 $user = $result['user']; 
                 Session::set('id',$user->getId()); 
                 Session::set("username" , $user->getUsername());
