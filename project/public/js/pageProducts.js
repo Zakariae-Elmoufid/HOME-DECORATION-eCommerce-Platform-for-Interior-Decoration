@@ -80,4 +80,12 @@ searchBar.addEventListener("submit" , async (e)=>{
 
 
 })
-})
+});
+
+const addButtons = document.querySelectorAll('.add-product');
+
+addButtons.forEach(button => {
+  button.addEventListener('click', async function() {
+ 
+  })
+});
