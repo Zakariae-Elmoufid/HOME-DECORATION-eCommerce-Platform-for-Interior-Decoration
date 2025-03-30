@@ -131,10 +131,10 @@
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap" id="category">
-                  <div class="category-value text-sm text-gray-900">{{ product.category_name }}</div>
+                  <div class="category-value text-sm text-gray-900">{{ product.categoryname }}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">${{ product.base_price }}</div>
+                  <div class="text-sm text-gray-900">${{ product.baseprice }}</div>
                   {% if (product.Colores|length) > 0 %}
                     <div class="text-xs text-gray-500">
                       {% for Color in product.Colores %}

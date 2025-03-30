@@ -19,7 +19,6 @@ const decreaseBtn = document.getElementById('decrease-quantity');
   const increaseBtn = document.getElementById('increase-quantity');
   const quantityInput = document.getElementById('quantity');
   const maxStock = parseInt(quantityInput.getAttribute('max'));
-  
   decreaseBtn.addEventListener('click', function() {
     let value = parseInt(quantityInput.value);
     if (value > 1) {
@@ -63,7 +62,7 @@ const decreaseBtn = document.getElementById('decrease-quantity');
           this.parentElement.querySelector('span').classList.remove('border-gray-300');
           this.parentElement.querySelector('span').classList.add('border-gold', 'bg-gold-light');
           updatePrice();
-        //   updateAvailableStock();    
+          updateAvailableStock();    
     });  
   });
 

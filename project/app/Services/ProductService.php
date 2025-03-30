@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Core\Validator;
 use App\Core\Response;
+use App\Models\Product;
 use App\Repositories\ProductRepository;
 
 class ProductService {
@@ -18,12 +19,9 @@ class ProductService {
 
    public function fetchAll(){
     $products = $this->productRepository->selectAll();
-    foreach ($products as &$product) {
-        $product->sizes = !is_null($product->sizes) ? json_decode($product->sizes, true) : [];
-        $product->images = !is_null($product->images) ?  json_decode($product->images, true) : [];
-        $product->colors = !is_null($product->colors) ?  json_decode($product->colors, true) : [];
-    }
+
     $categories = $this->productRepository->selectCategories();
+    
     $countProducts = $this->productRepository->countProducts();
     $countAvailable = $this->productRepository->countAvailable();
     $countCategories = $this->productRepository->countCategories();
@@ -36,7 +34,7 @@ class ProductService {
         "countCategories" => $countCategories
     ];
     
-   
+     
    }
 
    public function fetchCategory(){
@@ -198,6 +196,7 @@ class ProductService {
         return $this->response->jsonEncode(["errors" => $errors , "oldData" => $oldData]);
     }  
         $result =$this->productRepository->insertProduct($data);
+        
         if($result){
             $this->response->jsonEncode(["success" => "create produt is succusful"]);
         }
@@ -212,7 +211,6 @@ class ProductService {
             "product" => $result
         ];
         return $data;
-        // return $this->response->render("admin/products/edit",["categories" => $categories,"product" => $result]);
     }
 
     public function update($data){

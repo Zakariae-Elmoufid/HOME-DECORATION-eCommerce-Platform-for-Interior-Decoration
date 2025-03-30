@@ -1,19 +1,21 @@
 <?php
 
 namespace App\Controllers\Auth;
+
 use App\Core\Session;
-
-
 use App\Core\Controller;
 use App\Core\Request;
+use App\Core\Response;
 use App\Services\AuthService;
 
 class LoginController extends Controller  {
 
-  private $authService ;
+  private $authService;
+  private $response;
 
   public function __construct(){
       $this->authService = new AuthService() ; 
+      $this->response = new Response;
   }
 
 public function index(){
@@ -24,22 +26,41 @@ public function login(Request $request){
   $data = $request->getBody();
 
   
-    $result = $this->authService->findUser($data);
-    if (!empty($result)) {
-        return $this->render('auth/login', 
-        ['errors' => $result,
-        'old' => $data['email']
-        ]
-      );
+    $user = $this->authService->findUser($data);
+
+    if (isset($user['errorEmail']) || isset($user['errorPassword'])) {
+      return $this->render('auth/login', 
+      ['errors' => $user,
+      'old' => $data['email']
+      ]
+    );
+  }
+  $user =$user['user'];
+  Session::set('id',$user->getId());
+  Session::set("username" , $user->getUsername());
+  Session::set("email" , $user->getEmail());
+  Session::set("role" , $user->getRole());
+  
+    if ($user->getRole() == 2) {
+        $this->response->redirect('customer');
+    } else {
+        $this->response->redirect('admin');
     }
+
+
+
 }
 
 public function loginGoogle(Request $request) {
   $postData = $request->getBody();
-   
   
-
   $result  = $this->authService->loginGoogle($postData);
+  $user = $result['user']; 
+  Session::set('id',$user->getId()); 
+  Session::set("username" , $user->getUsername());
+  Session::set("email" , $user->getEmail());
+  Session::set("role" , $user->getRole());
+  $this->response->redirect('customer');
 
 }
 

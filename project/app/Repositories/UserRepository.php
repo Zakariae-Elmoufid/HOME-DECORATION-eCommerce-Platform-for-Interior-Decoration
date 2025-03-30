@@ -23,7 +23,6 @@ class UserRepository extends BaseRepository {
         $create_user = $this->insert($this->table,$userdata );
         
         if($create_user){
-           
             $user = new User($data['username'],$data['email'],$data['password'],$roleId,$create_user);
             return $user;
         }
@@ -37,6 +36,7 @@ class UserRepository extends BaseRepository {
       
           $errors = [];
 
+
           if (!$user) {
               $errors['errorEmail'] = 'This email was not found!';
           } elseif (!password_verify($data['password'], $user->password)) {
@@ -48,7 +48,7 @@ class UserRepository extends BaseRepository {
           }
           
          
-          return ['user' => new User($user->username, $user->email, $user->password, $user->role_id)];
+          return ['user' => new User($user->username, $user->email, $user->password, $user->role_id ,$user->id)];
         
     }
 

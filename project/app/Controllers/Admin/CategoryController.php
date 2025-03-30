@@ -29,21 +29,39 @@ class CategoryController extends Controller{
     public function show(Request $request){
         $body = $request->getbody();
         $id = isset($body['id']) ? (int) $body['id'] : null;
-
-        $this->CategoryService->show($id);
+        $result = $this->CategoryService->show($id);
+         
+        $category = $this->CategoryService->show($id);
+        
+        $result = [
+            'id' => $category->getId(),
+            'title' => $category->getTitle(),
+            'icon' => $category->getIcon()
+        ];
+    
+        return $this->response->jsonEncode($result);
     }
-
-
 
     public function store(Request $request){
         $data = $request->getbody();
-         $this->CategoryService->create($data);
+        $category = $this->CategoryService->create($data);
+
+       if(!empty($category["errors"])){
+           return $this->response->jsonEncode($category);
+        }
+
+        return $this->response->jsonEncode([ "message" => "susscuful" ,'data' => $data]);
+
+
     }
 
     
     public function update(Request $request){
         $data = $request->getBody();
-        $this->CategoryService->update($data);
+        $result = $this->CategoryService->update($data);
+        if($result){
+            $this->response->jsonEncode([ "message" => "update susscuful" ]);
+        }
     }
 
     public function delete(Request $request){
