@@ -87,3 +87,35 @@ CREATE TABLE Product_images (
 );
 
 
+
+CREATE TABLE `carts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL, 
+  `session_id` varchar(255) DEFAULT NULL, 
+  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `total` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `quantity` int(11) NOT NULL DEFAULT '0',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `session_id` (`session_id`),
+    CONSTRAINT `carts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
+
+)
+CREATE TABLE `cart_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cart_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT '1',
+  `selected_color` varchar(50) DEFAULT NULL,
+  `selected_size` varchar(50) DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL, 
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `cart_id` (`cart_id`),
+  KEY `product_id` (`product_id`),
+  FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`product_id`) REFERENCES `Products` (`id`)
+) 
