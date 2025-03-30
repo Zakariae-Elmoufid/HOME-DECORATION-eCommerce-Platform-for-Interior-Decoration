@@ -36,14 +36,13 @@ class ProductController extends Controller{
         $body = $request->getbody();
         $id = isset($body['id']) ? (int) $body['id'] : null;
         $data =   $this->ProductService->show($id);
-        // dump($data['product']);
         $this->response->render('customer/pageProduct', [ "product" => $data['product']]);
     }
 
     public function getProduct(Request $request){
         $body = $request->getbody();
         $id = isset($body['id']) ? (int) $body['id'] : null;
-        $data =   $this->ProductService->show($id);
+        $data = $this->ProductService->show($id);
         $this->response->render("admin/products/edit",["categories" => $data['categories'] ,"product" => $data['product']]);
     }
     
@@ -58,8 +57,5 @@ class ProductController extends Controller{
         $id = $data['id'];
         $this->ProductService->delete($id);
     }
-
-
-
 
 }

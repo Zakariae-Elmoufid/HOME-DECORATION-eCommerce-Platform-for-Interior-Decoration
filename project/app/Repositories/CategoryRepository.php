@@ -11,25 +11,34 @@ class CategoryRepository extends BaseRepository {
 
 
     public  function fechAll(){
-      return  $this->getAll($this->table);
+      $categories =  $this->getAll($this->table);
+      $data = [];
+      foreach( $categories as $category ){
+         $data = new Category($category);
+      }
+      return $categories;
     }
     
     public function create($data){
 
-        $result = $this->insert($this->table,$data );
-
-          $category = new category($data["title"],$data["icon"]);
+        $result = $this->insert($this->table,$data);
+        $data['id'] = $result;
+          $category = new category($data);
           return $category;
         
     }
 
     public function fetchById($id){
-      return  $this->findById($this->table, $id);
-    
+      $data =  $this->findById($this->table, $id);
+      $category = new category($data);
+      return $category;
     }
 
     public function updat($id ,$date){
        return $this->update($this->table, $id ,$date);
+       $data['id'] = $id;
+       $category = new category($data);
+       return $category;
     }
     
     public function remove($id){

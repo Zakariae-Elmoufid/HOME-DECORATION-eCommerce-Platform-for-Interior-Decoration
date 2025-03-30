@@ -1,0 +1,379 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}
+  Cart - ElegantHome
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <!-- Breadcrumb -->
+  <div class="mb-6 text-sm text-gray-500">
+    <a href="/" class="hover:text-gold">Home</a> &gt; 
+    <span class="text-charcoal">Cart</span>
+  </div>
+
+  <h1 class="text-3xl font-serif font-bold text-charcoal mb-8">Your Shopping Cart</h1>
+
+  {# {% if cartItems and cartItems|length > 0 %} #}
+  <!-- Cart with items -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Cart Items List -->
+    <div class="lg:col-span-2">
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <!-- Cart Headers - Desktop -->
+        <div class="hidden md:grid md:grid-cols-12 pb-4 border-b border-gray-200 text-sm font-medium text-gray-500">
+          <div class="md:col-span-6">Product</div>
+          <div class="md:col-span-2 text-center">Price</div>
+          <div class="md:col-span-2 text-center">Quantity</div>
+          <div class="md:col-span-2 text-center">Total</div>
+        </div>
+
+        <!-- Cart Items -->
+        <div class="space-y-6 pt-4">
+          <!-- Item 1 -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 py-4 border-b border-gray-200">
+            <div class="md:col-span-6">
+              <div class="flex">
+                <div class="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-md overflow-hidden">
+                  <img src="https://via.placeholder.com/150" alt="Velvet Elegance Armchair" class="w-full h-full object-cover">
+                </div>
+                <div class="ml-4 flex-1">
+                  <h3 class="font-medium text-charcoal">Velvet Elegance Armchair</h3>
+                  <div class="text-sm text-gray-500 mt-1">Color: <span class="text-charcoal">Emerald</span></div>
+                  <div class="text-sm text-gray-500">Size: <span class="text-charcoal">Comfort</span></div>
+                  <button class="text-sm text-red-500 mt-2 hover:text-red-700 flex items-center">
+                    <i class="fas fa-trash-alt text-xs mr-1"></i> Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="md:col-span-2 flex md:justify-center items-center">
+              <span class="text-sm md:hidden font-medium text-gray-500 mr-2">Price:</span>
+              <span class="text-charcoal">$599.00</span>
+            </div>
+            <div class="md:col-span-2 flex md:justify-center items-center">
+              <span class="text-sm md:hidden font-medium text-gray-500 mr-2">Quantity:</span>
+              <div class="flex">
+                <button class="bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-l-md">
+                  <i class="fas fa-minus text-xs"></i>
+                </button>
+                <input type="number" value="1" min="1" class="w-12 text-center border-y border-gray-300 py-1 focus:outline-none focus:ring-1 focus:ring-gold">
+                <button class="bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-r-md">
+                  <i class="fas fa-plus text-xs"></i>
+                </button>
+              </div>
+            </div>
+            <div class="md:col-span-2 flex md:justify-center items-center">
+              <span class="text-sm md:hidden font-medium text-gray-500 mr-2">Total:</span>
+              <span class="font-medium text-charcoal">$599.00</span>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 py-4 border-b border-gray-200">
+            <div class="md:col-span-6">
+              <div class="flex">
+                <div class="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-md overflow-hidden">
+                  <img src="https://via.placeholder.com/150" alt="Meridian Coffee Table" class="w-full h-full object-cover">
+                </div>
+                <div class="ml-4 flex-1">
+                  <h3 class="font-medium text-charcoal">Meridian Coffee Table</h3>
+                  <div class="text-sm text-gray-500 mt-1">Color: <span class="text-charcoal">Walnut</span></div>
+                  <div class="text-sm text-gray-500">Size: <span class="text-charcoal">Standard</span></div>
+                  <button class="text-sm text-red-500 mt-2 hover:text-red-700 flex items-center">
+                    <i class="fas fa-trash-alt text-xs mr-1"></i> Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="md:col-span-2 flex md:justify-center items-center">
+              <span class="text-sm md:hidden font-medium text-gray-500 mr-2">Price:</span>
+              <span class="text-charcoal">$349.00</span>
+            </div>
+            <div class="md:col-span-2 flex md:justify-center items-center">
+              <span class="text-sm md:hidden font-medium text-gray-500 mr-2">Quantity:</span>
+              <div class="flex">
+                <button class="bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-l-md">
+                  <i class="fas fa-minus text-xs"></i>
+                </button>
+                <input type="number" value="1" min="1" class="w-12 text-center border-y border-gray-300 py-1 focus:outline-none focus:ring-1 focus:ring-gold">
+                <button class="bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-r-md">
+                  <i class="fas fa-plus text-xs"></i>
+                </button>
+              </div>
+            </div>
+            <div class="md:col-span-2 flex md:justify-center items-center">
+              <span class="text-sm md:hidden font-medium text-gray-500 mr-2">Total:</span>
+              <span class="font-medium text-charcoal">$349.00</span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex justify-between pt-4">
+            <button class="text-gold hover:text-gold-dark flex items-center">
+              <i class="fas fa-arrow-left text-xs mr-2"></i> Continue Shopping
+            </button>
+            <button id="update-cart" class="bg-white border border-gold text-gold hover:bg-gold hover:text-white px-4 py-2 rounded transition duration-300">
+              Update Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="lg:col-span-1">
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-lg font-medium text-charcoal mb-4">Order Summary</h2>
+        
+        <div class="space-y-3 mb-6">
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Subtotal</span>
+            <span class="text-charcoal">$948.00</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Shipping</span>
+            <span class="text-charcoal">$0.00</span>
+          </div>
+          <div class="flex justify-between font-medium pt-3 border-t border-gray-200">
+            <span>Total</span>
+            <span class="text-charcoal">$948.00</span>
+          </div>
+        </div>
+        
+        <!-- Promo Code -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-500 mb-2">Promo Code</label>
+          <div class="flex">
+            <input type="text" placeholder="Enter your code" class="flex-grow border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold">
+            <button class="bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-r-lg transition duration-300">Apply</button>
+          </div>
+        </div>
+        
+        <!-- Checkout Button -->
+        <button class="w-full bg-gold hover:bg-gold-dark text-white py-3 rounded-md transition duration-300 flex items-center justify-center font-medium">
+          Proceed to Checkout <i class="fas fa-arrow-right ml-2 text-xs"></i>
+        </button>
+        
+        <!-- Secure Checkout -->
+        <div class="mt-6 text-center">
+          <div class="flex justify-center mb-2">
+            <i class="fas fa-lock text-green-500 mr-2"></i>
+            <span class="text-sm font-medium">Secure Payment</span>
+          </div>
+          <div class="flex justify-center space-x-2 mt-2">
+            <i class="fab fa-cc-visa text-gray-600 text-2xl"></i>
+            <i class="fab fa-cc-mastercard text-gray-600 text-2xl"></i>
+            <i class="fab fa-cc-paypal text-gray-600 text-2xl"></i>
+            <i class="fab fa-cc-apple-pay text-gray-600 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# {% else %} #}
+  <!-- Empty Cart -->
+  <div class="text-center py-16 bg-white rounded-lg shadow-sm">
+    <div class="mb-6">
+      <i class="fas fa-shopping-cart text-6xl text-gray-300"></i>
+    </div>
+    <h2 class="text-2xl font-medium text-charcoal mb-4">Your cart is empty</h2>
+    <p class="text-gray-500 mb-8">Explore our collection and find pieces that inspire you</p>
+    <a href="/shop" class="inline-block bg-gold hover:bg-gold-dark text-white px-6 py-3 rounded-md transition duration-300 font-medium">
+      Start Shopping
+    </a>
+  </div>
+  {# {% endif %} #}
+
+  <!-- You May Also Like -->
+  <div class="mt-16">
+    <h2 class="text-2xl font-serif font-bold text-charcoal mb-8">You May Also Like</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Recommendation 1 -->
+      <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300">
+        <div class="relative">
+          <img src="https://via.placeholder.com/300x300" alt="Halo Floor Lamp" class="w-full h-48 object-cover">
+          <div class="absolute top-3 right-3">
+            <button class="bg-white p-2 rounded-full shadow hover:bg-cream">
+              <i class="far fa-heart text-charcoal"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-4">
+          <h3 class="font-medium text-charcoal mb-1">Halo Floor Lamp</h3>
+          <div class="text-gold mb-2">$229.00</div>
+          <button class="w-full bg-white border border-gold text-gold hover:bg-gold hover:text-white py-2 rounded transition duration-300">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Recommendation 2 -->
+      <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300">
+        <div class="relative">
+          <img src="https://via.placeholder.com/300x300" alt="Nordic Rug" class="w-full h-48 object-cover">
+          <div class="absolute top-3 right-3">
+            <button class="bg-white p-2 rounded-full shadow hover:bg-cream">
+              <i class="far fa-heart text-charcoal"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-4">
+          <h3 class="font-medium text-charcoal mb-1">Nordic Rug</h3>
+          <div class="text-gold mb-2">$189.00</div>
+          <button class="w-full bg-white border border-gold text-gold hover:bg-gold hover:text-white py-2 rounded transition duration-300">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Recommendation 3 -->
+      <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300">
+        <div class="relative">
+          <img src="https://via.placeholder.com/300x300" alt="Decorative Pillow" class="w-full h-48 object-cover">
+          <div class="absolute top-3 right-3">
+            <button class="bg-white p-2 rounded-full shadow hover:bg-cream">
+              <i class="far fa-heart text-charcoal"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-4">
+          <h3 class="font-medium text-charcoal mb-1">Decorative Pillow</h3>
+          <div class="text-gold mb-2">$45.00</div>
+          <button class="w-full bg-white border border-gold text-gold hover:bg-gold hover:text-white py-2 rounded transition duration-300">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Recommendation 4 -->
+      <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300">
+        <div class="relative">
+          <img src="https://via.placeholder.com/300x300" alt="Ceramic Vase" class="w-full h-48 object-cover">
+          <div class="absolute top-3 right-3">
+            <button class="bg-white p-2 rounded-full shadow hover:bg-cream">
+              <i class="far fa-heart text-charcoal"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-4">
+          <h3 class="font-medium text-charcoal mb-1">Ceramic Vase</h3>
+          <div class="text-gold mb-2">$79.00</div>
+          <button class="w-full bg-white border border-gold text-gold hover:bg-gold hover:text-white py-2 rounded transition duration-300">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Update cart button
+  const updateCartBtn = document.getElementById('update-cart');
+  if (updateCartBtn) {
+    updateCartBtn.addEventListener('click', function() {
+      // Collect all quantities
+      const quantities = document.querySelectorAll('input[type="number"]');
+      const cartUpdates = [];
+      
+      quantities.forEach((input, index) => {
+        cartUpdates.push({
+          itemId: index + 1, // This would be a real item ID in production
+          quantity: parseInt(input.value)
+        });
+      });
+      
+      // Here would be the call to update the cart in the database
+      console.log('Updating cart with:', cartUpdates);
+      
+      // Show success notification
+      showNotification('Cart updated successfully', 'success');
+    });
+  }
+  
+  // Function to show notification
+  function showNotification(message, type = 'success') {
+    const notificationClass = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+    const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+    
+    const notification = document.createElement('div');
+    notification.classList.add('fixed', 'bottom-4', 'right-4', notificationClass, 'text-white', 'p-4', 'rounded-md', 'shadow-lg', 'z-50');
+    notification.innerHTML = `
+      <div class="flex items-center">
+        <i class="fas ${icon} mr-2"></i>
+        <span>${message}</span>
+      </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.classList.add('opacity-0', 'transition', 'duration-300');
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 300);
+    }, 3000);
+  }
+  
+  // Quantity buttons
+  const decreaseButtons = document.querySelectorAll('.fa-minus');
+  const increaseButtons = document.querySelectorAll('.fa-plus');
+  
+  decreaseButtons.forEach(button => {
+    button.parentElement.addEventListener('click', function() {
+      const input = this.parentElement.querySelector('input');
+      const currentValue = parseInt(input.value);
+      if (currentValue > 1) {
+        input.value = currentValue - 1;
+      }
+    });
+  });
+  
+  increaseButtons.forEach(button => {
+    button.parentElement.addEventListener('click', function() {
+      const input = this.parentElement.querySelector('input');
+      const currentValue = parseInt(input.value);
+      input.value = currentValue + 1;
+    });
+  });
+});
+</script>
+
+<style>
+  /* Default TailwindCSS doesn't have all the colors we might need */
+  .bg-gold {
+    background-color: #D4AF37;
+  }
+  
+  .bg-gold-dark {
+    background-color: #B8860B;
+  }
+  
+  .text-gold {
+    color: #D4AF37;
+  }
+  
+  .hover\:text-gold:hover {
+    color: #D4AF37;
+  }
+  
+  .hover\:text-gold-dark:hover {
+    color: #B8860B;
+  }
+  
+  .border-gold {
+    border-color: #D4AF37;
+  }
+  
+  .bg-cream {
+    background-color: #F5F5DC;
+  }
+  
+  .bg-cream-light {
+    background-color: #FAF9F6;
+  }
+  
+  .text-charcoal {
+    color: #36454F;
+  }
+  
+  .focus\:ring-gold:focus {
+    --tw-ring-color: #D4AF37;
+  }
+</style>
+{% endblock %}

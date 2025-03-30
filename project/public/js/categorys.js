@@ -186,6 +186,7 @@ const remplireFormUpdate = async (id) => {
     method: "GET",
   });
   const response = await data.json();
+  console.log(response);
 
     idInput = document.createElement('input');
     idInput.setAttribute("type","hidden"); 

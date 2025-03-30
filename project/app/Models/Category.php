@@ -8,10 +8,12 @@ class Category {
     private $icon;
     private $id;
 
-    public function __construct($title,$icon,$id = null){
-         $this->title = $title;
-         $this->icon = $icon;
-         $this->id = $id;
+    public function __construct($data = []){
+        $dataArray = is_object($data) ? get_object_vars($data) : $data;
+
+         $this->title = $dataArray['title'] ?? null ;
+         $this->icon = $dataArray['icon'] ?? null;
+         $this->id = $dataArray['id'] ?? null ;
     }
     
     public function getId(){
@@ -22,7 +24,7 @@ class Category {
         return $this->title; 
     }
   
-   public function geticon() {
+   public function getIcon() {
         return $this->icon;
     }
 

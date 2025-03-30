@@ -79,6 +79,7 @@ class Router {
                         $controllerInstance = new $controllerClass();
                         return $controllerInstance->$method();
                     } else {
+                        dump($controllerClass);
                         http_response_code(404);
                         echo "404 - Controller Or methode not found";
                         return;

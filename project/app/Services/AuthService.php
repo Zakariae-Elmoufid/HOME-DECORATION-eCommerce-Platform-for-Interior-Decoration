@@ -53,15 +53,7 @@ class AuthService {
 
         
         $user = $this->userRepository->createUser($data);
-        
-        if($user){
-            Session::set("username" , $user->getUsername());
-            Session::set("email" , $user->getEmail());
-            Session::set("role" , $user->getRole());
-            Session::set('id',$user->getId());
-            $this->response->redirect('customer');
-        }
-       
+        return $user;
 
     }
 
@@ -84,6 +76,7 @@ class AuthService {
         }
 
         $result = $this->userRepository->findUser($data);
+        
         if (isset($result['errorEmail'])) {
             return ['errorEmail' =>$result['errorEmail']]; 
         }
@@ -91,18 +84,8 @@ class AuthService {
         if (isset($result['errorPassword'])) {
             return ['errorPassword'=> $result['errorPassword']]; 
         }
-        
-        $user = $result['user']; 
-        Session::set('id',$user->getId());
-        Session::set("username" , $user->getUsername());
-        Session::set("email" , $user->getEmail());
-        Session::set("role" , $user->getRole());
-        
-        if ($user->getRole() == 2) {
-            $this->response->redirect('customer');
-        } else {
-            $this->response->redirect('admin');
-        }
+        return  ['user' => $result['user']]; 
+     
 
     }
 
@@ -148,18 +131,10 @@ class AuthService {
                  
                 $result = $this->userRepository->findUser($data);
             
-                
-                $user = $result['user']; 
-                Session::set('id',$user->getId()); 
-                Session::set("username" , $user->getUsername());
-                Session::set("email" , $user->getEmail());
-                Session::set("role" , $user->getRole());
+               return $result;
                 
 
-                if($result){
-                    $this->response->redirect('customer');
-                }
-
+                
                 } else {
                     $this->response->statusCode(400);
                     die('Invalid token');
@@ -204,17 +179,9 @@ class AuthService {
 
 
             
-            $user = $this->userRepository->createUser($data);         
-            if($user){
-                if($user){
-                    Session::set('id',$user->getId());
-                    Session::set("username" , $user->getUsername());
-                    Session::set("email" , $user->getEmail());
-                    Session::set("role" , $user->getRole());
-                    $this->response->redirect('customer');
-                }
-                $this->response->redirect('customer');
-            }
+            $user = $this->userRepository->createUser($data);
+            return $user;
+            
         } else {
             $this->response->statusCode(400);
             die('Invalid token');

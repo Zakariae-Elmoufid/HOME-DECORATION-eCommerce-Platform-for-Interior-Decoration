@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Category;
+use App\Models\Product;
 use PDO;
 
 class ProductRepository extends BaseRepository {
@@ -60,12 +61,22 @@ class ProductRepository extends BaseRepository {
                 categorys c ON p.category_id = c.id
             WHERE 
                 p.deleted_at IS NULL; ");
-         return $stmt->fetchAll(PDO::FETCH_OBJ);
-
+        $data =  $stmt->fetchAll(PDO::FETCH_OBJ);
+        $products = [];
+        
+        foreach($data as $product){
+            $products[] = new Product($product);
+        }
+        return $products;
        }
 
        public function selectCategories(){
-        return  $this->getAll('categorys');
+        $categories =  $this->getAll("categorys");
+        $data = [];
+        foreach( $categories as $category ){
+           $data = new Category($category);
+        }
+        return $categories;
        }
 
        public function countProducts(){
@@ -87,60 +98,85 @@ class ProductRepository extends BaseRepository {
        }
 
 
-    public function  insertProduct($data){
-
-         $product = [
+       public function insertProduct($data) {
+        $product = [
             "title" => $data["title"],
             "category_id" => $data["category_id"],
             "description" => $data["description"],
             "base_price" => $data["base_price"],
             "stock" => $data["stock"],
-            "isAvailable" => $data["isAvailable"]   ? 1 : 0
-         ] ;
+            "isAvailable" => $data["isAvailable"] ? 1 : 0
+        ];
          
-         $product_id = $this->insert($this->table, $product );
+        $product_id = $this->insert($this->table, $product);
     
-         if (!$product_id) {
+        if (!$product_id) {
             return false;
         }
-    
-        if (!empty($data["size_name"])) {
-             foreach ($data["size_name"] as $index => $sizeName) {
-                 $size= [
-                     "product_id" => $product_id,
-                     "size_name" => $sizeName,
-                     "price_adjustment" =>  $data["size_price_adjustment"][$index],
-                     "stock_quantity" => $data["stock_quantity_size"][$index],
-                    ];
-                    $this->insert("Product_sizes",$size);
-                }
-        }
-
-        if(!empty($data["color_name"])){
-            foreach($data["color_name"] as $index => $colorName){
-                
-                $color = [
-                        "product_id" => $product_id,
-                        "color_name" => $colorName,
-                        "color_code" => $data["color_code"][$index],
-                        "price_adjustment" => $data["color_price_adjustment"][$index],
-                        "stock_quantity" => $data["stock_quantity_color"][$index],
-                    ];
-                    $this->insert("Product_colors",$color);
-                }
-            }
         
-        if(!empty($data["images"])){
-            foreach($data["images"] as  $image){
-                $image = [
+        $product["id"] = $product_id;
+        
+        $sizes = [];
+        $colors = [];
+        $images = [];
+        
+        if (!empty($data["size_name"])) {
+            foreach ($data["size_name"] as $index => $sizeName) {
+                $size = [
+                    "product_id" => $product_id,
+                    "size_name" => $sizeName,
+                    "price_adjustment" => $data["size_price_adjustment"][$index],
+                    "stock_quantity" => $data["stock_quantity_size"][$index],
+                ];
+                
+                $this->insert("Product_sizes", $size);
+                
+                $sizes[] = $size;
+            }
+        }
+    
+        if (!empty($data["color_name"])) {
+            foreach ($data["color_name"] as $index => $colorName) {
+                $color = [
+                    "product_id" => $product_id,
+                    "color_name" => $colorName,
+                    "color_code" => $data["color_code"][$index],
+                    "price_adjustment" => $data["color_price_adjustment"][$index],
+                    "stock_quantity" => $data["stock_quantity_color"][$index],
+                ];
+                
+                $this->insert("Product_colors", $color);
+                
+                $colors[] = $color;
+            }
+        }
+    
+        if (!empty($data["images"])) {
+            foreach ($data["images"] as $image) {
+                $imageData = [
                     "is_primary" => $image["is_primary"],
                     "product_id" => $product_id,
                     "image_path" => $image["path"],
                 ];
-                $this->insert("Product_images",$image);
+                
+                $this->insert("Product_images", $imageData);
+                
+                $images[] = $imageData;
             }
         }
-        return true;
+        
+        $productData = array_merge($product, [
+            'sizes' => $sizes,
+            'colors' => $colors,
+            'images' => $images
+        ]);
+        
+        $productObject = new Product($productData);
+        
+        
+        
+        
+        return $productObject;
     }
     
     
@@ -183,7 +219,7 @@ class ProductRepository extends BaseRepository {
         FROM Product_sizes
         WHERE product_id = $id");
         $product->sizes = $stmt->fetchAll(PDO::FETCH_OBJ);
-
+   
         return $product;
 
     }

@@ -18,11 +18,9 @@ class CategoryService {
 
    public function fechAll(){
     return  $this->categoryRepository->fechAll();
-
    }
 
    public function create($data){
-     
     $errors = [];
     $validator = new Validator($data);
 
@@ -36,17 +34,15 @@ class CategoryService {
 
     if (!$validator->validate()) {
         $errors = $validator->getErrors();
-        return $this->response->jsonEncode(["errors" => $errors, "data" => $oldData]);
+        return ["errors" => $errors, "data" => $oldData];
     }
 
     $result = $this->categoryRepository->create($data);
-
-    return $this->response->jsonEncode([ "message" => "susscuful" ,'data' => $data]);
+    return ["succus" => $result];
     }
 
     public function show($id){
-        $result = $this->categoryRepository->fetchById($id);
-        return $this->response->jsonEncode( $result);
+        return $this->categoryRepository->fetchById($id);
     }
 
 
@@ -70,7 +66,7 @@ class CategoryService {
         $id =  $data['id'] ;
         $result = $this->categoryRepository->updat($id,$data);
 
-        return $this->response->jsonEncode([ "message" => "update susscuful" ]);
+        return $result;
     
     }
 

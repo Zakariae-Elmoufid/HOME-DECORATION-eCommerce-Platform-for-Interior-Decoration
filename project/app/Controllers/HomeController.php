@@ -36,7 +36,6 @@ class HomeController extends Controller{
     public function product()
     {
         $products = $this->ProductService->fetchAll();
-        
         return $this->render('products', [
             'products' => $products
         ]);

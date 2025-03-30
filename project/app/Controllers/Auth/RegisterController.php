@@ -11,9 +11,11 @@ Session::start();
 class RegisterController extends Controller  {
 
     private $authService ;
+    private $response;
 
     public function __construct(){
         $this->authService = new AuthService() ; 
+        $this->response = new Response;
     }
 
 
@@ -25,23 +27,41 @@ class RegisterController extends Controller  {
         $data = $request->getBody();
         
         
-        $result = $this->authService->register($data);
-        if (!empty($result['errors'])) {
+        $user = $this->authService->register($data);
+        if (is_array($user) && isset($user['errors'])) {
             return $this->render('auth/register', 
-            ['errors' => $result['errors'],
-            'old' => $result['old']
+            ['errors' => $user['errors'],
+            'old' => $user['old']
             ]
-            );
+        );
+        }  
+
+        if($user){
+            Session::set("username" , $user->getUsername());
+            Session::set("email" , $user->getEmail());
+            Session::set("role" , $user->getRole());
+            Session::set('id',$user->getId());
+            $this->response->redirect('customer');
         }
-         return $this->redirect('/login');
+        
+
+          $this->redirect('/login');
 
 
     }
 
     public function registerGoogle(Request $request){
         $postData = $request->getBody();
-         $this->authService->registerGoogle($postData);
-
+        $user = $this->authService->registerGoogle($postData);
+            if($user){
+                Session::set('id',$user->getId());
+                Session::set("username" , $user->getUsername());
+                Session::set("email" , $user->getEmail());
+                Session::set("role" , $user->getRole());
+                $this->response->redirect('customer');
+            }
+            $this->response->redirect('customer');
+        
     }
 
 }

@@ -34,7 +34,6 @@
       </div>
     </div>
 
-
     <div id="product-container" class=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {% for product in products.products %}
         <!-- Product Card -->
@@ -78,8 +77,8 @@
           
           <div class="p-4">
             <!-- Product Title -->
-            <h3 class="title text-lg font-medium text-charcoal">{{ product.title }}</h3>
-            <p class="category-value text-sm text-gray-500 mb-2">{{ product.category_name }}</p>
+            <h3 class="title text-lg font-medium text-charcoal">{{ product.getTitle }}</h3>
+            <p class="category-value text-sm text-gray-500 mb-2">{{ product.getCategoryName }}</p>
             
             <!-- Star Rating -->
             <div class="flex items-center mb-3">
@@ -95,13 +94,13 @@
             
             <!-- Price and Add to Cart -->
             <div class="flex justify-between items-center">
-              <span class="price text-xl font-bold text-charcoal">${{ product.base_price }}</span>
+              <span class="price text-xl font-bold text-charcoal">${{ product.getBasePrice }}</span>
               <div class="flex space-x-2">
                 <a href="/product?id={{ product.id }}"
                   class="bg-white border border-gold text-gold hover:bg-gold hover:text-white p-2 rounded-lg transition duration-300">
                   <i class="fas fa-eye"></i>
                 </a>
-                {% if product.isAvailable and product.stock > 0 %}
+                {% if product.getIsAvailable and product.getStock > 0 %}
                   <button 
                     class="add-product bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center"
                     data-product-id="{{ product.id }}">
