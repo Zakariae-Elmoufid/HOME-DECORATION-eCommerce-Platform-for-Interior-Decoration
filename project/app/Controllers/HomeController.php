@@ -42,8 +42,9 @@ class HomeController extends Controller{
     }
     
     public function search(Request $request){
+        $query = $request->getbody();
         // $products = $this->ProductService->fechByKey();
-        return $this->response->jsonEncode( $request);
+        return $this->response->jsonEncode($query);
 
     }
 

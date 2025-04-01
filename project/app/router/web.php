@@ -11,6 +11,7 @@ use App\Controllers\Auth\LogoutController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\CategoryController;
 use App\Controllers\Admin\ProductController;
+use App\Controllers\Customer\CartController;
 
 
 
@@ -48,6 +49,8 @@ $app->router->delete('/products/delete' ,[ProductController::class , 'delete']);
 $app->router->get('/products' , 'HomeController@product');
 $app->router->post('/products/search' , [HomeController::class , 'search']);
 $app->router->get('/cart','Customer\CartController@index');
+$app->router->post('/cart/add', [CartController::class , 'addToCart']);
+
 
 
 // $app->get('/dashboard', [DashboardController::class, 'index']

@@ -102,7 +102,7 @@
                 </a>
                 {% if product.getIsAvailable and product.getStock > 0 %}
                   <button 
-                    class="add-product bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center"
+                    class="add-cart bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center"
                     data-product-id="{{ product.id }}">
                     <i class="fas fa-shopping-cart mr-1"></i> Add
                   </button>
@@ -126,4 +126,6 @@
   </div>
 </section>
 <script src="../../public/js/products.js"></script>
+  <script src="../../public/js/cart.js" ></script>
+
 {% endblock %}

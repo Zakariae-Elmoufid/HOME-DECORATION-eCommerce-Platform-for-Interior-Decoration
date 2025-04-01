@@ -47,4 +47,47 @@ class Session {
         }
         return null;
     }
+
+
+    public static function getOrCreateGuestIdentifier() {
+        self::start();
+        
+        if (!isset($_SESSION['guest_identifier'])) {
+            $_SESSION['guest_identifier'] = self::generateUniqueIdentifier();
+        }
+        
+        return $_SESSION['guest_identifier'];
+    }
+
+    private static function generateUniqueIdentifier() {
+        return bin2hex(random_bytes(16)); // 32 caractères hexadécimaux
+    }
+
+
+    public static function associateCartAfterLogin($userId) {
+        self::start();
+        
+        if (isset($_SESSION['guest_identifier'])) {
+            $guestIdentifier = $_SESSION['guest_identifier'];
+            
+            // Créer une instance du repository de panier
+            $cartRepo = new \App\Repositories\CartRepository();
+            
+            // Récupérer les IDs des paniers
+            $guestCartId = $cartRepo->getCartIdBySessionId($guestIdentifier);
+            $userCartId = $cartRepo->getCartIdByUserId($userId);
+            
+            if ($guestCartId && $userCartId) {
+                // Fusionner les paniers
+                $cartRepo->mergeCarts($userCartId, $guestCartId);
+            } elseif ($guestCartId) {
+                // Associer le panier du visiteur à l'utilisateur
+                $cartRepo->assignCartToUser($guestCartId, $userId);
+            }
+            
+            // Supprimer l'identifiant de visiteur
+            unset($_SESSION['guest_identifier']);
+        }
+    }
+
 }

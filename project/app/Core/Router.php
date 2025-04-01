@@ -49,8 +49,8 @@ class Router {
         $url = $this->request->getUrl();
 
 
-
         $callback = $this->routes[$method][$url] ?? false;
+        
         if (!$callback) {
             // $this->response->statusCode(code: 404);
             return 'Not Found';
@@ -92,7 +92,7 @@ class Router {
                     $controller = $callback[0];
                     $method = $callback[1];
                     $controllerInstance = new $controller();
-                    return $controllerInstance->$method( $this->request);
+                    return $controllerInstance->$method($this->request);
                 }
 
          
