@@ -88,7 +88,7 @@
           </div>
 
           <!-- Product Options -->
-          <form id="product-options-form" class="space-y-6">
+          <form id="product-options-form"  class="space-y-6">
             <input type="hidden" id="product-id" value="{{ product.id }}">
             
             <!-- Size Option -->
@@ -162,7 +162,9 @@
             <!-- Add to Cart Button -->
             <div class="flex space-x-4">
               <button type="submit" id="add-to-cart-btn"
-                      class="{% if product.isAvailable and product.stock > 0 %}bg-gold hover:bg-gold-dark{% else %}bg-gray-300{% endif %} text-white px-6 py-3 rounded-lg transition duration-300 flex items-center"
+                      class="add-cart  {% if product.isAvailable and product.stock > 0 %}
+                      bg-gold hover:bg-gold-dark{% else %}bg-gray-300{% endif %} text-white px-6 py-3 rounded-lg transition duration-300 flex items-center"            
+                               data-product-id="{{ product.id }}" 
                       {% if not product.isAvailable or product.stock <= 0 %}disabled{% endif %}>
                 <i class="fas fa-shopping-cart mr-2"></i> 
                 {% if product.isAvailable and product.stock > 0 %}
@@ -456,7 +458,8 @@
           
           <div class="flex justify-between items-center">
             <span class="text-xl font-bold text-charcoal">$499.99</span>
-            <button class="bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center">
+            <button class=" bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center"
+              >
               <i class="fas fa-shopping-cart mr-1"></i> Add
             </button>
           </div>
@@ -466,4 +469,6 @@
   </div>
 </section>
 <script src="../../../public/js/pageProduct.js"></script>
+{# <script src="../../../public/js/cart.js" ></script> #}
+
 {% endblock %}

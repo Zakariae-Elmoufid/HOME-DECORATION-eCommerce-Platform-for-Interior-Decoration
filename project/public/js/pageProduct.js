@@ -160,3 +160,5 @@ const decreaseBtn = document.getElementById('decrease-quantity');
       addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
     }
   }
+
+   
