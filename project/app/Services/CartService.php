@@ -15,7 +15,7 @@ public function isConnected(){
 }
 
 
-public  function getOrCreateGuestIdentifier() {
+public  function getOrCreateGuestId() {
   
   if (!Session::get('guest_identifier')) {
     Session::set('guest_identifier' ,  $this->generateUniqueIdentifier());
@@ -27,5 +27,7 @@ public  function getOrCreateGuestIdentifier() {
 private  function generateUniqueIdentifier() {
   return bin2hex(random_bytes(16)); // 32 caractères hexadécimaux
 }
+
+
 
 }

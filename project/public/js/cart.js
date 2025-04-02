@@ -10,6 +10,8 @@ cartBtns.forEach(button => {
         const data = {
             product_id: productId,
             quantity: quantity,
+
+
         };
         console.log(data);
 
