@@ -1,3 +1,5 @@
+import displayMessage from "./alert.js"
+
 const increaseBtn = document.querySelectorAll('.increase');
 const decreaseBtn = document.querySelectorAll('.decrease');
 const items = document.querySelectorAll('.item');
@@ -97,9 +99,37 @@ updateCartButton.addEventListener('click' ,async function(){
         },
         body: JSON.stringify(cartData),
     });
-
-
-
+    
     const result = await response.json();
+    if(result.success) {
+     displayMessage(result.success,'/cart');
+    }
+
+})
+
+
+const removes  =  Array.from(document.getElementsByClassName('remove'));
+
+removes.forEach(button => {
+    button.addEventListener('click' , async function(e){
+        e.preventDefault();
+      const itemId =  button.dataset.itemId;
+       const data = {
+        id : itemId
+       };
+       const response = await    fetch(`/cart/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify(data),
+              })
+              const result = await response.json();
+              if(result.success) {
+                displayMessage(result.success,'/cart');
+               }
+             
+              
+    })
 
 })

@@ -51,6 +51,7 @@ $app->router->post('/products/search' , [HomeController::class , 'search']);
 $app->router->get('/cart','Customer\CartController@index');
 $app->router->post('/cart/add', [CartController::class , 'addToCart']);
 $app->router->patch('/cart/update', [CartController::class , 'update']);
+$app->router->delete('/cart/delete', [CartController::class , 'delete']);
 
 
 

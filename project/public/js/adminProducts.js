@@ -152,7 +152,6 @@ const deleteButtons = document.querySelectorAll('.delete-product');
         fetch(`/products/delete`, {
           method: 'DELETE',
           body: JSON.stringify(data),
-
         })
         
         .then(response => {

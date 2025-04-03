@@ -83,9 +83,8 @@ class CartController extends Controller {
       ];
      $item_id =$this->cartRepository->addCartItem($item);
       if($item_id){
-        dump('item add to cart  succussful');
+        $this->response->jsonEncode([ "message" => "item add to cart  succussful" ]);
       }
-    // Mettre à jour le tota
     }
   
 
@@ -110,8 +109,19 @@ class CartController extends Controller {
         $id = $item['id'];
         unset($item["id"]);
         $cartItem = $this->cartRepository->updateCartItem($id,$item);
+        $this->response->jsonEncode([ "success" => "item update to cart  succussful" ]);
       }
-    }
+   }
+
+   public function delete(Request $request){
+    $data = $request->getbody();
+    $id = $data['id'];
+    $cartItem = $this->cartRepository->deleteCartItem($id);
+    $this->response->jsonEncode([ "success" => "item delete to cart  succussful" ]);
+   }
+
+
+
 
 
 }

@@ -119,7 +119,6 @@ class Request {
             
             $rawData = file_get_contents("php://input");
             $jsonData = json_decode($rawData, true);            
-        
             if ($jsonData) {
                 foreach ($jsonData as $key => $value) {
                     $body[$key] = filter_var($value, FILTER_SANITIZE_SPECIAL_CHARS);

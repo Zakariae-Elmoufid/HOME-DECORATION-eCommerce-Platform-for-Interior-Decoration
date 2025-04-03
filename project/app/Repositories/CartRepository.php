@@ -80,6 +80,9 @@ class CartRepository  extends BaseRepository{
     public function updateCartItem($id ,$data){
         return $this->update('cart_items' , $id, $data);
     }
+    public function deleteCartItem($id){
+        return $this->delete('cart_items',$id);
+    }
 
 
 }   

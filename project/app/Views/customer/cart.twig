@@ -44,7 +44,7 @@
                   <h3 class="font-medium text-charcoal">{{ item.getProductTitle }}</h3>
                   <div class="text-sm text-gray-500 mt-1">Color: <span class="text-charcoal">{{ item.getProductColor }}</span> Stock: <span class="color text-charcoal"> {{ item.getStockColor }}</span></div>
                   <div class="text-sm text-gray-500">Size: <span class="text-charcoal">{{ item.getProductSize }}</span> Stock:  <span class="size text-charcoal">{{ item.getStockSize }}</span></div>
-                  <button class="text-sm text-red-500 mt-2 hover:text-red-700 flex items-center">
+                  <button data-item-id="{{item.getCartItemId}}" class="remove text-sm text-red-500 mt-2 hover:text-red-700 flex items-center">
                     <i class="fas fa-trash-alt text-xs mr-1"></i> Remove
                   </button>
                 </div>
@@ -96,7 +96,7 @@
         <div class="space-y-3 mb-6">
           <div class="flex justify-between text-sm">
             <span class="text-gray-500">Subtotal</span>
-            <span class="sub-total text-charcoal">$948.00</span>
+            <span class="sub-total text-charcoal">$00.00</span>
           </div>
           <div class="flex justify-between text-sm">
             <span class="shipping text-gray-500">Shipping</span>
@@ -104,7 +104,7 @@
           </div>
           <div class="flex justify-between font-medium pt-3 border-t border-gray-200">
             <span>Total</span>
-            <span class="total text-charcoal">$948.00</span>
+            <span class="total text-charcoal">$00.00</span>
           </div>
         </div>
         
