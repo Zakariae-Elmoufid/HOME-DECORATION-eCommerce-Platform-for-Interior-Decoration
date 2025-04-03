@@ -33,15 +33,14 @@ class CartController extends Controller {
 
 
        $items = $this->cartRepository->getcartItems($user_id, $guest_id);
-        dump($items);
-        $this->render("customer/cart",$items);
+        $this->render("customer/cart",['items' => $items]);
     }
 
     public function addToCart(Request $request){
       $data = $request->getbody();
   
     
-      
+      dump($data);
        $isConnected =  $this->cartService->isConnected();
        if($isConnected){
           $user_id = $isConnected;
@@ -55,13 +54,13 @@ class CartController extends Controller {
        $cartId = $this->cartRepository->searchCartExisting($user_id, $guest_id);
        
        if (!$cartId) {
-        $productPrice = $this->cartRepository->getProductPrice($data['product_id']); 
+        // $productPrice = $this->cartRepository->getProductPrice($data['product_id']); 
 
-        $total = $productPrice * $data['quantity'];
+        // $total = $productPrice * $data['quantity'];
         $cart = [
           'user_id '=> $user_id,
           'session_id' => $guest_id,
-          'total' => $total,
+          'total' =>$data['totalPrice'] ,
           'quantity' => $data['quantity'],
         ];
         $cartId = $this->cartRepository->createNewCart($cart);
@@ -72,15 +71,13 @@ class CartController extends Controller {
     }
 
     public function addItems($cartId,$data){
-      $productPrice = $this->cartRepository->getProductPrice($data['product_id']);
       
-      $totalItem = $productPrice * $data['quantity'];
       $item = [
         'cart_id' => $cartId,
         'product_id' => $data['product_id'],
         'quantity' => $data['quantity'],
-        'price' => $productPrice,
-        'total_item' => $totalItem,
+        'price' => $data["price"],
+        'total_item' => $data['totalPrice'],
         'selected_color' => $data['color'] ?? null,
         'selected_size' => $data['size'] ?? null,
       ];
@@ -89,6 +86,31 @@ class CartController extends Controller {
         dump('item add to cart  succussful');
       }
     // Mettre à jour le tota
+    }
+  
+
+    public function update(Request $request){
+      $data = $request->getbody();
+      $cartId =$data[0]['cart_id'];
+      $total = $data[0]['total'];
+     
+      foreach ($data as &$item) {
+        unset($item["total"]);
+        unset($item["cart_id"]);
+    }
+      
+      $cart = $this->cartRepository->updateCart($cartId,$total);
+      if($cart){
+        $this->updateItem($data);
+      }
+    }
+
+    public function updateItem($data){
+      foreach($data as $item){
+        $id = $item['id'];
+        unset($item["id"]);
+        $cartItem = $this->cartRepository->updateCartItem($id,$item);
+      }
     }
 
 

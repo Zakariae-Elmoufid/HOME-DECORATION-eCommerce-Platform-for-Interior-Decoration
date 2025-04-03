@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 use PDO;
-use App\Modeles\CartItem;
+use App\Models\CartItem;
 class CartRepository  extends BaseRepository{
 
     private $table = "carts";
@@ -47,26 +47,39 @@ class CartRepository  extends BaseRepository{
         ci.quantity, 
         p.id AS product_id, 
         p.title AS product_title, 
-        p.base_price AS product_price, 
+        ci.price AS product_price, 
         p.stock,
-        pi.image_path AS product_image
+        pi.image_path AS product_image,
+        pc.color_name,
+        pc.stock_quantity as  color_stock,
+        ps.size_name ,
+        ps.stock_quantity As size_stock
+
          from carts c
          inner join cart_items  ci on ci.cart_id = c.id
          inner join Products  p on ci.product_id = p.id
          left join Product_images  pi on pi.product_id  =  p.id AND pi.is_primary = 1 
-         where user_id = ? or session_id = ? ',[$id,$id]);
-         $data =  $stmt->fetchAll(PDO::FETCH_OBJ);
-         return $data;
-         dump($data);
-        //  exit;
-        // $items = [];
+         left join Product_colors  pc on pc.id  =  ci.selected_color 
+         left join Product_sizes  ps on ps.id  =  ci.selected_size 
         
-        // foreach($data as $item){
-        //     $items[] = new CartItem($item);
-        // }
-        // return $items;
+         where user_id = ? or session_id = ? ',[$id,$id]);
+         $data =  $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        $items = [];
+        
+        foreach($data as $item){
+            $items[] = new CartItem($item);
+        }
+        return $items;
+    }
+    
+
+    public function updateCart($cartId,$total){
+      return $this->update($this->table , $cartId, ['total' => $total]);
     }
 
+    public function updateCartItem($id ,$data){
+        return $this->update('cart_items' , $id, $data);
+    }
 
 
 }   
