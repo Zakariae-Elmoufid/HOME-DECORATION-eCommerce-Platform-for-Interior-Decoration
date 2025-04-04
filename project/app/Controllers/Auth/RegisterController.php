@@ -4,6 +4,7 @@ namespace App\Controllers\Auth;
 use App\Core\Controller;
 use App\Core\Request;
 use App\Services\AuthService;
+use App\Services\CartService;
 use App\Core\Session;
 use App\Core\Response;
 Session::start();
@@ -11,10 +12,12 @@ Session::start();
 class RegisterController extends Controller  {
 
     private $authService ;
+    private $cartServise;
     private $response;
 
     public function __construct(){
         $this->authService = new AuthService() ; 
+        $this->cartServise = new CartService();
         $this->response = new Response;
     }
 

@@ -94,29 +94,33 @@ class CartRepository  extends BaseRepository{
 
     public function getCartIdBySessionId($sessionId) {
         $stmt = $this->query("SELECT id FROM carts WHERE session_id = ? LIMIT 1" , [$sessionId]);
-        return  $stmt->fetch();
+        return  $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
 
     public function getCartIdByUserId($userId) {
         $stmt = $this->query("SELECT id FROM carts WHERE user_id = ? LIMIT 1" , [$userId]);
-        return  $stmt->fetch();
+        return  $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function mergeCarts($userCartId, $guestCartId){
-        $stmt = $this->query("SELECT cart_items as id  from cart 
-        inner join cart_items  on cart.id = cart_items.cart_id
-        where session_id = ? ",[$guestCartId]);
+       
+        $stmt = $this->query("SELECT cart_items.id as id  from carts 
+        inner join cart_items  on carts.id = cart_items.cart_id
+        where carts.id = ? ",[$guestCartId]);
         $items =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        
         foreach($items as $item){
             $id = $item['id'];
             $cartItem = $this->updateCartItem($id,["cart_id" => $userCartId ]);
         }
-        dump('succusful');
+         return true;
+
     }
 
     public function assignCartToUser($guestCartId, $userId){
-        return $this->update($this->table , $guestCartId['id'], ['user_id' => $userId ,'session_id' => null]);
+        return $this->update($this->table , $guestCartId, ['user_id' => $userId ,'session_id' => null]);
     }
 
 
