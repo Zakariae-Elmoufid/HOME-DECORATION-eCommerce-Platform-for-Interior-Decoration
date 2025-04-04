@@ -45,7 +45,7 @@
             <a href="#" class="text-charcoal hover:text-gold transition duration-300"><i class="far fa-heart text-xl"></i></a>
             <a href="/cart" class="text-charcoal hover:text-gold transition duration-300 relative">
               <i class="fas fa-shopping-bag text-xl"></i>
-              <span class="absolute -top-2 -right-2 bg-gold text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+              <span id="count-cart-item" class=" absolute -top-2 -right-2 bg-gold text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"></span>
             </a>
             <a href="/login" class="text-charcoal hover:text-gold transition duration-300"><i class="far fa-user text-xl"></i></a>
             <button id="bars" class="md:hidden text-charcoal hover:text-gold transition duration-300"><i class="fas fa-bars text-xl"></i></button>
@@ -119,6 +119,8 @@
 </div>
 
     </header>
+       {% include "components/alert.twig" %}
+
       {% block content %}
 
       {% endblock %}
@@ -222,8 +224,8 @@
       </div>
     </footer>
 
+    <script src="../../../public/js/main.js" type="module"></script>
 
   </body>
-    <script src="../../../public/js/main.js"></script>
 
 </html>

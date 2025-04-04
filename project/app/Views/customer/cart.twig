@@ -14,7 +14,7 @@
 
   <h1 class="text-3xl font-serif font-bold text-charcoal mb-8">Your Shopping Cart</h1>
 
-  {# {% if cartItems and cartItems|length > 0 %} #}
+  {% if items and items|length > 0 %}
   <!-- Cart with items -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
     <!-- Cart Items List -->
@@ -29,19 +29,22 @@
         </div>
 
         <!-- Cart Items -->
-        <div class="space-y-6 pt-4">
+        <div   data-id-cart="{{items[0].getCartId}}"  class="space-y-6 pt-4">
+        {% for item in items %}
           <!-- Item 1 -->
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 py-4 border-b border-gray-200">
+          <div data-product-price="{{item.getProductPrice}}" data-product-total="{{ item.getTotalItems }}" 
+           data-item-id="{{item.getCartItemId}}" data-cart-id="{{item.getCartId}}"
+            class="item grid grid-cols-1 md:grid-cols-12 gap-4 py-4 border-b border-gray-200" >
             <div class="md:col-span-6">
               <div class="flex">
                 <div class="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-md overflow-hidden">
-                  <img src="https://via.placeholder.com/150" alt="Velvet Elegance Armchair" class="w-full h-full object-cover">
+                  <img src="/public/uploads/{{ item.getProductImage }}" alt="{{ item.getProductTitle }}" class="w-full h-full object-cover">
                 </div>
                 <div class="ml-4 flex-1">
-                  <h3 class="font-medium text-charcoal">Velvet Elegance Armchair</h3>
-                  <div class="text-sm text-gray-500 mt-1">Color: <span class="text-charcoal">Emerald</span></div>
-                  <div class="text-sm text-gray-500">Size: <span class="text-charcoal">Comfort</span></div>
-                  <button class="text-sm text-red-500 mt-2 hover:text-red-700 flex items-center">
+                  <h3 class="font-medium text-charcoal">{{ item.getProductTitle }}</h3>
+                  <div class="text-sm text-gray-500 mt-1">Color: <span class="text-charcoal">{{ item.getProductColor }}</span> Stock: <span class="color text-charcoal"> {{ item.getStockColor }}</span></div>
+                  <div class="text-sm text-gray-500">Size: <span class="text-charcoal">{{ item.getProductSize }}</span> Stock:  <span class="size text-charcoal">{{ item.getStockSize }}</span></div>
+                  <button data-item-id="{{item.getCartItemId}}" class="remove text-sm text-red-500 mt-2 hover:text-red-700 flex items-center">
                     <i class="fas fa-trash-alt text-xs mr-1"></i> Remove
                   </button>
                 </div>
@@ -49,64 +52,28 @@
             </div>
             <div class="md:col-span-2 flex md:justify-center items-center">
               <span class="text-sm md:hidden font-medium text-gray-500 mr-2">Price:</span>
-              <span class="text-charcoal">$599.00</span>
+              <span class="price text-charcoal">${{ item.getProductPrice }}</span>
             </div>
             <div class="md:col-span-2 flex md:justify-center items-center">
               <span class="text-sm md:hidden font-medium text-gray-500 mr-2">Quantity:</span>
               <div class="flex">
-                <button class="bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-l-md">
+                <button class="decrease bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-l-md">
                   <i class="fas fa-minus text-xs"></i>
                 </button>
-                <input type="number" value="1" min="1" class="w-12 text-center border-y border-gray-300 py-1 focus:outline-none focus:ring-1 focus:ring-gold">
-                <button class="bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-r-md">
+                <input type="number"  data-stock-color="{{ item.getStockColor}}" data-stock-size="{{item.getStockSize}}"
+                  value="{{ item.getQuantity }}" min="1" class="w-12 text-center border-y border-gray-300 py-1 focus:outline-none focus:ring-1 focus:ring-gold">
+                <button class="increase bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-r-md">
                   <i class="fas fa-plus text-xs"></i>
                 </button>
               </div>
             </div>
             <div class="md:col-span-2 flex md:justify-center items-center">
               <span class="text-sm md:hidden font-medium text-gray-500 mr-2">Total:</span>
-              <span class="font-medium text-charcoal">$599.00</span>
+              <span class="sub-total-item font-medium text-charcoal">${{ item.getTotalItems }}</span>
             </div>
           </div>
 
-          <!-- Item 2 -->
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 py-4 border-b border-gray-200">
-            <div class="md:col-span-6">
-              <div class="flex">
-                <div class="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-md overflow-hidden">
-                  <img src="https://via.placeholder.com/150" alt="Meridian Coffee Table" class="w-full h-full object-cover">
-                </div>
-                <div class="ml-4 flex-1">
-                  <h3 class="font-medium text-charcoal">Meridian Coffee Table</h3>
-                  <div class="text-sm text-gray-500 mt-1">Color: <span class="text-charcoal">Walnut</span></div>
-                  <div class="text-sm text-gray-500">Size: <span class="text-charcoal">Standard</span></div>
-                  <button class="text-sm text-red-500 mt-2 hover:text-red-700 flex items-center">
-                    <i class="fas fa-trash-alt text-xs mr-1"></i> Remove
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="md:col-span-2 flex md:justify-center items-center">
-              <span class="text-sm md:hidden font-medium text-gray-500 mr-2">Price:</span>
-              <span class="text-charcoal">$349.00</span>
-            </div>
-            <div class="md:col-span-2 flex md:justify-center items-center">
-              <span class="text-sm md:hidden font-medium text-gray-500 mr-2">Quantity:</span>
-              <div class="flex">
-                <button class="bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-l-md">
-                  <i class="fas fa-minus text-xs"></i>
-                </button>
-                <input type="number" value="1" min="1" class="w-12 text-center border-y border-gray-300 py-1 focus:outline-none focus:ring-1 focus:ring-gold">
-                <button class="bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-r-md">
-                  <i class="fas fa-plus text-xs"></i>
-                </button>
-              </div>
-            </div>
-            <div class="md:col-span-2 flex md:justify-center items-center">
-              <span class="text-sm md:hidden font-medium text-gray-500 mr-2">Total:</span>
-              <span class="font-medium text-charcoal">$349.00</span>
-            </div>
-          </div>
+        {% endfor %}
 
           <!-- Actions -->
           <div class="flex justify-between pt-4">
@@ -129,15 +96,15 @@
         <div class="space-y-3 mb-6">
           <div class="flex justify-between text-sm">
             <span class="text-gray-500">Subtotal</span>
-            <span class="text-charcoal">$948.00</span>
+            <span class="sub-total text-charcoal">$00.00</span>
           </div>
           <div class="flex justify-between text-sm">
-            <span class="text-gray-500">Shipping</span>
+            <span class="shipping text-gray-500">Shipping</span>
             <span class="text-charcoal">$0.00</span>
           </div>
           <div class="flex justify-between font-medium pt-3 border-t border-gray-200">
             <span>Total</span>
-            <span class="text-charcoal">$948.00</span>
+            <span class="total text-charcoal">$00.00</span>
           </div>
         </div>
         
@@ -172,7 +139,7 @@
     </div>
   </div>
 
-  {# {% else %} #}
+  {% else %}
   <!-- Empty Cart -->
   <div class="text-center py-16 bg-white rounded-lg shadow-sm">
     <div class="mb-6">
@@ -184,7 +151,7 @@
       Start Shopping
     </a>
   </div>
-  {# {% endif %} #}
+  {% endif %}
 
   <!-- You May Also Like -->
   <div class="mt-16">
@@ -260,7 +227,6 @@
     </div>
   </div>
 </div>
+<script src="../../../public/js/cart.js" type="module" defer></script>
 
-
-  
 {% endblock %}

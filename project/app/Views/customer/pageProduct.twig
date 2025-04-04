@@ -89,7 +89,8 @@
 
           <!-- Product Options -->
           <form id="product-options-form"  class="space-y-6">
-            <input type="hidden" id="product-id" value="{{ product.id }}">
+            <input type="hidden" id="product-id" value="{{ product.id }}" name="product_id">
+            <input type="hidden"  value="{{ product.base_price }}" name="price">
             
             <!-- Size Option -->
             {% if product.sizes|length > 0 %}
@@ -468,7 +469,7 @@
     </div>
   </div>
 </section>
-<script src="../../../public/js/pageProduct.js"></script>
-{# <script src="../../../public/js/cart.js" ></script> #}
+{# <script src="../../../public/js/cart.js" type="module"></script> #}
+<script src="../../../public/js/pageProduct.js" type="module"></script>
 
 {% endblock %}

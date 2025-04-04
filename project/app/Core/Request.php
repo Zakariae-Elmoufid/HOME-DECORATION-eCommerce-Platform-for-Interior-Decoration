@@ -27,12 +27,14 @@ class Request {
         if ($position !== false) {
             $path = substr($path, 0, $position);
         }
+  
         return $path;
     }
 
     public function getIdFromQuery()
     {
-        return $_GET['id'] ?? null;
+        $id = $_GET['id'] ?? null;
+        return $id ? password_hash($id, PASSWORD_DEFAULT) : null;
     }
 
     
@@ -119,7 +121,6 @@ class Request {
             
             $rawData = file_get_contents("php://input");
             $jsonData = json_decode($rawData, true);            
-        
             if ($jsonData) {
                 foreach ($jsonData as $key => $value) {
                     $body[$key] = filter_var($value, FILTER_SANITIZE_SPECIAL_CHARS);

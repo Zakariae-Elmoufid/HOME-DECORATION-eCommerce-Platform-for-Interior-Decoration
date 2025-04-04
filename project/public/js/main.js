@@ -1,5 +1,7 @@
-document.addEventListener("DOMContentLoaded", function () {
 
+
+document.addEventListener("DOMContentLoaded", function () {
+  
 const bars = document.getElementById('bars');
 bars.addEventListener("click", function () {
     
@@ -14,3 +16,19 @@ furniture.addEventListener('click', function(){
 })
 
 });
+
+
+const  countItem =  document.getElementById('count-cart-item');
+
+ const updateCount = async () => {
+    const data = await fetch(`/cart/count`, {
+      method: "GET",
+    });
+    const response = await data.json();
+    countItem.textContent = response.count;
+};
+
+updateCount();
+
+
+

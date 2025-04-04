@@ -43,6 +43,7 @@ class ProductController extends Controller{
         $body = $request->getbody();
         $id = isset($body['id']) ? (int) $body['id'] : null;
         $data = $this->ProductService->show($id);
+       
         $this->response->render("admin/products/edit",["categories" => $data['categories'] ,"product" => $data['product']]);
     }
     

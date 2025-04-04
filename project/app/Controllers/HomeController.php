@@ -26,6 +26,7 @@ class HomeController extends Controller{
     {
         $categories =  $this->CategoryService->fechAll();
         $products = $this->ProductService->fetchAll();
+        
 
         return $this->render('home', [
             'categories' => $categories,

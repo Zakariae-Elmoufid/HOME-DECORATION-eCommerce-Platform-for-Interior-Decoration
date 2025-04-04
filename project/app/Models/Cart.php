@@ -15,11 +15,5 @@ class Cart {
          $this->session_id = $session_id;
     }
 
-    public function addItem(Product $product, int $quantity = 1) {
-        $this->items[] = new CartItem($this, $product, $quantity);
-    }
-
-    public function removeItem(Product $product) {
-        $this->items = array_filter($this->items, fn($item) => $item->product->id !== $product->id);
-    }
+  
 }

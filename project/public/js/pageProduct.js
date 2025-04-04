@@ -1,6 +1,6 @@
+
 const mainImage = document.getElementById('main-product-image');
 const thumbnails = document.querySelectorAll('.image-thumbnail');
-
 thumbnails.forEach(thumbnail => {
   thumbnail.addEventListener('click', function() {
     mainImage.src = this.dataset.image;
@@ -24,6 +24,7 @@ const decreaseBtn = document.getElementById('decrease-quantity');
     if (value > 1) {
       quantityInput.value = value - 1;
       updateStockInfo();
+      updatePrice(); 
     }
   });
   
@@ -32,6 +33,7 @@ const decreaseBtn = document.getElementById('decrease-quantity');
     if (value < maxStock) {
       quantityInput.value = value + 1;
       updateStockInfo();
+      updatePrice();
     }
   });
   
@@ -40,6 +42,7 @@ const decreaseBtn = document.getElementById('decrease-quantity');
     if (value < 1) this.value = 1;
     if (value > maxStock) this.value = maxStock;
     updateStockInfo();
+    updatePrice();
   });
   
   function updateStockInfo() {
@@ -74,7 +77,6 @@ const decreaseBtn = document.getElementById('decrease-quantity');
      
   colorOptions.forEach(option => {
     option.addEventListener('change', function() {
-      // Update selected color
       selectedColor = this.value;
       
       // Update visual selection
@@ -96,18 +98,39 @@ const decreaseBtn = document.getElementById('decrease-quantity');
   function updatePrice(){
     const basePrice = document.getElementById('current-price');
     const price = parseFloat(basePrice.getAttribute('data-base-price'));
-    let totalPrice = price;
+    const quantity = parseInt(quantityInput.value);
+
+    let totalPrice = price  * quantity;
 
     if(selectedSize){
         const selectedSizeElement = document.querySelector(`input[name="size"][value="${selectedSize}"]`);
         if (selectedSizeElement) {
             const priceAdjustment = parseFloat(selectedSizeElement.dataset.priceAdjustment);
-            totalPrice += priceAdjustment;
+            totalPrice += priceAdjustment * quantity;
         }
     }
 
+    if(selectedColor){
+      const selectedColorElement = document.querySelector(`input[name="color"][value="${selectedColor}"]`);
+      if(selectedColorElement){
+        const priceAdjustment = parseFloat(selectedColorElement.dataset.priceAdjustment);
+        totalPrice += priceAdjustment * quantity;
+      }
+    }
+
+
+
     const currentPriceElement = document.getElementById('current-price');
     currentPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
+    let base_perice = document.querySelector('[name="price"]');
+    base_perice.value = totalPrice / quantity;
+    console.log(base_perice.value);
+
+    const TotalInput = document.createElement('input');
+    TotalInput.setAttribute("value",totalPrice.toFixed(2));
+    TotalInput.setAttribute("name","totalPrice");
+    TotalInput.setAttribute("type",'hidden');
+    formCart.appendChild(TotalInput);
   }
 
 
@@ -160,5 +183,31 @@ const decreaseBtn = document.getElementById('decrease-quantity');
       addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
     }
   }
+
+  const formCart = document.getElementById('product-options-form');
+
+  formCart.addEventListener('submit' ,  async (e) => {
+      e.preventDefault();
+      const formData = new FormData(formCart);
+      const data = {};
+      formData.forEach((value, key) => {
+          data[key] = value;
+       });
+      console.log(data);
+       const response = await fetch('/cart/add', {
+                          method: 'POST',
+                          headers: {
+                              'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify(data),
+                      });
+          
+                  
+          
+                      const result = await response.json();
+                         if(result.success) {
+                            displayMessage(result.success,'/cart');
+                          }
+  });
 
    
