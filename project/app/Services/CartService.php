@@ -39,27 +39,23 @@ public function countItem($id){
 
     public  function associateCartAfterLogin($userId) {
       
-      // Si un identifiant de visiteur existe
       if (Session::get('guest_identifier')) {
           $guestIdentifier = Session::get('guest_identifier');
            
           $cartRepository = new CartRepository();
 
           
-          // Récupérer les IDs des paniers
           $guestCartId = $cartRepository->getCartIdBySessionId($guestIdentifier);
           $userCartId = $cartRepository->getCartIdByUserId($userId);
-          
-          if ($guestCartId && $userCartId) {
-              // Fusionner les paniers
-              $cartRepository->mergeCarts($userCartId, $guestCartId);
-          } elseif ($guestCartId) {
-              // Associer le panier du visiteur à l'utilisateur
-              $cartRepository->assignCartToUser($guestCartId, $userId);
+        
+          if (isset($guestCartId['id']) && $userCartId['id']) {
+              $cartRepository->mergeCarts($userCartId['id'], $guestCartId['id']);
+          } elseif ($guestCartId['id']) {
+              $cartRepository->assignCartToUser($guestCartId['id'], $userId);
           }
           
-          // Supprimer l'identifiant de visiteur
           unset($_SESSION['guest_identifier']);
+          return true;
       }
   }
 

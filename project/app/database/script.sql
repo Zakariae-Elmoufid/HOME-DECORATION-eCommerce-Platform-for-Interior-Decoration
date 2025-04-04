@@ -94,7 +94,6 @@ CREATE TABLE `carts` (
   `session_id` varchar(255) DEFAULT NULL, 
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `total` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `quantity` int(11) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -120,5 +119,29 @@ CREATE TABLE `cart_items` (
   FOREIGN KEY (`product_id`) REFERENCES `Products` (`id`)
 ) 
 
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `orderDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` varchar(50) NOT NULL DEFAULT 'pending',
+  `totalAmount` decimal(10,2) NOT NULL,
+  `shippingAddress` text NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `paymentMethod` varchar(50) NOT NULL,
+  `paymentDate` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+ )
 
-alter table carts drop COLUMN  `quantity`
+ CREATE TABLE `order_items` (
+  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `selectedColor` varchar(50) DEFAULT NULL,
+  `selectedSize` varchar(50) DEFAULT NULL,
+  FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
+ FOREIGN KEY (`product_id`) REFERENCES `Products` (`id`)
+)

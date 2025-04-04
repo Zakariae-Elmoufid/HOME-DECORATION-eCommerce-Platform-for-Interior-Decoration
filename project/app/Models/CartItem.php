@@ -18,7 +18,7 @@ class CartItem {
     private ?int $color_stock;
     private ?int $size_stock;
 
-    public function __construct(array $data) {
+    public function __construct(array $data = []) {
         $this->cart_id = $data['cart_id'];
         $this->total = $data['total'];
         $this->total_items = $data['total_item'];
@@ -91,4 +91,8 @@ class CartItem {
     public function getStockSize(){
         return $this->size_stock ;
     }
+
+    
+
+
 }
