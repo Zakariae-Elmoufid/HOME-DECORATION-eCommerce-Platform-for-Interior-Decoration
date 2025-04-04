@@ -1,0 +1,353 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}
+  Checkout - ElegantHome
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <!-- Breadcrumb -->
+  <div class="mb-6 text-sm text-gray-500">
+    <a href="/" class="hover:text-gold">Home</a> &gt; 
+    <a href="/cart" class="hover:text-gold">Cart</a> &gt; 
+    <span class="text-charcoal">Checkout</span>
+  </div>
+
+  <h1 class="text-3xl font-serif font-bold text-charcoal mb-8">Checkout</h1>
+
+  <!-- Checkout process steps -->
+  <div class="flex justify-center mb-10">
+    <div class="relative flex items-center max-w-3xl w-full">
+      <div class="flex-1 relative">
+        <div class="flex items-center justify-center ">
+          <div class="z-40 bg-gold rounded-full h-10 w-10 flex items-center justify-center text-white font-bold">1</div>
+        </div>
+        <div class="text-center mt-2 text-sm font-medium">Cart</div>
+        <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gold"></div>
+      </div>
+      <div class="flex-1 relative">
+        <div class="flex items-center justify-center">
+          <div class="z-40  bg-gold rounded-full h-10 w-10 flex items-center justify-center text-white font-bold ">2</div>
+        </div>
+        <div class="text-center mt-2 text-sm font-med">Shipping</div>
+        <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gold"></div>
+      </div>
+      <div class="flex-1 relative">
+        <div class="flex items-center justify-center">
+          <div class="z-40  bg-gray-200 rounded-full h-10 w-10 flex items-center justify-center text-gray-500 ">3</div>
+        </div>
+        <div class="text-center mt-2 text-sm text-gray-500">Payment</div>
+        <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gray-300"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Checkout Form -->
+    <div class="lg:col-span-2">
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-xl font-medium text-charcoal mb-6">Shipping Information</h2>
+        
+        <form id="checkout-form" method="post" action="/checkout/process">
+          <!-- Personal Information -->
+          <div class="mb-6">
+            <h3 class="text-lg font-medium text-charcoal mb-4">Personal Details</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name*</label>
+                <input type="text" id="first_name" name="first_name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+              </div>
+              <div>
+                <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name*</label>
+                <input type="text" id="last_name" name="last_name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address*</label>
+                <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+              </div>
+              <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number*</label>
+                <input type="tel" id="phone" name="phone" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Shipping Address -->
+          <div class="mb-6">
+            <h3 class="text-lg font-medium text-charcoal mb-4">Shipping Address</h3>
+            <div class="grid grid-cols-1 gap-4">
+              <div>
+                <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Street Address*</label>
+                <input type="text" id="address" name="address" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City*</label>
+                  <input type="text" id="city" name="city" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                </div>
+                <div>
+                  <label for="postal_code" class="block text-sm font-medium text-gray-700 mb-1">Postal Code*</label>
+                  <input type="text" id="postal_code" name="postal_code" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                </div>
+              </div>
+              <div>
+                <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country*</label>
+                <select id="country" name="country" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                  <option value="">Select Country</option>
+                  <option value="US">United States</option>
+                  <option value="CA">Canada</option>
+                  <option value="GB">United Kingdom</option>
+                  <option value="FR">France</option>
+                  <option value="DE">Germany</option>
+                  <option value="IT">Italy</option>
+                  <option value="ES">Spain</option>
+                  <option value="NL">Netherlands</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Shipping Method -->
+          <div class="mb-6">
+            <h3 class="text-lg font-medium text-charcoal mb-4">Shipping Method</h3>
+            <div class="space-y-3">
+              <label class="flex items-center p-4 border border-gray-300 rounded-md cursor-pointer hover:border-gold">
+                <input type="radio" name="shipping_method" value="standard" checked class="text-gold focus:ring-gold h-4 w-4">
+                <div class="ml-4">
+                  <div class="font-medium text-charcoal">Standard Shipping</div>
+                  <div class="text-sm text-gray-500">3-5 business days</div>
+                </div>
+                <div class="ml-auto font-medium">Free</div>
+              </label>
+              <label class="flex items-center p-4 border border-gray-300 rounded-md cursor-pointer hover:border-gold">
+                <input type="radio" name="shipping_method" value="express" class="text-gold focus:ring-gold h-4 w-4">
+                <div class="ml-4">
+                  <div class="font-medium text-charcoal">Express Shipping</div>
+                  <div class="text-sm text-gray-500">1-2 business days</div>
+                </div>
+                <div class="ml-auto font-medium">$15.00</div>
+              </label>
+            </div>
+          </div>
+          
+          <!-- Payment Method -->
+          <div class="mb-6">
+            <h3 class="text-lg font-medium text-charcoal mb-4">Payment Method</h3>
+            <div class="space-y-3">
+              <label class="flex items-center p-4 border border-gray-300 rounded-md cursor-pointer hover:border-gold">
+                <input type="radio" name="payment_method" value="credit_card" checked class="text-gold focus:ring-gold h-4 w-4">
+                <div class="ml-4">
+                  <div class="font-medium text-charcoal">Credit Card</div>
+                  <div class="text-sm text-gray-500">Visa, Mastercard, American Express</div>
+                </div>
+                <div class="ml-auto flex space-x-2">
+                  <i class="fab fa-cc-visa text-2xl"></i>
+                  <i class="fab fa-cc-mastercard text-2xl"></i>
+                  <i class="fab fa-cc-amex text-2xl"></i>
+                </div>
+              </label>
+              <label class="flex items-center p-4 border border-gray-300 rounded-md cursor-pointer hover:border-gold">
+                <input type="radio" name="payment_method" value="paypal" class="text-gold focus:ring-gold h-4 w-4">
+                <div class="ml-4">
+                  <div class="font-medium text-charcoal">PayPal</div>
+                  <div class="text-sm text-gray-500">Pay with your PayPal account</div>
+                </div>
+                <div class="ml-auto">
+                  <i class="fab fa-paypal text-2xl"></i>
+                </div>
+              </label>
+            </div>
+          </div>
+          
+          <!-- Credit Card Information (shown only if credit card is selected) -->
+          <div id="credit-card-info" class="mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label for="card_number" class="block text-sm font-medium text-gray-700 mb-1">Card Number*</label>
+                <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9012 3456" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+              </div>
+              <div>
+                <label for="expiry_date" class="block text-sm font-medium text-gray-700 mb-1">Expiry Date*</label>
+                <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+              </div>
+              <div>
+                <label for="cvv" class="block text-sm font-medium text-gray-700 mb-1">CVV*</label>
+                <input type="text" id="cvv" name="cvv" placeholder="123" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+              </div>
+              <div class="md:col-span-2">
+                <label for="card_name" class="block text-sm font-medium text-gray-700 mb-1">Name on Card*</label>
+                <input type="text" id="card_name" name="card_name" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Order Comments -->
+          <div class="mb-6">
+            <label for="comments" class="block text-sm font-medium text-gray-700 mb-1">Order Comments (Optional)</label>
+            <textarea id="comments" name="comments" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold"></textarea>
+          </div>
+          
+          <!-- Terms and Conditions -->
+          <div class="mb-6">
+            <label class="flex items-start">
+              <input type="checkbox" name="terms" required class="text-gold focus:ring-gold mt-1 h-4 w-4">
+              <span class="ml-2 text-sm text-gray-700">I agree to the <a href="/terms" class="text-gold hover:underline">Terms and Conditions</a> and <a href="/privacy" class="text-gold hover:underline">Privacy Policy</a></span>
+            </label>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="lg:col-span-1">
+      <div class="bg-white rounded-lg shadow-sm p-6 sticky top-24">
+        <h2 class="text-xl font-medium text-charcoal mb-6">Order Summary</h2>
+        
+        <div class="space-y-4 mb-6">
+          {% for item in items %}
+          <div class="flex">
+            <div class="flex-shrink-0 w-20 h-20 bg-gray-100 rounded-md overflow-hidden">
+              <img src="/public/uploads/{{ item.getProductImage }}" alt="{{ item.getProductTitle }}" class="w-full h-full object-cover">
+            </div>
+            <div class="ml-4 flex-1">
+              <h3 class="text-sm font-medium text-charcoal">{{ item.getProductTitle }}</h3>
+              <div class="text-xs text-gray-500 mt-1">
+                <span class="inline-block mr-2">
+                  <span class="font-medium">Color:</span> 
+                  <span class="inline-flex items-center">
+                    <span class="w-3 h-3 rounded-full mr-1" style="background-color: {{ item.getProductColorCode }}"></span>
+                    {{ item.getProductColor }}
+                  </span>
+                </span>
+                <span class="inline-block">
+                  <span class="font-medium">Size:</span> {{ item.getProductSize }}
+                </span>
+              </div>
+              <div class="flex justify-between mt-1">
+                <span class="text-xs text-gray-500">Qty: {{ item.getQuantity }}</span>
+                <span class="text-sm font-medium">${{ item.getTotalItems|number_format(2, '.', ',') }}</span>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        
+        <div class="border-t border-gray-200 pt-4 space-y-3 mb-6">
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Subtotal</span>
+            <span class="text-charcoal">${{ subtotal|number_format(2, '.', ',') }}</span>
+          </div>
+          <div class="flex justify-between text-sm shipping-cost">
+            <span class="text-gray-500">Shipping</span>
+            <span class="text-charcoal">$0.00</span>
+          </div>
+          {% if discount %}
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Discount</span>
+            <span class="text-red-500">-${{ discount|number_format(2, '.', ',') }}</span>
+          </div>
+          {% endif %}
+          <div class="flex justify-between font-medium pt-3 border-t border-gray-200 total-amount">
+            <span>Total</span>
+            <span class="text-charcoal">${{ total|number_format(2, '.', ',') }}</span>
+          </div>
+        </div>
+        
+        <!-- Place Order Button -->
+        <button type="submit" form="checkout-form" class="w-full bg-gold hover:bg-gold-dark text-white py-3 rounded-md transition duration-300 flex items-center justify-center font-medium">
+          Place Order
+        </button>
+        
+        <!-- Secure Checkout -->
+        <div class="mt-6 text-center">
+          <div class="flex justify-center mb-2">
+            <i class="fas fa-lock text-green-500 mr-2"></i>
+            <span class="text-sm font-medium">Secure Payment</span>
+          </div>
+          <div class="flex justify-center space-x-2 mt-2">
+            <i class="fab fa-cc-visa text-gray-600 text-2xl"></i>
+            <i class="fab fa-cc-mastercard text-gray-600 text-2xl"></i>
+            <i class="fab fa-cc-amex text-gray-600 text-2xl"></i>
+            <i class="fab fa-cc-paypal text-gray-600 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Toggle credit card info based on payment method
+  const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+  const creditCardInfo = document.getElementById('credit-card-info');
+  
+  paymentMethods.forEach(method => {
+    method.addEventListener('change', function() {
+      if (this.value === 'credit_card') {
+        creditCardInfo.style.display = 'block';
+      } else {
+        creditCardInfo.style.display = 'none';
+      }
+    });
+  });
+  
+  // Update shipping cost based on shipping method
+  const shippingMethods = document.querySelectorAll('input[name="shipping_method"]');
+  const shippingCostElement = document.querySelector('.shipping-cost .text-charcoal');
+  const totalElement = document.querySelector('.total-amount .text-charcoal');
+  
+  shippingMethods.forEach(method => {
+    method.addEventListener('change', function() {
+      let shippingCost = 0;
+      if (this.value === 'express') {
+        shippingCost = 15;
+      }
+      
+      // Update shipping cost display
+      shippingCostElement.textContent = '$' + shippingCost.toFixed(2);
+      
+      // Update total amount
+      const subtotal = {{ subtotal }};
+      {% if discount %}
+      const discount = {{ discount }};
+      {% else %}
+      const discount = 0;
+      {% endif %}
+      
+      const newTotal = subtotal + shippingCost - discount;
+      totalElement.textContent = '$' + newTotal.toFixed(2);
+    });
+  });
+  
+  // Basic form validation
+  const checkoutForm = document.getElementById('checkout-form');
+  
+  checkoutForm.addEventListener('submit', function(e) {
+    let valid = true;
+    
+    // Validate credit card info if credit card payment method is selected
+    const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+    
+    if (paymentMethod === 'credit_card') {
+      const cardNumber = document.getElementById('card_number').value.trim();
+      const expiryDate = document.getElementById('expiry_date').value.trim();
+      const cvv = document.getElementById('cvv').value.trim();
+      const cardName = document.getElementById('card_name').value.trim();
+      
+      if (!cardNumber || !expiryDate || !cvv || !cardName) {
+        alert('Please fill in all credit card information');
+        valid = false;
+      }
+    }
+    
+    if (!valid) {
+      e.preventDefault();
+    }
+  });
+});
+</script>
+
+
+{% endblock %}

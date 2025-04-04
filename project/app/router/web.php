@@ -56,6 +56,8 @@ $app->router->delete('/cart/delete', [CartController::class , 'delete']);
 $app->router->get('/cart/count', [CartController::class , 'countItem']);
 
 
+$app->router->get('/order',"Customer\OrderController@index");
+
 // /cart/count?id=${cart}
 
 

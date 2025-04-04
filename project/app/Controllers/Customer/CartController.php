@@ -32,7 +32,6 @@ class CartController extends Controller {
         $user_id = null ; 
        }
 
-
        $items = $this->cartRepository->getcartItems($user_id, $guest_id);
         $this->render("customer/cart",['items' => $items]);
     }

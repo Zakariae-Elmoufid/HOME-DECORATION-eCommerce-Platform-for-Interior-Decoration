@@ -14,6 +14,35 @@
 
   <h1 class="text-3xl font-serif font-bold text-charcoal mb-8">Your Shopping Cart</h1>
 
+
+    <!-- Checkout process steps -->
+  <div class="flex justify-center mb-10">
+    <div class="relative flex items-center max-w-3xl w-full">
+      <div class="flex-1 relative">
+        <div class="flex items-center justify-center ">
+          <div class="z-40 bg-gold rounded-full h-10 w-10 flex items-center justify-center text-white font-bold">1</div>
+        </div>
+        <div class="text-center mt-2 text-sm font-medium">Cart</div>
+        <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gold"></div>
+      </div>
+      <div class="flex-1 relative">
+        <div class="flex items-center justify-center">
+          <div class="z-40  bg-gray-200 rounded-full h-10 w-10 flex items-center justify-center text-gray-500e ">2</div>
+        </div>
+        <div class="text-center mt-2 text-sm text-gray-500">Shipping</div>
+        <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gray-300"></div>
+      </div>
+      <div class="flex-1 relative">
+        <div class="flex items-center justify-center">
+          <div class="z-40  bg-gray-200 rounded-full h-10 w-10 flex items-center justify-center text-gray-500 ">3</div>
+        </div>
+        <div class="text-center mt-2 text-sm text-gray-500">Payment</div>
+        <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gray-300"></div>
+
+      </div>
+    </div>
+  </div>
+
   {% if items and items|length > 0 %}
   <!-- Cart with items -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">

@@ -145,3 +145,32 @@ CREATE TABLE `orders` (
   FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
  FOREIGN KEY (`product_id`) REFERENCES `Products` (`id`)
 )
+
+
+ CREATE TABLE `user_addresses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `address_type` enum('shipping', 'billing') NOT NULL DEFAULT 'shipping',
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `address` text NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `postal_code` varchar(20) NOT NULL,
+  `country` varchar(100) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `is_default` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+ FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+)
+
+
+
+ALTER TABLE `orders` 
+  ADD COLUMN `shipping_address_id` INT(11) DEFAULT NULL AFTER `user_id`,
+  ADD CONSTRAINT `fk_shipping_address` FOREIGN KEY (`shipping_address_id`) REFERENCES `user_addresses` (`id`);
+
+ALTER TABLE `orders` 
+  ADD COLUMN `subTotal` DECIMAL(10,2) NOT NULL AFTER `totalAmount`,
+  ADD COLUMN `shipping` DECIMAL(10,2) NOT NULL DEFAULT 0.00;
