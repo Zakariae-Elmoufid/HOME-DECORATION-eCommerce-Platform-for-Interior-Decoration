@@ -1,5 +1,12 @@
 import displayMessage from "./alert.js"
 
+
+    const cartElement = document.querySelector('[data-id-cart]');
+    
+        const cart = cartElement.dataset.idCart;
+        export default cart;
+
+
 const increaseBtn = document.querySelectorAll('.increase');
 const decreaseBtn = document.querySelectorAll('.decrease');
 const items = document.querySelectorAll('.item');
@@ -18,6 +25,7 @@ increaseBtn.forEach(button => {
          if (currentQuantity < maxStock) {
            input.value = currentQuantity + 1;
            updateTotals();
+           updateCount();
          }
     });
 })
@@ -29,6 +37,7 @@ decreaseBtn.forEach(button => {
         if (currentQuantity > 1) {
           input.value = currentQuantity - 1;
           updateTotals();
+          updateCount();
         }
     });
 });
@@ -65,6 +74,7 @@ totalElement.textContent = '$' + cartTotal.toFixed(2);
 
 updateTotals();
 
+let idCart ;
 const updateCartButton = document.getElementById('update-cart');
 
 updateCartButton.addEventListener('click' ,async function(){
@@ -76,7 +86,7 @@ updateCartButton.addEventListener('click' ,async function(){
         const itemId = item.getAttribute('data-item-id') || '0';
         const quantity = item.querySelector('input[type="number"]').value;
 
-
+        
         const subtotal = item.dataset.productTotal;
         
         
@@ -87,8 +97,6 @@ updateCartButton.addEventListener('click' ,async function(){
           total_item : parseFloat(subtotal),
           total : parseFloat(totalElement.textContent.replace('$',''))
         });
-
-        console.log(cartData);
 
     });
 
@@ -102,7 +110,8 @@ updateCartButton.addEventListener('click' ,async function(){
     
     const result = await response.json();
     if(result.success) {
-     displayMessage(result.success,'/cart');
+        displayMessage(result.success,'/cart');
+        updateCount();
     }
 
 })

@@ -53,6 +53,11 @@ $app->router->post('/cart/add', [CartController::class , 'addToCart']);
 $app->router->patch('/cart/update', [CartController::class , 'update']);
 $app->router->delete('/cart/delete', [CartController::class , 'delete']);
 
+$app->router->get('/cart/count', [CartController::class , 'countItem']);
+
+
+// /cart/count?id=${cart}
+
 
 
 // $app->get('/dashboard', [DashboardController::class, 'index']

@@ -4,6 +4,7 @@ namespace App\Controllers\Customer;
 use App\Core\Controller;
 use App\Core\Response;
 use App\Core\Request;
+use App\Core\Session;
 use App\Services\CartService;
 use App\Repositories\CartRepository;
 use App\Models\Cart;
@@ -40,7 +41,6 @@ class CartController extends Controller {
       $data = $request->getbody();
   
     
-      dump($data);
        $isConnected =  $this->cartService->isConnected();
        if($isConnected){
           $user_id = $isConnected;
@@ -54,18 +54,16 @@ class CartController extends Controller {
        $cartId = $this->cartRepository->searchCartExisting($user_id, $guest_id);
        
        if (!$cartId) {
-        // $productPrice = $this->cartRepository->getProductPrice($data['product_id']); 
-
-        // $total = $productPrice * $data['quantity'];
+       
         $cart = [
           'user_id '=> $user_id,
           'session_id' => $guest_id,
-          'total' =>$data['totalPrice'] ,
-          'quantity' => $data['quantity'],
+          'total' =>$data['price'] ,
         ];
         $cartId = $this->cartRepository->createNewCart($cart);
        }
-       
+
+       session::set('cart_id',$cartId);
        $items = $this->addItems($cartId,$data);
        
     }
@@ -83,6 +81,7 @@ class CartController extends Controller {
       ];
      $item_id =$this->cartRepository->addCartItem($item);
       if($item_id){
+        $this->countItem();
         $this->response->jsonEncode([ "message" => "item add to cart  succussful" ]);
       }
     }
@@ -109,18 +108,29 @@ class CartController extends Controller {
         $id = $item['id'];
         unset($item["id"]);
         $cartItem = $this->cartRepository->updateCartItem($id,$item);
+        $this->countItem();
         $this->response->jsonEncode([ "success" => "item update to cart  succussful" ]);
       }
+
    }
 
    public function delete(Request $request){
     $data = $request->getbody();
     $id = $data['id'];
     $cartItem = $this->cartRepository->deleteCartItem($id);
+    $this->countItem();
     $this->response->jsonEncode([ "success" => "item delete to cart  succussful" ]);
+
+   }
+
+   public function countItem(){
+  
+   $result= $this->cartService->countItem(Session::get("cart_id"));
+   $this->response->jsonEncode([ "count" => $result ]);
    }
 
 
+ 
 
 
 

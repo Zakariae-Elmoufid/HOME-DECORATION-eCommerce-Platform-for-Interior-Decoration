@@ -205,7 +205,9 @@ const decreaseBtn = document.getElementById('decrease-quantity');
                   
           
                       const result = await response.json();
-                      console.log(result);
+                         if(result.success) {
+                            displayMessage(result.success,'/cart');
+                          }
   });
 
    

@@ -29,12 +29,12 @@
         </div>
 
         <!-- Cart Items -->
-        <div class="space-y-6 pt-4">
+        <div   data-id-cart="{{items[0].getCartId}}"  class="space-y-6 pt-4">
         {% for item in items %}
           <!-- Item 1 -->
           <div data-product-price="{{item.getProductPrice}}" data-product-total="{{ item.getTotalItems }}" 
            data-item-id="{{item.getCartItemId}}" data-cart-id="{{item.getCartId}}"
-            class="item grid grid-cols-1 md:grid-cols-12 gap-4 py-4 border-b border-gray-200">
+            class="item grid grid-cols-1 md:grid-cols-12 gap-4 py-4 border-b border-gray-200" >
             <div class="md:col-span-6">
               <div class="flex">
                 <div class="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-md overflow-hidden">
@@ -227,6 +227,6 @@
     </div>
   </div>
 </div>
-<script src="../../../public/js/cart.js" type="module"></script>
+<script src="../../../public/js/cart.js" type="module" defer></script>
 
 {% endblock %}

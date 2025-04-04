@@ -119,3 +119,6 @@ CREATE TABLE `cart_items` (
   FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`) ON DELETE CASCADE,
   FOREIGN KEY (`product_id`) REFERENCES `Products` (`id`)
 ) 
+
+
+alter table carts drop COLUMN  `quantity`

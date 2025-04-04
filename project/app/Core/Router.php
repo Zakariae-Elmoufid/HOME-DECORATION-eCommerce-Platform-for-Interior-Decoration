@@ -48,9 +48,7 @@ class Router {
         $method = $this->request->getMethod();
         $url = $this->request->getUrl();
 
-
         $callback = $this->routes[$method][$url] ?? false;
-        
         if (!$callback) {
             // $this->response->statusCode(code: 404);
             return 'Not Found';

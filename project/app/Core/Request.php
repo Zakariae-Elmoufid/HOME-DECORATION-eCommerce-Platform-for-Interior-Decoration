@@ -27,12 +27,14 @@ class Request {
         if ($position !== false) {
             $path = substr($path, 0, $position);
         }
+  
         return $path;
     }
 
     public function getIdFromQuery()
     {
-        return $_GET['id'] ?? null;
+        $id = $_GET['id'] ?? null;
+        return $id ? password_hash($id, PASSWORD_DEFAULT) : null;
     }
 
     

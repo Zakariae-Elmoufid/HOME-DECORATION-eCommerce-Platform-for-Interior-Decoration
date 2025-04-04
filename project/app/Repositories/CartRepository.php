@@ -83,6 +83,41 @@ class CartRepository  extends BaseRepository{
     public function deleteCartItem($id){
         return $this->delete('cart_items',$id);
     }
+    
+    public function countItem($id){
+        $stmt = $this->query("SELECT COUNT(id) from cart_items where  cart_id = ? ",[$id]);
+        return $stmt->fetchColumn();
+
+    }
+
+
+
+    public function getCartIdBySessionId($sessionId) {
+        $stmt = $this->query("SELECT id FROM carts WHERE session_id = ? LIMIT 1" , [$sessionId]);
+        return  $stmt->fetch();
+    }
+
+
+    public function getCartIdByUserId($userId) {
+        $stmt = $this->query("SELECT id FROM carts WHERE user_id = ? LIMIT 1" , [$userId]);
+        return  $stmt->fetch();
+    }
+
+    public function mergeCarts($userCartId, $guestCartId){
+        $stmt = $this->query("SELECT cart_items as id  from cart 
+        inner join cart_items  on cart.id = cart_items.cart_id
+        where session_id = ? ",[$guestCartId]);
+        $items =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach($items as $item){
+            $id = $item['id'];
+            $cartItem = $this->updateCartItem($id,["cart_id" => $userCartId ]);
+        }
+        dump('succusful');
+    }
+
+    public function assignCartToUser($guestCartId, $userId){
+        return $this->update($this->table , $guestCartId['id'], ['user_id' => $userId ,'session_id' => null]);
+    }
 
 
 }   
