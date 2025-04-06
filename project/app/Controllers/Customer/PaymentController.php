@@ -6,15 +6,18 @@ use App\Core\Controller;
 use App\Core\Response;
 use App\Core\Request;
 use App\Services\PaymentService;
+use App\repositories\PaymentRepository;
 use App\repositories\OrderRepository;
 
 class PaymentController extends Controller {
     private $paymentService;
     private $orderRepository;
+    private $paymentRepository;
     private $response;
 
     public function __construct() {
         $this->paymentService = new PaymentService();
+        $this->paymentRepository = new PaymentRepository();
         $this->orderRepository = new OrderRepository();
         $this->response = new Response();
     }
@@ -64,7 +67,8 @@ class PaymentController extends Controller {
      */
     public function updateStatus(Request $request) {
         $data = $request->getbody();
-        
+        dump($data);
+        exit;
         // Validate required fields
         if (empty($data['payment_intent_id']) || empty($data['status'])) {
             return $this->response->jsonEncode([
@@ -118,17 +122,19 @@ class PaymentController extends Controller {
         $orderId = isset($body['id']) ? (int) $body['id'] : null;
         // Get order details
         $order = $this->orderRepository->getOrderById($orderId);
-        
         if (!$order) {
             return $this->response->redirect('/checkout');
         }
-        
+        $shippingAddress = $this->orderRepository->getUserAddressById($order->getShippingAddress());
+        $payment = $this->paymentRepository->getByOrderId($orderId);
+ 
         // Get order items
         $orderItems = $this->orderRepository->getOrderItems($orderId);
-        
         $this->response->render('customer/payment-confirmation', [
             'order' => $order,
-            'orderItems' => $orderItems
+            'orderItems' => $orderItems,
+            'shippingAddress' => $shippingAddress,
+            'payment' => $payment,
         ]);
     }
 

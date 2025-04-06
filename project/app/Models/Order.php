@@ -8,6 +8,8 @@ class Order {
     private $orderDate;
     private $status;
     private $totalAmount;
+    private $shipping;
+    private $shippingAddress;
     private $subTotal;
     private $items = [];
 
@@ -18,6 +20,8 @@ class Order {
         $this->userId = $dataArray['user_id'] ?? null;
         $this->orderDate = $dataArray['orderDate'] ?? null;
         $this->status = $dataArray['status'] ?? 'pending';
+        $this->shippingAddress = $dataArray['shipping_address_id'] ?? null;
+        $this->shipping = $dataArray['shipping'] ?? null;
         $this->totalAmount = $dataArray['totalAmount'] ?? 0;
         $this->subTotal = $dataArray['subTotal'] ?? null;
         
@@ -52,9 +56,15 @@ class Order {
     public function getTotalAmount() {
         return $this->totalAmount;
     }
+    public function getSubTotal() {
+        return $this->subTotal;
+    }
     
     public function getShippingAddress() {
         return $this->shippingAddress;
+    }
+    public function getShipping() {
+        return $this->shipping;
     }
     
 

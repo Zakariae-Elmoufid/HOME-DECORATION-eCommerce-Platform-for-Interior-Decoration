@@ -4,6 +4,7 @@ namespace App\repositories;
 
 use App\Core\DatabaseConnection;
 use App\Models\Payment;
+use PDO;
 
 class PaymentRepository  extends BaseRepository{
     
@@ -29,8 +30,9 @@ class PaymentRepository  extends BaseRepository{
     }
 
     public function getByOrderId(int $orderId) {
-        $paymentData  = findBy($this->table , ['order_id',$orderId]);
-              
+        $stmt = $this->query("SELECT * FROM payments WHERE order_id = ?" , [$orderId]);
+        $paymentData  = $stmt->fetch(PDO::FETCH_ASSOC);
+        dump($paymentData);
         if (!$paymentData) {
             return null;
         }
@@ -38,8 +40,12 @@ class PaymentRepository  extends BaseRepository{
         return new Payment($paymentData);
     }
 
+
+    
+    
+
     public function getByPaymentIntentId(string $paymentIntentId): ?Payment {
-        $paymentData  = findBy($this->table , ['payment_intent_id',$paymentIntentId]);        
+        $paymentData  =  $this->findBy($this->table , ['payment_intent_id' => $paymentIntentId]);        
         if (!$paymentData) {
             return null;
         }

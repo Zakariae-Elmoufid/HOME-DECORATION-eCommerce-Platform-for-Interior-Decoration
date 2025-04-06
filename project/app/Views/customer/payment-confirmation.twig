@@ -6,7 +6,45 @@
 {% endblock %}
 
 {% block content %}
+
+
 <div class="container mx-auto px-4 py-8">
+  <!-- Breadcrumb -->
+  <div class="mb-6 text-sm text-gray-500">
+    <a href="/" class="hover:text-gold">Home</a> &gt; 
+    <a href="/cart" class="hover:text-gold">Cart</a> &gt; 
+    <span class="text-charcoal">Checkout</span>
+  </div>
+
+  <h1 class="text-3xl font-serif font-bold text-charcoal mb-8">Checkout</h1>
+
+  <!-- Checkout process steps -->
+  <div class="flex justify-center mb-10">
+    <div class="relative flex items-center max-w-3xl w-full">
+      <div class="flex-1 relative">
+        <div class="flex items-center justify-center ">
+          <div class="z-40 bg-gold rounded-full h-10 w-10 flex items-center justify-center text-white font-bold">1</div>
+        </div>
+        <div class="text-center mt-2 text-sm font-medium">Cart</div>
+        <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gold"></div>
+      </div>
+      <div class="flex-1 relative">
+        <div class="flex items-center justify-center">
+          <div class="z-40  bg-gold rounded-full h-10 w-10 flex items-center justify-center text-white font-bold ">2</div>
+        </div>
+        <div class="text-center mt-2 text-sm font-medium">Shipping</div>
+        <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gold"></div>
+      </div>
+      <div class="flex-1 relative">
+        <div class="flex items-center justify-center">
+          <div class="z-40  bg-gold rounded-full h-10 w-10 flex items-center justify-center text-white font-bold  ">3</div>
+        </div>
+        <div class="text-center mt-2 text-sm font-medium">conformation</div>
+        <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gold"></div>
+
+      </div>
+    </div>
+  </div>
   <div class="bg-white rounded-lg shadow-sm p-6 max-w-4xl mx-auto">
     <div class="text-center mb-8">
       <div class="text-green-500 mb-4">
@@ -32,7 +70,7 @@
         {% for item in orderItems %}
         <div class="flex items-center">
           <div class="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-md overflow-hidden">
-            <img src="/public/uploads/{{ item.getImage }}" alt="{{ item.getTitle }}" class="w-full h-full object-cover">
+            <img src="/public/uploads/{{ item.getProductImage }}" alt="{{ item.getTitle }}" class="w-full h-full object-cover">
           </div>
           <div class="ml-4 flex-1">
             <h3 class="text-sm font-medium text-charcoal">{{ item.getTitle }}</h3>

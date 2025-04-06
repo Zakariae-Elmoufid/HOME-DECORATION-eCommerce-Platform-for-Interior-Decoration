@@ -1,19 +1,15 @@
-// Initialisation des éléments du formulaire
 const checkoutForm = document.getElementById('checkout-form'); 
 const subtotalElement = document.getElementById('subtotal');   
 const shippingElement = document.getElementById('shipping');   
 const totalElement = document.getElementById('total'); 
 let items = Array.from(document.querySelectorAll('.item'));
 
-// Initialisation de Stripe
 const stripe = Stripe('pk_test_51RAgELH2nPPbXqXk68Ynch9G4PJaymfMp7d4fG5QlpM6aFwskq2VeIVQYa60f6yzmyysePWNOoH2c892RsuKULHL00cJOASWRW');
 const elements = stripe.elements();
 let cardElement;
 
-// Variables pour le calcul du montant
 let shippingValue = 0.00;
 
-// Fonction pour obtenir la valeur d'expédition
 function getShippingValue() {
     const shippingMethode = document.querySelector('[name="shipping_method"]:checked');
     
@@ -33,14 +29,12 @@ function getShippingValue() {
     return value;
 }
 
-// Mise à jour des totaux lors du changement de méthode d'expédition
 checkoutForm.addEventListener('change', (event) => {
     if (event.target.name === 'shipping_method') {
         shippingValue = getShippingValue();
         updateTotalDisplay();
     }
     
-    // Afficher/masquer les informations de carte selon la méthode de paiement
     if (event.target.name === 'payment_method') {
         const creditCardInfo = document.getElementById('credit-card-info');
         if (creditCardInfo) {
@@ -49,7 +43,6 @@ checkoutForm.addEventListener('change', (event) => {
     }
 });
 
-// Calcul du sous-total
 function calculSubtotal() {
     const subtotal = items.reduce((sum, item) => {
         const itemTotal = parseFloat(item.dataset.totalItem);
@@ -60,26 +53,23 @@ function calculSubtotal() {
     return subtotal;
 }
 
-// Calcul du montant total
 function totalAmount() {
     const subtotal = calculSubtotal();
     return subtotal + shippingValue;
 }
 
-// Mise à jour de l'affichage du total
 function updateTotalDisplay() {
     const total = totalAmount();
     totalElement.textContent = "$ " + total.toFixed(2);
 }
 
-// Récupérer les IDs des articles
 function getDataItems() {
     return items.map(item => item.dataset.idItem);
 }
 
-// Initialiser les éléments Stripe
+
 function setupStripeElements() {
-    // Créer l'élément de carte
+    //create cart element 
     cardElement = elements.create('card', {
         style: {
             base: {
@@ -100,34 +90,28 @@ function setupStripeElements() {
     
     const creditCardInfo = document.getElementById('credit-card-info');
     if (creditCardInfo) {
-        // Effacer les éléments existants
+
         creditCardInfo.innerHTML = '';
         
-        // Créer le label
         const cardLabel = document.createElement('label');
         cardLabel.htmlFor = 'card-element';
         cardLabel.className = 'block text-sm font-medium text-gray-700 mb-1';
         cardLabel.textContent = 'Credit Card Details*';
         
-        // Créer le conteneur pour l'élément de carte
         const cardElementContainer = document.createElement('div');
         cardElementContainer.id = 'card-element';
         cardElementContainer.className = 'w-full px-4 py-2 border border-gray-300 rounded-md';
         
-        // Créer l'élément pour afficher les erreurs
         const cardErrors = document.createElement('div');
         cardErrors.id = 'card-errors';
         cardErrors.className = 'text-red-500 text-sm mt-2';
         
-        // Ajouter les nouveaux éléments
         creditCardInfo.appendChild(cardLabel);
         creditCardInfo.appendChild(cardElementContainer);
         creditCardInfo.appendChild(cardErrors);
         
-        // Monter l'élément de carte
         cardElement.mount('#card-element');
-        
-        // Gérer les erreurs de validation en temps réel
+
         cardElement.addEventListener('change', (event) => {
             if (event.error) {
                 cardErrors.textContent = event.error.message;
@@ -138,14 +122,12 @@ function setupStripeElements() {
     }
 }
 
-// Effacer tous les messages d'erreur
 function clearErrors() {
     document.querySelectorAll('[id^="error_"]').forEach(errorElement => {
         errorElement.textContent = '';
     });
 }
 
-// Afficher les erreurs de validation
 function showErrors(errors) {
     clearErrors();
     
@@ -157,40 +139,33 @@ function showErrors(errors) {
     });
 }
 
-// Initialiser les calculs et les éléments Stripe
 document.addEventListener('DOMContentLoaded', () => {
     calculSubtotal();
     updateTotalDisplay();
     setupStripeElements();
 });
 
-// Gestion de la soumission du formulaire
 checkoutForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    // Désactiver le bouton de soumission
     const submitButton = checkoutForm.querySelector('button[type="submit"]');
-    console.log(submitButton);
     submitButton.disabled = true;
     submitButton.innerHTML = '<span class="animate-spin inline-block mr-2">⟳</span> Processing...';
     
-    // Effacer les erreurs précédentes
     clearErrors();
     
-    // Récupérer les données du formulaire
     const formData = new FormData(checkoutForm);
     const data = {};
     formData.forEach((value, key) => {
         data[key] = value;
     });
     
-    // Ajouter les articles et les montants
     data.items = getDataItems();
     data.subTotal = calculSubtotal();
     data.totalAmount = totalAmount();
     
     try {
-        // 1. Créer la commande
+        // 1. create order
         const orderResponse = await fetch('/order/add', {
             method: 'POST',
             headers: {
@@ -215,9 +190,9 @@ checkoutForm.addEventListener('submit', async function(e) {
         const orderId = orderResult.order_id;
         const paymentMethod = data.payment_method;
         
-        // 2. Traiter le paiement selon la méthode choisie
+        // 2. Process the payment according to the chosen method
         if (paymentMethod === 'credit_card') {
-            // Créer l'intention de paiement
+
             const paymentIntentResponse = await fetch('/payment/create-intent', {
                 method: 'POST',
                 headers: {
@@ -235,7 +210,6 @@ checkoutForm.addEventListener('submit', async function(e) {
                 throw new Error(paymentIntentResult.error || 'Failed to create payment intent');
             }
             
-            // Confirmer le paiement par carte
             const { error, paymentIntent } = await stripe.confirmCardPayment(
                 paymentIntentResult.client_secret,
                 {
@@ -267,7 +241,6 @@ checkoutForm.addEventListener('submit', async function(e) {
                 return;
             }
             
-            // Mettre à jour le statut du paiement
             await fetch('/payment/update-status', {
                 method: 'POST',
                 headers: {
