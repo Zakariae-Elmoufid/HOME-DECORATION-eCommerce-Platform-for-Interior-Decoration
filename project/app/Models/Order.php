@@ -8,10 +8,7 @@ class Order {
     private $orderDate;
     private $status;
     private $totalAmount;
-    private $shippingAddress;
-    private $phone;
-    private $paymentMethod;
-    private $paymentDate;
+    private $subTotal;
     private $items = [];
 
     public function __construct($data = []) {
@@ -22,10 +19,7 @@ class Order {
         $this->orderDate = $dataArray['orderDate'] ?? null;
         $this->status = $dataArray['status'] ?? 'pending';
         $this->totalAmount = $dataArray['totalAmount'] ?? 0;
-        $this->shippingAddress = $dataArray['shippingAddress'] ?? null;
-        $this->phone = $dataArray['phone'] ?? null;
-        $this->paymentMethod = $dataArray['paymentMethod'] ?? null;
-        $this->paymentDate = $dataArray['paymentDate'] ?? null;
+        $this->subTotal = $dataArray['subTotal'] ?? null;
         
         if (isset($dataArray['items'])) {
             foreach ($dataArray['items'] as $itemData) {
@@ -63,21 +57,7 @@ class Order {
         return $this->shippingAddress;
     }
     
-    public function getPhone() {
-        return $this->phone;
-    }
-    
-    public function getPaymentMethod() {
-        return $this->paymentMethod;
-    }
-    
-    public function getPaymentDate() {
-        return $this->paymentDate;
-    }
-    
-    public function setPaymentDate($paymentDate) {
-        $this->paymentDate = $paymentDate;
-    }
+
     
     public function getItems() {
         return $this->items;

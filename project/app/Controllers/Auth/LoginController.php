@@ -30,22 +30,21 @@ public function login(Request $request){
 
   
     $user = $this->authService->findUser($data);
-
-    if (isset($user['errorEmail']) || isset($user['errorPassword'])) {
+    if (isset($user['errors']) || isset($user['errorEmail']) || isset($user['errorPassword'])) {
       return $this->render('auth/login', 
       ['errors' => $user,
       'old' => $data['email']
       ]
     );
   }
-  $user =$user['user'];
-  $user_id = Session::set('id',$user->getId());
+  $user = $user['user'];
+  Session::set('id',$user->getId());
   Session::set("username" , $user->getUsername());
   Session::set("email" , $user->getEmail());
   Session::set("role" , $user->getRole());
   
     if ($user->getRole() == 2) {
-        $this->cartServise->associateCartAfterLogin($user_id);
+        $this->cartServise->associateCartAfterLogin($user->getId());
         $this->response->redirect('customer');
     } else {
         $this->response->redirect('admin');
