@@ -65,7 +65,7 @@ $app->router->post('/payment/update-status',[PaymentController::class , 'updateS
 $app->router->get('/payment/confirmation',[PaymentController::class , 'confirmation']);
 
 
-
+$app->router->get('/customer/account', 'Customer\AccountController@index');
 
 // $app->get('/dashboard', [DashboardController::class, 'index']
 // $app->get('/login', [AuthController::class, 'login']);

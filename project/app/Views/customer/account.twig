@@ -1,0 +1,180 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}My Account - ElegantHome{% endblock %}
+
+{% block content %}
+<!-- Page Title -->
+<div class="bg-white py-8 shadow-sm">
+  <div class="container mx-auto px-4">
+    <h1 class="text-3xl font-serif font-bold text-charcoal text-center">My Account</h1>
+  </div>
+</div>
+
+<!-- Breadcrumbs -->
+<div class="container mx-auto px-4 py-4 text-sm">
+  <div class="flex items-center text-gray-500">
+    <a href="/" class="hover:text-gold transition duration-300">Home</a>
+    <span class="mx-2">/</span>
+    <span class="text-charcoal">My Account</span>
+  </div>
+</div>
+
+<!-- Account Dashboard -->
+<div class="container mx-auto px-4 py-10">
+  <div class="grid md:grid-cols-4 gap-8">
+    <!-- Sidebar -->
+    <div class="md:col-span-1">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center space-x-4 mb-6">
+          <div class="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-white">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <p class="font-medium">{{ customer.username }}</p>
+            <p class="text-sm text-gray-500">{{ customer.email }}</p>
+          </div>
+        </div>
+        <nav>
+          <ul class="space-y-2">
+            <li><a href="" class="flex items-center text-gold font-medium py-2 px-4 bg-cream rounded-md"><i class="fas fa-tachometer-alt mr-3"></i> Dashboard</a></li>
+            <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-shopping-bag mr-3"></i> Orders</a></li>
+            <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-map-marker-alt mr-3"></i> Addresses</a></li>
+            <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="far fa-heart mr-3"></i> Wishlist</a></li>
+            <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-credit-card mr-3"></i> Payment Methods</a></li>
+            <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-user-cog mr-3"></i> Account Details</a></li>
+            <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-sign-out-alt mr-3"></i> Logout</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="md:col-span-3">
+      <!-- Welcome Section -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4">Welcome, {{ customer.username }}!</h2>
+        <p class="text-gray-600 mb-4">From your account dashboard, you can view your recent orders, manage your addresses, and edit your account details.</p>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Recent Orders</h2>
+          <a href="" class="text-gold hover:underline text-sm">View All</a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full">
+            <thead>
+              <tr class="border-b border-gray-200">
+                <th class="py-3 px-4 text-left font-medium text-sm text-gray-500">Order</th>
+                <th class="py-3 px-4 text-left font-medium text-sm text-gray-500">Date</th>
+                <th class="py-3 px-4 text-left font-medium text-sm text-gray-500">Status</th>
+                <th class="py-3 px-4 text-left font-medium text-sm text-gray-500">Total</th>
+                <th class="py-3 px-4 text-left font-medium text-sm text-gray-500">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if orders is empty %}
+                <tr><td colspan="5" class="py-4 text-center text-gray-500">No orders found</td></tr>
+              {% else %}
+                {% for order in orders %}
+                  <tr class="border-b border-gray-200">
+                    <td class="py-3 px-4 text-charcoal">#{{ order.number }}</td>
+                    <td class="py-3 px-4 text-charcoal">{{ order.date|date('F d, Y') }}</td>
+                    <td class="py-3 px-4">
+                      {% set statusColors = {
+                        'delivered': 'green',
+                        'shipped': 'blue',
+                        'processing': 'yellow',
+                        'canceled': 'red'
+                      } %}
+                      {% set color = statusColors[order.status] ?? 'gray' %}
+                      <span class="px-2 py-1 bg-{{ color }}-100 text-{{ color }}-800 rounded-full text-xs">
+                        {{ order.status|capitalize }}
+                      </span>
+                    </td>
+                    <td class="py-3 px-4 text-charcoal">${{ order.total|number_format(2, '.', ',') }}</td>
+                    <td class="py-3 px-4">
+                      <a href="" class="text-gold hover:underline text-sm">View</a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Address Overview -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Shipping Address -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">Shipping Address</h2>
+            <a href="" class="text-gold hover:underline text-sm">Edit</a>
+          </div>
+          {% if customer.shippingAddress %}
+            <address class="not-italic text-gray-600">
+              {{ customer.shippingAddress.firstName }} {{ customer.shippingAddress.lastName }}<br />
+              {{ customer.shippingAddress.street }}<br />
+              {{ customer.shippingAddress.city }}, {{ customer.shippingAddress.state }} {{ customer.shippingAddress.postcode }}<br />
+              {{ customer.shippingAddress.country }}<br />
+              {{ customer.shippingAddress.phone }}
+            </address>
+          {% else %}
+            <p class="text-gray-500">No shipping address registered</p>
+          {% endif %}
+        </div>
+
+        <!-- Billing Address -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">Billing Address</h2>
+            <a href="" class="text-gold hover:underline text-sm">Edit</a>
+          </div>
+          {% if customer.billingAddress %}
+            <address class="not-italic text-gray-600">
+              {{ customer.billingAddress.firstName }} {{ customer.billingAddress.lastName }}<br />
+              {{ customer.billingAddress.street }}<br />
+              {{ customer.billingAddress.city }}, {{ customer.billingAddress.state }} {{ customer.billingAddress.postcode }}<br />
+              {{ customer.billingAddress.country }}<br />
+              {{ customer.billingAddress.phone }}
+            </address>
+          {% else %}
+            <p class="text-gray-500">No billing address registered</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Recently Viewed -->
+      {% if recentlyViewed %}
+      <div class="mt-8">
+        <h2 class="text-xl font-semibold mb-6">Recently Viewed</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {% for product in recentlyViewed %}
+          <div class="bg-white rounded-lg shadow-md overflow-hidden group">
+            <div class="relative">
+              <img src="{{ product.image }}" alt="{{ product.name }}" class="w-full h-64 object-cover" />
+              <div class="absolute top-0 right-0 p-2">
+                <button class="text-gold hover:text-gold-dark bg-white rounded-full p-2 shadow-md transition duration-300">
+                  <i class="far fa-heart"></i>
+                </button>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-medium text-charcoal group-hover:text-gold transition duration-300 mb-2">{{ product.name }}</h3>
+              <p class="text-gray-500 text-sm mb-2">{{ product.category }}</p>
+              <div class="flex justify-between items-center">
+                <span class="text-lg font-semibold text-gold">${{ product.price|number_format(2, '.', ',') }}</span>
+                <a href="" class="text-sm text-gold hover:underline">View</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

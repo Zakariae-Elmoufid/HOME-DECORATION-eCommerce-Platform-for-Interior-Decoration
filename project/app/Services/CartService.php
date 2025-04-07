@@ -49,7 +49,7 @@ public function countItem($id){
           $userCartId = $cartRepository->getCartIdByUserId($userId);
           if (isset($guestCartId['id']) && isset($userCartId['id'])) {
               $cartRepository->mergeCarts($userCartId['id'], $guestCartId['id']);
-          } elseif ($guestCartId['id']) {
+          } elseif (isset($guestCartId['id'])) {
               $cartRepository->assignCartToUser($guestCartId['id'], $userId);
           }
           
@@ -57,5 +57,36 @@ public function countItem($id){
           return true;
       }
   }
+
+
+
+  public function cartId(){
+  $cartRepository = new CartRepository();
+  $isConnected =  $this->isConnected();
+       if($isConnected){
+          $user_id = $isConnected;
+          $guest_id = null ; 
+       }else{
+        $guest_id = $this->getOrCreateGuestId();
+        $user_id = null ; 
+       }
+
+
+       $cartId = $cartRepository->searchCartExisting($user_id, $guest_id);
+       if (!$cartId) {
+       
+        $data = [
+          'user_id '=> $user_id,
+          'session_id' => $guest_id,
+          'total' =>00.0 ,
+        ];
+        
+        $cartId = $cartRepository->createNewCart($data);
+      }
+
+      session::set('cart_id',$cartId);
+     return $cartId;
+    }    
+
 
 }

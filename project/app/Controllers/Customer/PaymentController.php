@@ -67,7 +67,6 @@ class PaymentController extends Controller {
      */
     public function updateStatus(Request $request) {
         $data = $request->getbody();
-        dump($data);
         exit;
         // Validate required fields
         if (empty($data['payment_intent_id']) || empty($data['status'])) {
