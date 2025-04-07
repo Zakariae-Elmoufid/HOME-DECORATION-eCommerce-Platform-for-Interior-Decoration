@@ -1,0 +1,147 @@
+{# payment-confirmation.twig #}
+{% extends "layouts/main.twig" %}
+
+{% block title %}
+  Order Confirmation - ElegantHome
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container mx-auto px-4 py-8">
+  <!-- Breadcrumb -->
+  <div class="mb-6 text-sm text-gray-500">
+    <a href="/" class="hover:text-gold">Home</a> &gt; 
+    <a href="/cart" class="hover:text-gold">Cart</a> &gt; 
+    <span class="text-charcoal">Checkout</span>
+  </div>
+
+  <h1 class="text-3xl font-serif font-bold text-charcoal mb-8">Checkout</h1>
+
+  <!-- Checkout process steps -->
+  <div class="flex justify-center mb-10">
+    <div class="relative flex items-center max-w-3xl w-full">
+      <div class="flex-1 relative">
+        <div class="flex items-center justify-center ">
+          <div class="z-40 bg-gold rounded-full h-10 w-10 flex items-center justify-center text-white font-bold">1</div>
+        </div>
+        <div class="text-center mt-2 text-sm font-medium">Cart</div>
+        <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gold"></div>
+      </div>
+      <div class="flex-1 relative">
+        <div class="flex items-center justify-center">
+          <div class="z-40  bg-gold rounded-full h-10 w-10 flex items-center justify-center text-white font-bold ">2</div>
+        </div>
+        <div class="text-center mt-2 text-sm font-medium">Shipping</div>
+        <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gold"></div>
+      </div>
+      <div class="flex-1 relative">
+        <div class="flex items-center justify-center">
+          <div class="z-40  bg-gold rounded-full h-10 w-10 flex items-center justify-center text-white font-bold  ">3</div>
+        </div>
+        <div class="text-center mt-2 text-sm font-medium">conformation</div>
+        <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gold"></div>
+
+      </div>
+    </div>
+  </div>
+  <div class="bg-white rounded-lg shadow-sm p-6 max-w-4xl mx-auto">
+    <div class="text-center mb-8">
+      <div class="text-green-500 mb-4">
+        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+      
+      <h1 class="text-3xl font-serif font-bold text-charcoal mb-2">Thank You for Your Order!</h1>
+      <p class="text-gray-600 mb-1">Order #{{ order.getId }}</p>
+      <p class="text-gray-600">{{ order.getOrderDate|date("F d, Y") }}</p>
+      
+      <p class="text-gray-700 mt-4">
+        We've received your order and payment. A confirmation email has been sent to 
+        <strong>{{ shippingAddress.getEmail }}</strong>.
+      </p>
+    </div>
+    
+    <div class="border-t border-b border-gray-200 py-4 mb-6">
+      <h2 class="text-xl font-medium text-charcoal mb-4">Order Summary</h2>
+      
+      <div class="space-y-4">
+        {% for item in orderItems %}
+        <div class="flex items-center">
+          <div class="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-md overflow-hidden">
+            <img src="/public/uploads/{{ item.getProductImage }}" alt="{{ item.getTitle }}" class="w-full h-full object-cover">
+          </div>
+          <div class="ml-4 flex-1">
+            <h3 class="text-sm font-medium text-charcoal">{{ item.getTitle }}</h3>
+            <div class="text-xs text-gray-500">
+              <span>{{ item.getSelectedColor }}, {{ item.getSelectedSize }}</span>
+              <span class="mx-1">·</span>
+              <span>Qty: {{ item.getQuantity }}</span>
+            </div>
+          </div>
+          <div class="text-sm font-medium text-right">${{ item.getPrice * item.getQuantity|number_format(2, '.', ',') }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div>
+        <h3 class="text-lg font-medium text-charcoal mb-2">Shipping Address</h3>
+        <address class="not-italic text-sm text-gray-600">
+          {{ shippingAddress.getFirstName }} {{ shippingAddress.getLastName }}<br>
+          {{ shippingAddress.getAddress }}<br>
+          {{ shippingAddress.getCity }}, {{ shippingAddress.getPostalCode }}<br>
+          {{ shippingAddress.getCountry }}
+        </address>
+      </div>
+      
+      <div>
+        <h3 class="text-lg font-medium text-charcoal mb-2">Payment Information</h3>
+        <div class="text-sm text-gray-600">
+          <p>
+            <span class="font-medium">Method:</span> 
+            {% if payment.getPaymentMethod == 'credit_card' %}
+              Credit Card
+            {% elseif payment.getPaymentMethod == 'paypal' %}
+              PayPal
+            {% else %}
+              {{ payment.getPaymentMethod|capitalize }}
+            {% endif %}
+          </p>
+          <p><span class="font-medium">Status:</span> {{ payment.getStatus|capitalize }}</p>
+          <p><span class="font-medium">Date:</span> {{ payment.getCreatedAt|date("F d, Y H:i") }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="border-t border-gray-200 pt-4 space-y-3">
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-500">Subtotal</span>
+        <span class="text-charcoal">${{ order.getSubTotal|number_format(2, '.', ',') }}</span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-500">Shipping</span>
+        <span class="text-charcoal">${{ order.getShipping|number_format(2, '.', ',') }}</span>
+      </div>
+      <div class="flex justify-between font-medium pt-3 border-t border-gray-200">
+        <span>Total</span>
+        <span class="text-charcoal">${{ order.getTotalAmount|number_format(2, '.', ',') }}</span>
+      </div>
+    </div>
+    
+    <div class="mt-8 text-center">
+      <p class="text-gray-600 mb-4">If you have any questions, please contact our customer service.</p>
+      <div class="flex justify-center space-x-4">
+        <a href="/" class="inline-block bg-gold hover:bg-gold-dark text-white py-2 px-6 rounded-md transition duration-300">
+          Continue Shopping
+        </a>
+        <a href="/account/orders" class="inline-block bg-white border border-gold hover:bg-gray-50 text-gold py-2 px-6 rounded-md transition duration-300">
+          View My Orders
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

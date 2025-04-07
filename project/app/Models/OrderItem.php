@@ -13,6 +13,7 @@ class OrderItem {
     private $selectedSize;
     private $productTitle; 
     private $productImage; 
+    private $total_item; 
 
     public function __construct($data = []) {
         $dataArray = is_object($data) ? get_object_vars($data) : $data;
@@ -24,8 +25,9 @@ class OrderItem {
         $this->price = $dataArray['price'] ?? 0;
         $this->selectedColor = $dataArray['selectedColor'] ?? null;
         $this->selectedSize = $dataArray['selectedSize'] ?? null;
-        $this->productTitle = $dataArray['product_title'] ?? null;
-        $this->productImage = $dataArray['product_image'] ?? null;
+        $this->productTitle = $dataArray['title'] ?? null;
+        $this->productImage = $dataArray['image_path'] ?? null;
+        $this->total_item = $dataArray['total_item'] ?? null;
     }
 
     // Getters
@@ -56,14 +58,17 @@ class OrderItem {
     public function getSelectedSize() {
         return $this->selectedSize;
     }
-    
     public function getProductTitle() {
         return $this->productTitle;
     }
-    
     public function getProductImage() {
         return $this->productImage;
     }
+ 
+    
+
+    
+
     
     // Calculer le sous-total de cet élément
     public function getSubtotal() {

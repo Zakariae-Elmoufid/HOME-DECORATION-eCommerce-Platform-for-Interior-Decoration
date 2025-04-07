@@ -36,7 +36,7 @@
         <div class="flex items-center justify-center">
           <div class="z-40  bg-gray-200 rounded-full h-10 w-10 flex items-center justify-center text-gray-500 ">3</div>
         </div>
-        <div class="text-center mt-2 text-sm text-gray-500">Payment</div>
+        <div class="text-center mt-2 text-sm text-gray-500">conformation</div>
         <div class="absolute left-1/2 top-5 transform -translate-x-1/2 w-full h-0.5 bg-gray-300"></div>
 
       </div>
@@ -49,7 +49,7 @@
       <div class="bg-white rounded-lg shadow-sm p-6">
         <h2 class="text-xl font-medium text-charcoal mb-6">Shipping Information</h2>
         
-        <form id="checkout-form" method="post" action="/checkout/process">
+        <form id="checkout-form" >
           <!-- Personal Information -->
           <div class="mb-6">
             <h3 class="text-lg font-medium text-charcoal mb-4">Personal Details</h3>
@@ -57,18 +57,23 @@
               <div>
                 <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name*</label>
                 <input type="text" id="first_name" name="first_name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                 <small class="text-red-500 error-message" id="error_first_name"></small>
               </div>
               <div>
                 <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name*</label>
                 <input type="text" id="last_name" name="last_name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                <small class="text-red-500 error-message" id="error_last_name"></small>
               </div>
               <div>
                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address*</label>
                 <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                 <small class="text-red-500 error-message" id="error_email"></small>
+
               </div>
               <div>
                 <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number*</label>
                 <input type="tel" id="phone" name="phone" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                <small class="text-red-500 error-message" id="error_phone"></small>
               </div>
             </div>
           </div>
@@ -80,15 +85,18 @@
               <div>
                 <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Street Address*</label>
                 <input type="text" id="address" name="address" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                <small class="text-red-500 error-message" id="error_address"></small>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City*</label>
                   <input type="text" id="city" name="city" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                  <small class="text-red-500 error-message" id="error_city"></small>
                 </div>
                 <div>
                   <label for="postal_code" class="block text-sm font-medium text-gray-700 mb-1">Postal Code*</label>
                   <input type="text" id="postal_code" name="postal_code" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                  <small class="text-red-500 error-message" id="error_postal"></small>
                 </div>
               </div>
               <div>
@@ -113,7 +121,7 @@
             <h3 class="text-lg font-medium text-charcoal mb-4">Shipping Method</h3>
             <div class="space-y-3">
               <label class="flex items-center p-4 border border-gray-300 rounded-md cursor-pointer hover:border-gold">
-                <input type="radio" name="shipping_method" value="standard" checked class="text-gold focus:ring-gold h-4 w-4">
+                <input type="radio" name="shipping_method" value="0.00"  class="text-gold focus:ring-gold h-4 w-4">
                 <div class="ml-4">
                   <div class="font-medium text-charcoal">Standard Shipping</div>
                   <div class="text-sm text-gray-500">3-5 business days</div>
@@ -121,7 +129,7 @@
                 <div class="ml-auto font-medium">Free</div>
               </label>
               <label class="flex items-center p-4 border border-gray-300 rounded-md cursor-pointer hover:border-gold">
-                <input type="radio" name="shipping_method" value="express" class="text-gold focus:ring-gold h-4 w-4">
+                <input type="radio" name="shipping_method" value="15.00" class="text-gold focus:ring-gold h-4 w-4">
                 <div class="ml-4">
                   <div class="font-medium text-charcoal">Express Shipping</div>
                   <div class="text-sm text-gray-500">1-2 business days</div>
@@ -130,8 +138,9 @@
               </label>
             </div>
           </div>
-          
-          <!-- Payment Method -->
+
+
+                    <!-- Payment Method -->
           <div class="mb-6">
             <h3 class="text-lg font-medium text-charcoal mb-4">Payment Method</h3>
             <div class="space-y-3">
@@ -182,6 +191,9 @@
             </div>
           </div>
           
+          
+
+          
           <!-- Order Comments -->
           <div class="mb-6">
             <label for="comments" class="block text-sm font-medium text-gray-700 mb-1">Order Comments (Optional)</label>
@@ -195,6 +207,11 @@
               <span class="ml-2 text-sm text-gray-700">I agree to the <a href="/terms" class="text-gold hover:underline">Terms and Conditions</a> and <a href="/privacy" class="text-gold hover:underline">Privacy Policy</a></span>
             </label>
           </div>
+        <!-- Place Order Button -->
+        <button type="submit"  class="w-full bg-gold hover:bg-gold-dark text-white py-3 rounded-md transition duration-300 flex items-center justify-center font-medium">
+          Place Order
+        </button>
+        
         </form>
       </div>
     </div>
@@ -206,7 +223,7 @@
         
         <div class="space-y-4 mb-6">
           {% for item in items %}
-          <div class="flex">
+          <div  data-total-item="{{ item.getTotalItems }}" data-id-item="{{item.getCartItemId}}" class="flex  item">
             <div class="flex-shrink-0 w-20 h-20 bg-gray-100 rounded-md overflow-hidden">
               <img src="/public/uploads/{{ item.getProductImage }}" alt="{{ item.getProductTitle }}" class="w-full h-full object-cover">
             </div>
@@ -236,11 +253,11 @@
         <div class="border-t border-gray-200 pt-4 space-y-3 mb-6">
           <div class="flex justify-between text-sm">
             <span class="text-gray-500">Subtotal</span>
-            <span class="text-charcoal">${{ subtotal|number_format(2, '.', ',') }}</span>
+            <span id="subtotal" class="text-charcoal">${{ subtotal|number_format(2, '.', ',') }}</span>
           </div>
           <div class="flex justify-between text-sm shipping-cost">
-            <span class="text-gray-500">Shipping</span>
-            <span class="text-charcoal">$0.00</span>
+            <span  class="text-gray-500">Shipping</span>
+            <span id="shipping" class="text-charcoal">$0.00</span>
           </div>
           {% if discount %}
           <div class="flex justify-between text-sm">
@@ -250,14 +267,9 @@
           {% endif %}
           <div class="flex justify-between font-medium pt-3 border-t border-gray-200 total-amount">
             <span>Total</span>
-            <span class="text-charcoal">${{ total|number_format(2, '.', ',') }}</span>
+            <span id="total" class="text-charcoal">${{ total|number_format(2, '.', ',') }}</span>
           </div>
         </div>
-        
-        <!-- Place Order Button -->
-        <button type="submit" form="checkout-form" class="w-full bg-gold hover:bg-gold-dark text-white py-3 rounded-md transition duration-300 flex items-center justify-center font-medium">
-          Place Order
-        </button>
         
         <!-- Secure Checkout -->
         <div class="mt-6 text-center">
@@ -277,77 +289,8 @@
   </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Toggle credit card info based on payment method
-  const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
-  const creditCardInfo = document.getElementById('credit-card-info');
-  
-  paymentMethods.forEach(method => {
-    method.addEventListener('change', function() {
-      if (this.value === 'credit_card') {
-        creditCardInfo.style.display = 'block';
-      } else {
-        creditCardInfo.style.display = 'none';
-      }
-    });
-  });
-  
-  // Update shipping cost based on shipping method
-  const shippingMethods = document.querySelectorAll('input[name="shipping_method"]');
-  const shippingCostElement = document.querySelector('.shipping-cost .text-charcoal');
-  const totalElement = document.querySelector('.total-amount .text-charcoal');
-  
-  shippingMethods.forEach(method => {
-    method.addEventListener('change', function() {
-      let shippingCost = 0;
-      if (this.value === 'express') {
-        shippingCost = 15;
-      }
-      
-      // Update shipping cost display
-      shippingCostElement.textContent = '$' + shippingCost.toFixed(2);
-      
-      // Update total amount
-      const subtotal = {{ subtotal }};
-      {% if discount %}
-      const discount = {{ discount }};
-      {% else %}
-      const discount = 0;
-      {% endif %}
-      
-      const newTotal = subtotal + shippingCost - discount;
-      totalElement.textContent = '$' + newTotal.toFixed(2);
-    });
-  });
-  
-  // Basic form validation
-  const checkoutForm = document.getElementById('checkout-form');
-  
-  checkoutForm.addEventListener('submit', function(e) {
-    let valid = true;
-    
-    // Validate credit card info if credit card payment method is selected
-    const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
-    
-    if (paymentMethod === 'credit_card') {
-      const cardNumber = document.getElementById('card_number').value.trim();
-      const expiryDate = document.getElementById('expiry_date').value.trim();
-      const cvv = document.getElementById('cvv').value.trim();
-      const cardName = document.getElementById('card_name').value.trim();
-      
-      if (!cardNumber || !expiryDate || !cvv || !cardName) {
-        alert('Please fill in all credit card information');
-        valid = false;
-      }
-    }
-    
-    if (!valid) {
-      e.preventDefault();
-    }
-  });
-});
-</script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../../../public/js/order.js"> </script>
 
 
 {% endblock %}

@@ -12,6 +12,8 @@ use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\CategoryController;
 use App\Controllers\Admin\ProductController;
 use App\Controllers\Customer\CartController;
+use App\Controllers\Customer\OrderController;
+use App\Controllers\Customer\PaymentController;
 
 
 
@@ -57,8 +59,11 @@ $app->router->get('/cart/count', [CartController::class , 'countItem']);
 
 
 $app->router->get('/order',"Customer\OrderController@index");
+$app->router->post('/order/add',[OrderController::class , 'store']);
+$app->router->post('/payment/create-intent',[PaymentController::class , 'createIntent']);
+$app->router->post('/payment/update-status',[PaymentController::class , 'updateStatus']);
+$app->router->get('/payment/confirmation',[PaymentController::class , 'confirmation']);
 
-// /cart/count?id=${cart}
 
 
 

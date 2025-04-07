@@ -47,8 +47,7 @@ public function countItem($id){
           
           $guestCartId = $cartRepository->getCartIdBySessionId($guestIdentifier);
           $userCartId = $cartRepository->getCartIdByUserId($userId);
-        
-          if (isset($guestCartId['id']) && $userCartId['id']) {
+          if (isset($guestCartId['id']) && isset($userCartId['id'])) {
               $cartRepository->mergeCarts($userCartId['id'], $guestCartId['id']);
           } elseif ($guestCartId['id']) {
               $cartRepository->assignCartToUser($guestCartId['id'], $userId);

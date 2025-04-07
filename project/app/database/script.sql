@@ -125,10 +125,7 @@ CREATE TABLE `orders` (
   `orderDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` varchar(50) NOT NULL DEFAULT 'pending',
   `totalAmount` decimal(10,2) NOT NULL,
-  `shippingAddress` text NOT NULL,
   `phone` varchar(20) NOT NULL,
-  `paymentMethod` varchar(50) NOT NULL,
-  `paymentDate` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
@@ -150,7 +147,6 @@ CREATE TABLE `orders` (
  CREATE TABLE `user_addresses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `address_type` enum('shipping', 'billing') NOT NULL DEFAULT 'shipping',
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) NOT NULL,
   `address` text NOT NULL,
@@ -174,3 +170,24 @@ ALTER TABLE `orders`
 ALTER TABLE `orders` 
   ADD COLUMN `subTotal` DECIMAL(10,2) NOT NULL AFTER `totalAmount`,
   ADD COLUMN `shipping` DECIMAL(10,2) NOT NULL DEFAULT 0.00;
+
+
+alter table order_items add column total_item DECIMAL(10,2) NOT NULL
+
+alter table user_addresses add COLUMN  email VARCHAR(255)  NOT NULL after phone
+
+
+
+CREATE TABLE payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    payment_method VARCHAR(50) NOT NULL DEFAULT 'credit_card',
+    payment_intent_id VARCHAR(255) DEFAULT NULL,
+    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    currency VARCHAR(3) NOT NULL DEFAULT 'usd',
+    status VARCHAR(50) NOT NULL DEFAULT 'pending',
+    error_message TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+) 
