@@ -1,6 +1,5 @@
 const sidebar = document.getElementById('sidebar');
 const menu = document.getElementById('menu');
-
 menu.addEventListener('click' , function(){
     sidebar.classList.toggle('hidden');
 })
@@ -10,12 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('nav a');
     navLinks.forEach(link => {
       link.addEventListener('click', function(e) {
-        // Si ce n'est pas un lien avec href="#", empêcher le comportement par défaut
         if (this.getAttribute('href') !== '#') {
           return;
         }
         
-        e.preventDefault(); // Empêcher la navigation pour les liens "#"
+        e.preventDefault(); 
         
         navLinks.forEach(navLink => {
           navLink.classList.remove('bg-blue', 'text-gray-300');
