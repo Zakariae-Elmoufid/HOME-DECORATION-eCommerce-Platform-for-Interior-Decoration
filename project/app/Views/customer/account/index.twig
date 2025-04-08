@@ -36,8 +36,8 @@
         </div>
         <nav>
           <ul class="space-y-2">
-            <li><a href="" class="flex items-center text-gold font-medium py-2 px-4 bg-cream rounded-md"><i class="fas fa-tachometer-alt mr-3"></i> Dashboard</a></li>
-            <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-shopping-bag mr-3"></i> Orders</a></li>
+            <li><a href="/customer/account" class="flex items-center text-gold font-medium py-2 px-4 bg-cream rounded-md"><i class="fas fa-tachometer-alt mr-3"></i> Dashboard</a></li>
+            <li><a href="/order" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-shopping-bag mr-3"></i> Orders</a></li>
             <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-map-marker-alt mr-3"></i> Addresses</a></li>
             <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="far fa-heart mr-3"></i> Wishlist</a></li>
             <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-credit-card mr-3"></i> Payment Methods</a></li>
@@ -93,7 +93,7 @@
                         {{ order.status|capitalize }}
                       </span>
                     </td>
-                    <td class="py-3 px-4 text-charcoal">${{ order.total|number_format(2, '.', ',') }}</td>
+                    <td class="py-3 px-4 text-charcoal">${{ order.total_item|number_format(2, '.', ',') }}</td>
                     <td class="py-3 px-4">
                       <a href="" class="text-gold hover:underline text-sm">View</a>
                     </td>
@@ -113,13 +113,12 @@
             <h2 class="text-lg font-semibold">Shipping Address</h2>
             <a href="" class="text-gold hover:underline text-sm">Edit</a>
           </div>
-          {% if customer.shippingAddress %}
+           {% if userAddress %}
             <address class="not-italic text-gray-600">
-              {{ customer.shippingAddress.firstName }} {{ customer.shippingAddress.lastName }}<br />
-              {{ customer.shippingAddress.street }}<br />
-              {{ customer.shippingAddress.city }}, {{ customer.shippingAddress.state }} {{ customer.shippingAddress.postcode }}<br />
-              {{ customer.shippingAddress.country }}<br />
-              {{ customer.shippingAddress.phone }}
+              {{ userAddress.getFirstName }} {{ userAddress.lastName }}<br />
+              {{ userAddress.city }}, {{userAddress.address }} {{userAddress.postcode }}<br />
+              {{userAddress.country }}<br />
+              {{userAddress.phone }}
             </address>
           {% else %}
             <p class="text-gray-500">No shipping address registered</p>

@@ -10,6 +10,7 @@ class Order {
     private $totalAmount;
     private $shipping;
     private $shippingAddress;
+
     private $subTotal;
     private $items = [];
 
@@ -20,7 +21,7 @@ class Order {
         $this->userId = $dataArray['user_id'] ?? null;
         $this->orderDate = $dataArray['orderDate'] ?? null;
         $this->status = $dataArray['status'] ?? 'pending';
-        $this->shippingAddress = $dataArray['shipping_address_id'] ?? null;
+        $this->shippingAddress = $data['shipping_address'] ?? null;
         $this->shipping = $dataArray['shipping'] ?? null;
         $this->totalAmount = $dataArray['totalAmount'] ?? 0;
         $this->subTotal = $dataArray['subTotal'] ?? null;
@@ -30,6 +31,8 @@ class Order {
                 $this->items[] = new OrderItem($itemData);
             }
         }
+
+
     }
 
     // Getters & Setters
