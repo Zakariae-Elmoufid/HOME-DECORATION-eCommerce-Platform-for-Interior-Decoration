@@ -21,10 +21,10 @@ class Order {
         $this->userId = $dataArray['user_id'] ?? null;
         $this->orderDate = $dataArray['orderDate'] ?? null;
         $this->status = $dataArray['status'] ?? 'pending';
-        $this->shippingAddress = $data['shipping_address'] ?? null;
         $this->shipping = $dataArray['shipping'] ?? null;
         $this->totalAmount = $dataArray['totalAmount'] ?? 0;
         $this->subTotal = $dataArray['subTotal'] ?? null;
+        $this->shippingAddress = $data['shipping_address_id'] ?? null;
         
         if (isset($dataArray['items'])) {
             foreach ($dataArray['items'] as $itemData) {

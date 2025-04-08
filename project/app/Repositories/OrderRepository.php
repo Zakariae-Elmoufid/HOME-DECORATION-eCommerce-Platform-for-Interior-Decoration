@@ -6,11 +6,12 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Core\Session;
 use PDO;
+use Exception;
 
 class OrderRepository  extends BaseRepository {
 
-    
 
+ 
     public function  createUserAddresse($data){
        $user_addresse_id = $this->insert("user_addresses",$data);
        if($user_addresse_id){
@@ -45,8 +46,7 @@ class OrderRepository  extends BaseRepository {
         if (!$orderData) {
             return null;
         }
-        
-        return new Order($orderData);
+        return new Order((array) $orderData);
     }
 
 
@@ -59,11 +59,9 @@ class OrderRepository  extends BaseRepository {
           oi.selectedColor,
           oi.selectedSize,
           oi.total_item,
-
           p.title as productTitle,
           pg.image_path as productImage 
         from order_items oi
-    --    inner join orders o on o.id = oi.order_id
        inner join Products p on  oi.product_id = p.id
        inner join Product_images pg on  pg.product_id = p.id AND pg.is_primary = 1
        where oi.order_id = ?
@@ -113,6 +111,69 @@ class OrderRepository  extends BaseRepository {
         
         return $orders;
     }
+
+
+    public function getOrderStock($orderId)
+    {
+        try {
+            $this->conn->beginTransaction();
+    
+            $stmt = $this->query('SELECT 
+                oi.id,
+                oi.product_id,
+                oi.quantity,
+                oi.selectedColor as selected_color,
+                oi.selectedSize as selected_size,
+                p.stock,
+                ps.id as size_id,
+                ps.stock_quantity as stock_size,
+                ps.size_name,
+                pc.id as color_id,
+                pc.stock_quantity as stock_color,
+                pc.color_name
+                FROM orders o
+                INNER JOIN order_items oi ON o.id = oi.order_id
+                INNER JOIN Products p ON p.id = oi.product_id
+                INNER JOIN Product_sizes ps ON ps.product_id = p.id AND ps.size_name = oi.selectedSize
+                INNER JOIN Product_colors pc ON pc.product_id = p.id AND pc.color_name = oi.selectedColor
+                WHERE oi.order_id = ?', [$orderId]);
+    
+            $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+            foreach ($items as $item) {
+                $quantity = (int) $item['quantity'];
+    
+                if (
+                    $item['stock'] < $quantity ||
+                    $item['stock_size'] < $quantity ||
+                    $item['stock_color'] < $quantity
+                ) {
+                    throw new Exception("Stock insuffisant pour le produit ID: {$item['product_id']}");
+                }
+    
+                $this->update("Products", $item['product_id'], [
+                    "stock" => $item['stock'] - $quantity
+                ]);
+    
+                $this->update("Product_sizes", $item['size_id'], [
+                    "stock_quantity" => $item['stock_size'] - $quantity
+                ]);
+    
+                $this->update("Product_colors", $item['color_id'], [
+                    "stock_quantity" => $item['stock_color'] - $quantity
+                ]);
+            }
+    
+            $this->conn->commit();
+            return true;
+    
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            echo "Erreur : " . $e->getMessage();
+            return false;
+        }
+    }
+    
 
     
     
