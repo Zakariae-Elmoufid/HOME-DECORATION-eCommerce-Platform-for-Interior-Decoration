@@ -7,6 +7,7 @@ use App\Core\Request;
 use App\Core\Session;
 use App\Repositories\OrderRepository;
 use App\Repositories\AccountRepository;
+Session::start();
 
 class AccountController extends Controller {
     
@@ -19,18 +20,20 @@ class AccountController extends Controller {
     }
     
     public function index(){
-        Session::start();
         $customer = [
         'username' => Session::get('username'),
         'email' => Session::get('email'),
         ];
         $orders = $this->orderRepository->getOrderByUserId(Session::get('id'));
         $user_Address  = $this->AccountRepository->getUserAdress(Session::get('id'));
-
-        // exit;
         $this->render('customer/account/index' ,['customer' => $customer , 'orders' => $orders , 'userAddress' => $user_Address]);
+    }
 
-       
+    public function order(){
+        $orders = $this->orderRepository->getOrderItemByUserId(Session::get('id'));
+        dump($orders);
+        $this->render('customer/account/order' ,['orders' => $orders]);
+
     }
 
 

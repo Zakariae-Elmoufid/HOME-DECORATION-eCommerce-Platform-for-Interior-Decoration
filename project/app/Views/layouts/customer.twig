@@ -1,0 +1,62 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}My Account - ElegantHome{% endblock %}
+
+{% block content %}
+<!-- Page Title -->
+<div class="bg-white py-8 shadow-sm">
+  <div class="container mx-auto px-4">
+    <h1 class="text-3xl font-serif font-bold text-charcoal text-center"> 
+    {% block titleAccount %}
+     My Account
+    {% endblock %}</h1>
+  </div>
+</div>
+
+<!-- Breadcrumbs -->
+<div class="container mx-auto px-4 py-4 text-sm">
+  <div class="flex items-center text-gray-500">
+    <a href="/" class="hover:text-gold transition duration-300">Home</a>
+    <span class="mx-2">/</span>
+    <span class="text-charcoal">
+     My Account
+    </span>
+  </div>
+</div>
+
+<!-- Account Dashboard -->
+<div class="container mx-auto px-4 py-10">
+  <div class="grid md:grid-cols-4 gap-8">
+    <!-- Sidebar -->
+    <div class="md:col-span-1">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center space-x-4 mb-6">
+          <div class="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-white">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <p class="font-medium">{{ customer.username }}</p>
+            <p class="text-sm text-gray-500">{{ customer.email }}</p>
+          </div>
+        </div>
+        <nav>
+          <ul class="space-y-2">
+            <li><a href="/customer/account" class="flex items-center text-gold font-medium py-2 px-4 bg-cream rounded-md"><i class="fas fa-tachometer-alt mr-3"></i> Dashboard</a></li>
+            <li><a href="/customer/account/order" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-shopping-bag mr-3"></i> Orders</a></li>
+            <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-map-marker-alt mr-3"></i> Addresses</a></li>
+            <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="far fa-heart mr-3"></i> Wishlist</a></li>
+            <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-credit-card mr-3"></i> Payment Methods</a></li>
+            <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-user-cog mr-3"></i> Account Details</a></li>
+            <li><a href="" class="flex items-center text-charcoal hover:text-gold transition duration-300 py-2 px-4"><i class="fas fa-sign-out-alt mr-3"></i> Logout</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <!-- Main Content -->
+      {% block contentCustomer %}
+
+      {% endblock %}
+    
+  </div>
+</div>
+{% endblock %}

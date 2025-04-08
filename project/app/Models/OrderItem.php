@@ -25,8 +25,8 @@ class OrderItem {
         $this->price = $dataArray['price'] ?? 0;
         $this->selectedColor = $dataArray['selectedColor'] ?? null;
         $this->selectedSize = $dataArray['selectedSize'] ?? null;
-        $this->productTitle = $dataArray['title'] ?? null;
-        $this->productImage = $dataArray['image_path'] ?? null;
+        $this->productTitle = $dataArray['productTitle'] ?? null;
+        $this->productImage = $dataArray['productImage'] ?? null;
         $this->total_item = $dataArray['total_item'] ?? null;
     }
 
@@ -63,6 +63,9 @@ class OrderItem {
     }
     public function getProductImage() {
         return $this->productImage;
+    }
+    public function getTotalItem() {
+        return $this->total_item;
     }
  
     

@@ -51,18 +51,29 @@ class OrderRepository  extends BaseRepository {
 
 
     public function getOrderItems(int $orderId){
-       $stmt = $this->query("SELECT * from order_items oi
-       inner join orders o on o.id = oi.order_id
+       $stmt = $this->query("SELECT 
+          oi.id,
+          oi.order_id , 
+          oi.quantity,
+          oi.price,
+          oi.selectedColor,
+          oi.selectedSize,
+          oi.total_item,
+
+          p.title as productTitle,
+          pg.image_path as productImage 
+        from order_items oi
+    --    inner join orders o on o.id = oi.order_id
        inner join Products p on  oi.product_id = p.id
-       inner join Product_images pg on  pg.product_id = p.id
+       inner join Product_images pg on  pg.product_id = p.id AND pg.is_primary = 1
        where oi.order_id = ?
        ",[$orderId]) ;
        $orderItemsData = $stmt->fetchAll(PDO::FETCH_OBJ);
        if (!$orderItemsData) {
            return null;
         }
-        
         $items = [];
+      
         foreach ($orderItemsData as $item){
             $items[] = new OrderItem($item); 
         }
@@ -78,54 +89,28 @@ class OrderRepository  extends BaseRepository {
 
     public function getOrderByUserId($userId){
         $stmt =  $this->query("SELECT * FROM  orders o
-         inner join order_items oi on o.id  = oi.order_id
-         inner join user_addresses ua on ua.id = o.shipping_address_id
-         inner join Products p on  oi.product_id = p.id
-         inner join Product_images pg on  pg.product_id = p.id
-         WHERE o.user_id  = ?
-         ",[$userId]) ; 
-        
+        WHERE o.user_id  = ? ORDER BY id DESC LIMIT 5",[$userId]) ; 
         $orderData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-         $orders = [];
-         $groupedOrders = [];
-      
-         foreach ($orderData as $row) {
-             $orderId = $row['id']; 
-     
-             if (!isset($groupedOrders[$orderId])) {
-                 $groupedOrders[$orderId] = [
-                     'id' => $row['id'],
-                     'user_id' => $row['user_id'],
-                     'orderDate' => $row['orderDate'],
-                     'status' => $row['status'],
-                     'shipping_address_id' => $row['shipping_address_id'],
-                     'shipping' => $row['shipping'],
-                     'totalAmount' => $row['totalAmount'],
-                     'subTotal' => $row['subTotal'],
-                     'items' => [],
-                     'shipping_address' => new UserAddress([
-                        'id' => $row['shipping_address_id'],
-                        'user_id' => $row['user_id'],
-                        'first_name' => $row['first_name'],
-                        'last_name' => $row['last_name'],
-                        'email' => $row['email'],
-                        'phone' => $row['phone'],
-                        'address' => $row['address'],
-                        'city' => $row['city'],
-                        'postal_code' => $row['postal_code'],
-                        'country' => $row['country'],
-                     ])
-                 ];
-             }
-             
-             $groupedOrders[$orderId]['items'][] = $row; 
-         }
+        $orders = [];
+        foreach ($orderData as $order) {
+            $orders[] = new Order($order);
+        }
+        return $orders;
+    }
 
-         $orders = [];
-         foreach ($groupedOrders as $groupedOrder) {
-             $orders[] = new Order($groupedOrder);
-         }
-     
+    public function getOrderItemByUserId($userId){
+        $stmt =  $this->query("SELECT * FROM  orders where user_id = ? ",[$userId]) ; 
+        $orderData = $stmt->fetchAll(PDO::FETCH_OBJ);
+        
+        
+        $orders = [];
+        $groupedOrders = [];
+        foreach ($orderData as  $obj) {
+            $orderItems = $this->getOrderItems($obj->id);
+            $obj->items = $orderItems; 
+            $orders[] = new Order((array)$obj);
+        }
+        
         return $orders;
     }
 
