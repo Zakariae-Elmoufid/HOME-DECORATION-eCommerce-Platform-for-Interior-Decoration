@@ -45,7 +45,7 @@ public function login(Request $request){
   
     if ($user->getRole() == 2) {
         $this->cartServise->associateCartAfterLogin($user->getId());
-        $this->response->redirect('customer');
+        $this->response->redirect('customer/account');
     } else {
         $this->response->redirect('admin');
     }

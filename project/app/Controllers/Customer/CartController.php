@@ -37,33 +37,12 @@ class CartController extends Controller {
     }
 
     public function addToCart(Request $request){
-      $data = $request->getbody();
+       $data = $request->getbody();
   
     
-       $isConnected =  $this->cartService->isConnected();
-       if($isConnected){
-          $user_id = $isConnected;
-          $guest_id = null ; 
-       }else{
-        $guest_id = $this->cartService->getOrCreateGuestId();
-        $user_id = null ; 
-       }
+       $cart_id =  $this->cartService->cartId();
 
-
-       $cartId = $this->cartRepository->searchCartExisting($user_id, $guest_id);
-       
-       if (!$cartId) {
-       
-        $cart = [
-          'user_id '=> $user_id,
-          'session_id' => $guest_id,
-          'total' =>$data['price'] ,
-        ];
-        $cartId = $this->cartRepository->createNewCart($cart);
-       }
-
-       session::set('cart_id',$cartId);
-       $items = $this->addItems($cartId,$data);
+       $items = $this->addItems($cart_id,$data);
        
     }
 
@@ -80,8 +59,7 @@ class CartController extends Controller {
       ];
      $item_id =$this->cartRepository->addCartItem($item);
       if($item_id){
-        $this->countItem();
-        $this->response->jsonEncode([ "message" => "item add to cart  succussful" ]);
+        $this->response->jsonEncode([ "success" => "item add to cart  succussful" ]);
       }
     }
   
@@ -117,14 +95,13 @@ class CartController extends Controller {
     $data = $request->getbody();
     $id = $data['id'];
     $cartItem = $this->cartRepository->deleteCartItem($id);
-    $this->countItem();
-    $this->response->jsonEncode([ "success" => "item delete to cart  succussful" ]);
+    $this->response->jsonEncode([ "success" => "item delete to cart  succussful"]);
 
    }
 
    public function countItem(){
-  
-   $result= $this->cartService->countItem(Session::get("cart_id"));
+    $cart_id =  $this->cartService->cartId();
+   $result= $this->cartService->countItem($cart_id);
    $this->response->jsonEncode([ "count" => $result ]);
    }
 

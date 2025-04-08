@@ -1,5 +1,5 @@
 import displayMessage from "./alert.js"
-
+import updateCount from "./main.js "
 
     const cartElement = document.querySelector('[data-id-cart]');
     
@@ -10,7 +10,6 @@ import displayMessage from "./alert.js"
 const increaseBtn = document.querySelectorAll('.increase');
 const decreaseBtn = document.querySelectorAll('.decrease');
 const items = document.querySelectorAll('.item');
-
 increaseBtn.forEach(button => {
 
     button.addEventListener('click', function(e) {
@@ -135,6 +134,9 @@ removes.forEach(button => {
               })
               const result = await response.json();
               if(result.success) {
+                  console.log("f");
+                  console.log(updateCount());
+                  updateCount();
                 displayMessage(result.success,'/cart');
                }
              

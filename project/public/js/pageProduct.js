@@ -1,3 +1,6 @@
+import updateCount from "./main.js "
+import displayMessage from "./alert.js"
+
 
 const mainImage = document.getElementById('main-product-image');
 const thumbnails = document.querySelectorAll('.image-thumbnail');
@@ -193,7 +196,6 @@ const decreaseBtn = document.getElementById('decrease-quantity');
       formData.forEach((value, key) => {
           data[key] = value;
        });
-      console.log(data);
        const response = await fetch('/cart/add', {
                           method: 'POST',
                           headers: {
@@ -201,13 +203,11 @@ const decreaseBtn = document.getElementById('decrease-quantity');
                           },
                           body: JSON.stringify(data),
                       });
-          
-                  
-          
-                      const result = await response.json();
-                         if(result.success) {
-                            displayMessage(result.success,'/cart');
-                          }
+       const result = await response.json();
+                      if(result.success) {
+                        updateCount();
+                        displayMessage(result.success,'/cart');
+                      }
   });
 
    

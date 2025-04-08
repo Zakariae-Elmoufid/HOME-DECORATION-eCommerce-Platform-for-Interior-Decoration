@@ -20,15 +20,21 @@ furniture.addEventListener('click', function(){
 
 const  countItem =  document.getElementById('count-cart-item');
 
- const updateCount = async () => {
+ const  updateCount = async () => {
+    console.log('hy bro!');
     const data = await fetch(`/cart/count`, {
       method: "GET",
     });
     const response = await data.json();
+    console.log(response);
     countItem.textContent = response.count;
 };
 
+export default updateCount;
+
+
 updateCount();
+
 
 
 

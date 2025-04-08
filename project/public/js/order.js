@@ -192,7 +192,7 @@ checkoutForm.addEventListener('submit', async function(e) {
         
         // 2. Process the payment according to the chosen method
         if (paymentMethod === 'credit_card') {
-
+        
             const paymentIntentResponse = await fetch('/payment/create-intent', {
                 method: 'POST',
                 headers: {
@@ -232,7 +232,7 @@ checkoutForm.addEventListener('submit', async function(e) {
             
             if (error) {
                 const cardErrors = document.getElementById('card-errors');
-                if (cardErrors) {
+                if (cardErrors){
                     cardErrors.textContent = error.message;
                 }
                 
@@ -240,7 +240,7 @@ checkoutForm.addEventListener('submit', async function(e) {
                 submitButton.textContent = 'Place Order';
                 return;
             }
-            
+              
             await fetch('/payment/update-status', {
                 method: 'POST',
                 headers: {
@@ -252,12 +252,12 @@ checkoutForm.addEventListener('submit', async function(e) {
                 })
             });
             
-            // Rediriger vers la page de confirmation
             window.location.href = `/payment/confirmation?id=${orderId}`;
             
         } else if (paymentMethod === 'paypal') {
             // Rediriger vers PayPal
             window.location.href = `/payment/paypal?id=${orderId}`;
+
         }
         
     } catch (error) {

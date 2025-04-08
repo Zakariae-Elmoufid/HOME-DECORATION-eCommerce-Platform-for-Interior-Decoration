@@ -32,7 +32,6 @@ class PaymentRepository  extends BaseRepository{
     public function getByOrderId(int $orderId) {
         $stmt = $this->query("SELECT * FROM payments WHERE order_id = ?" , [$orderId]);
         $paymentData  = $stmt->fetch(PDO::FETCH_ASSOC);
-        dump($paymentData);
         if (!$paymentData) {
             return null;
         }

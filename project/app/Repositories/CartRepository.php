@@ -33,6 +33,7 @@ class CartRepository  extends BaseRepository{
     }
 
     public function getcartItems($user_id, $guest_id){
+       
         if($user_id !== null ){
             $id = $user_id;
          }

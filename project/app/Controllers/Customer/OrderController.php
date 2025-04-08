@@ -32,12 +32,12 @@ class OrderController extends Controller {
         $isConnected =  $this->cartService->isConnected();
         if($isConnected){
            $user_id = $isConnected;
-           $guest_id = null ; 
+           $guest_id = null; 
         }else{
          $guest_id = $this->cartService->getOrCreateGuestId();
-         $user_id = null ; 
+         $user_id = null; 
         }
- 
+
         $items = $this->cartRepository->getcartItems($user_id, $guest_id);
         $this->response->render('customer/order',["items" => $items]);
     }
@@ -53,7 +53,7 @@ class OrderController extends Controller {
         
         $user_id = Session::get("id");
         $items = $this->cartRepository->getcartItems($user_id,null);
-
+        
      
 
         $user_addresse = $this->orderRepository->createUserAddresse([
