@@ -71,5 +71,6 @@ $app->router->get('/customer/account', 'Customer\AccountController@index');
 $app->router->get('/customer/account/order', 'Customer\AccountController@order');
 
 $app->router->get('/customer/review',[ReviewController::class , 'create' ]);
+$app->router->post('/customer/review/store',[ReviewController::class , 'store' ]);
 // $app->get('/dashboard', [DashboardController::class, 'index']
 // $app->get('/login', [AuthController::class, 'login']);
