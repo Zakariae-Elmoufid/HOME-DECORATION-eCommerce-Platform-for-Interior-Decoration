@@ -67,7 +67,7 @@ public function loginGoogle(Request $request) {
   Session::set("role" , $user->getRole());
   $this->cartServise->associateCartAfterLogin($user->getId());
 
-  $this->response->redirect('customer');
+  $this->response->redirect('customer/account');
 
 }
 

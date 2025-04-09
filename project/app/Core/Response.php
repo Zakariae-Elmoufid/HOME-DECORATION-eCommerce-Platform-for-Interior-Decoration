@@ -4,7 +4,9 @@ namespace App\Core;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
+Session::start();
 class Response
+
 {
 
     protected Environment $twig;
@@ -17,6 +19,8 @@ class Response
         $this->twig->addFunction(new TwigFunction('flash', function ($key) {
             return Session::getFlash($key);
         }));
+        $this->twig->addGlobal('session', $_SESSION);
+
 
     }
     public function render(string $view, array $params = []): string

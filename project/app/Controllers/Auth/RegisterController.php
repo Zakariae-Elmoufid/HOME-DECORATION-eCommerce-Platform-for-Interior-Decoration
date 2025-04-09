@@ -45,7 +45,7 @@ class RegisterController extends Controller  {
             Session::set("role" , $user->getRole());
             Session::set('id',$user->getId());
             $this->cartServise->associateCartAfterLogin($user->getId());
-            $this->response->redirect('customer');
+            $this->response->redirect('customer/account');
         }
         
 
@@ -62,10 +62,10 @@ class RegisterController extends Controller  {
                 Session::set("username" , $user->getUsername());
                 Session::set("email" , $user->getEmail());
                 Session::set("role" , $user->getRole());
-                $this->response->redirect('customer');
+                $this->response->redirect('customer/account');
             }
             $this->cartServise->associateCartAfterLogin($user->getId());
-            $this->response->redirect('customer');
+            $this->response->redirect('customer/account');
         
     }
 

@@ -46,7 +46,7 @@ class OrderController extends Controller {
     public function store(Request $request){
         $data =$request->getbody();
         $isValidet = $this->orderService->validetOrder($data);
-
+        
         if(isset($isValidet["errors"])){
            $this->response->jsonEncode(["errors"  => $isValidet["errors"] , "olddata" => $isValidet['old']]);
         }
@@ -82,8 +82,7 @@ class OrderController extends Controller {
         ]);
         
         
-
-
+      
 
         foreach($data['items'] as $itemId) {
 
@@ -95,6 +94,7 @@ class OrderController extends Controller {
                 }
             }
             //  if the item is find ,create a order_item
+         
             if($cartItem) {
             $order_item =   $this->orderRepository->createOrderItem([
                     'order_id' => $order->getId(),
@@ -105,15 +105,9 @@ class OrderController extends Controller {
                     'selectedSize' => $cartItem->getProductSize(),
                     'total_item' => $cartItem->getTotalItems()
                 ]);
-                
-                
-                // $this->productRepository->updateStock(
-                //     $cartItem->getProductId(), 
-                //     $cartItem->getQuantity(),
-                //     $cartItem->getProductColor(),
-                //     $cartItem->getProductSize()
-                // );
             }
+            $this->cartRepository->deleteCartItem($item->getCartItemId()) ;
+            
         }
         return $this->response->jsonEncode([
             'success' => true,
@@ -125,9 +119,9 @@ class OrderController extends Controller {
 
 
 
-
-
-
-
-
+    public function show(Request $request){
+        $body = $request->getbody();
+        $id = isset($body['id']) ? (int) $body['id'] : null;
+        dump($id);
+    }    
 }

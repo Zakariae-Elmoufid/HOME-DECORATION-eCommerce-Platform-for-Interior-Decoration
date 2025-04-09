@@ -20,7 +20,7 @@ class OrderItem {
 
         $this->id = $dataArray['id'] ?? null;
         $this->orderId = $dataArray['order_id'] ?? null;
-        $this->productId = $dataArray['product_id'] ?? null;
+        $this->productId = $dataArray['productId'] ?? null;
         $this->quantity = $dataArray['quantity'] ?? 1;
         $this->price = $dataArray['price'] ?? 0;
         $this->selectedColor = $dataArray['selectedColor'] ?? null;
