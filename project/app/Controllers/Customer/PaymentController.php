@@ -126,7 +126,7 @@ class PaymentController extends Controller {
         if (!$order) {
             return $this->response->redirect('/checkout');
         }
-        
+   
         $shippingAddress = $this->orderRepository->getUserAddressById($order->getShippingAddress());
         $payment = $this->paymentRepository->getByOrderId($orderId);
  
@@ -141,8 +141,7 @@ class PaymentController extends Controller {
             'shippingAddress' => $shippingAddress,
             'payment' => $payment,
         ]);
-        
-         }
+      }
     }
 
     /**

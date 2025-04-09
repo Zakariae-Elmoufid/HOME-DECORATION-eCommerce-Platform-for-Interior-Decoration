@@ -232,7 +232,7 @@ checkoutForm.addEventListener('submit', async function(e) {
             
             if (error) {
                 const cardErrors = document.getElementById('card-errors');
-                if (cardErrors){
+                if (cardErrors) {
                     cardErrors.textContent = error.message;
                 }
                 
@@ -255,6 +255,7 @@ checkoutForm.addEventListener('submit', async function(e) {
             window.location.href = `/payment/confirmation?id=${orderId}`;
             
         } else if (paymentMethod === 'paypal') {
+            // Rediriger vers PayPal
             window.location.href = `/payment/paypal?id=${orderId}`;
 
         }

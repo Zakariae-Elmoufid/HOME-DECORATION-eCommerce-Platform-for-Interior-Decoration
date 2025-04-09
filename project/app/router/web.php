@@ -14,6 +14,7 @@ use App\Controllers\Admin\ProductController;
 use App\Controllers\Customer\CartController;
 use App\Controllers\Customer\OrderController;
 use App\Controllers\Customer\PaymentController;
+use App\Controllers\Customer\ReviewController;
 
 
 
@@ -59,6 +60,7 @@ $app->router->get('/cart/count', [CartController::class , 'countItem']);
 
 
 $app->router->get('/order',"Customer\OrderController@index");
+$app->router->get('/order/show',"Customer\OrderController@show");
 $app->router->post('/order/add',[OrderController::class , 'store']);
 $app->router->post('/payment/create-intent',[PaymentController::class , 'createIntent']);
 $app->router->post('/payment/update-status',[PaymentController::class , 'updateStatus']);
@@ -68,5 +70,6 @@ $app->router->get('/payment/confirmation',[PaymentController::class , 'confirmat
 $app->router->get('/customer/account', 'Customer\AccountController@index');
 $app->router->get('/customer/account/order', 'Customer\AccountController@order');
 
+$app->router->get('/customer/review',[ReviewController::class , 'create' ]);
 // $app->get('/dashboard', [DashboardController::class, 'index']
 // $app->get('/login', [AuthController::class, 'login']);

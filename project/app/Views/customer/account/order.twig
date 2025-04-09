@@ -62,6 +62,7 @@
                 <th class="py-2 px-4 font-medium">Price</th>
                 <th class="py-2 px-4 font-medium">Qty</th>
                 <th class="py-2 px-4 font-medium">Total</th>
+                <th class="py-2 px-4 font-medium">Review</th>
               </tr>
             </thead>
             <tbody>
@@ -78,6 +79,14 @@
                   <td class="py-4 px-4 text-sm">{{ item.price|number_format(2, ',', ' ') }} $</td>
                   <td class="py-4 px-4 text-sm">{{ item.quantity }}</td>
                   <td class="py-4 px-4 text-sm font-medium">{{ item.totalItem|number_format(2, ',', ' ') }} $</td>
+                  <td class="py-4 px-4 text-sm font-medium">
+                  {% if order.status == 'completed' %}
+                  <a href="/customer/review?id={{item.productId}}">Make Reviews</a>
+                  {% else %}
+                  <a href="">await</a>
+                  {% endif %}
+                  </td>
+
                 </tr>
               {% endfor %}
             </tbody>
@@ -85,11 +94,11 @@
         </div>
         
         <div class="mt-6 flex justify-between">
-          <a href="/customer/order/{{ order.id }}" class="text-sm text-gold hover:text-gold-dark transition duration-300">
+          <a href="/customer/order/show?id={{ order.id }}" class="text-sm text-gold hover:text-gold-dark transition duration-300">
             <i class="fas fa-eye mr-1"></i> View details
           </a>
           {% if order.status == 'completed' %}
-            <a href="/customer/order/{{ order.id }}/reorder" class="text-sm bg-gold hover:bg-gold-dark text-white py-2 px-4 rounded transition duration-300">
+            <a href="/customer/order?id={{ order.id }}" class="text-sm bg-gold hover:bg-gold-dark text-white py-2 px-4 rounded transition duration-300">
               <i class="fas fa-redo mr-1"></i> Order again
             </a>
           {% endif %}

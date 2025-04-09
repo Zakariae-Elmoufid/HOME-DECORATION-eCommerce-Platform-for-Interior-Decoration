@@ -41,7 +41,7 @@ class CartController extends Controller {
   
     
        $cart_id =  $this->cartService->cartId();
-
+    
        $items = $this->addItems($cart_id,$data);
        
     }

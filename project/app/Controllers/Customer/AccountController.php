@@ -31,7 +31,6 @@ class AccountController extends Controller {
 
     public function order(){
         $orders = $this->orderRepository->getOrderItemByUserId(Session::get('id'));
-        dump($orders);
         $this->render('customer/account/order' ,['orders' => $orders]);
 
     }

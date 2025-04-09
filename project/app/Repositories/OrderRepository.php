@@ -54,6 +54,7 @@ class OrderRepository  extends BaseRepository {
        $stmt = $this->query("SELECT 
           oi.id,
           oi.order_id , 
+          oi.product_id as productId ,
           oi.quantity,
           oi.price,
           oi.selectedColor,
@@ -75,7 +76,6 @@ class OrderRepository  extends BaseRepository {
         foreach ($orderItemsData as $item){
             $items[] = new OrderItem($item); 
         }
-        
       return $items;
     }
 
@@ -108,7 +108,7 @@ class OrderRepository  extends BaseRepository {
             $obj->items = $orderItems; 
             $orders[] = new Order((array)$obj);
         }
-        
+       
         return $orders;
     }
 
