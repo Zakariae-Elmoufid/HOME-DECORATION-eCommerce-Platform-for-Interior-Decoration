@@ -66,6 +66,7 @@ $app->router->get('/payment/confirmation',[PaymentController::class , 'confirmat
 
 
 $app->router->get('/customer/account', 'Customer\AccountController@index');
+$app->router->get('/customer/account/order', 'Customer\AccountController@order');
 
 // $app->get('/dashboard', [DashboardController::class, 'index']
 // $app->get('/login', [AuthController::class, 'login']);

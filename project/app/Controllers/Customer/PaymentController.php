@@ -6,17 +6,20 @@ use App\Core\Controller;
 use App\Core\Response;
 use App\Core\Request;
 use App\Services\PaymentService;
+use App\Services\StockService;
 use App\repositories\PaymentRepository;
 use App\repositories\OrderRepository;
 
 class PaymentController extends Controller {
     private $paymentService;
+    private $stockService;
     private $orderRepository;
     private $paymentRepository;
     private $response;
 
     public function __construct() {
         $this->paymentService = new PaymentService();
+        $this->stockService = new StockService();
         $this->paymentRepository = new PaymentRepository();
         $this->orderRepository = new OrderRepository();
         $this->response = new Response();
@@ -40,7 +43,6 @@ class PaymentController extends Controller {
         
         // Get order details
         $order = $this->orderRepository->getOrderById($orderId);
-        
         if (!$order) {
             return $this->response->jsonEncode([
                 'success' => false,
@@ -124,17 +126,23 @@ class PaymentController extends Controller {
         if (!$order) {
             return $this->response->redirect('/checkout');
         }
+        
         $shippingAddress = $this->orderRepository->getUserAddressById($order->getShippingAddress());
         $payment = $this->paymentRepository->getByOrderId($orderId);
  
         // Get order items
         $orderItems = $this->orderRepository->getOrderItems($orderId);
+
+        $updateStock = $this->stockService->StockManagement($orderId);
+        if($updateStock){
         $this->response->render('customer/payment-confirmation', [
             'order' => $order,
             'orderItems' => $orderItems,
             'shippingAddress' => $shippingAddress,
             'payment' => $payment,
         ]);
+        
+         }
     }
 
     /**

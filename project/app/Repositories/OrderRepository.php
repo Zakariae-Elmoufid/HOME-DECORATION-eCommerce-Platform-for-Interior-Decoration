@@ -6,11 +6,12 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Core\Session;
 use PDO;
+use Exception;
 
 class OrderRepository  extends BaseRepository {
 
-    
 
+ 
     public function  createUserAddresse($data){
        $user_addresse_id = $this->insert("user_addresses",$data);
        if($user_addresse_id){
@@ -45,24 +46,32 @@ class OrderRepository  extends BaseRepository {
         if (!$orderData) {
             return null;
         }
-        
-        return new Order($orderData);
+        return new Order((array) $orderData);
     }
 
 
     public function getOrderItems(int $orderId){
-       $stmt = $this->query("SELECT * from order_items oi
-       inner join orders o on o.id = oi.order_id
+       $stmt = $this->query("SELECT 
+          oi.id,
+          oi.order_id , 
+          oi.quantity,
+          oi.price,
+          oi.selectedColor,
+          oi.selectedSize,
+          oi.total_item,
+          p.title as productTitle,
+          pg.image_path as productImage 
+        from order_items oi
        inner join Products p on  oi.product_id = p.id
-       inner join Product_images pg on  pg.product_id = p.id
+       inner join Product_images pg on  pg.product_id = p.id AND pg.is_primary = 1
        where oi.order_id = ?
        ",[$orderId]) ;
        $orderItemsData = $stmt->fetchAll(PDO::FETCH_OBJ);
        if (!$orderItemsData) {
            return null;
         }
-        
         $items = [];
+      
         foreach ($orderItemsData as $item){
             $items[] = new OrderItem($item); 
         }
@@ -78,56 +87,93 @@ class OrderRepository  extends BaseRepository {
 
     public function getOrderByUserId($userId){
         $stmt =  $this->query("SELECT * FROM  orders o
-         inner join order_items oi on o.id  = oi.order_id
-         inner join user_addresses ua on ua.id = o.shipping_address_id
-         inner join Products p on  oi.product_id = p.id
-         inner join Product_images pg on  pg.product_id = p.id
-         WHERE o.user_id  = ?
-         ",[$userId]) ; 
-        
+        WHERE o.user_id  = ? ORDER BY id DESC LIMIT 5",[$userId]) ; 
         $orderData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-         $orders = [];
-         $groupedOrders = [];
-      
-         foreach ($orderData as $row) {
-             $orderId = $row['id']; 
-     
-             if (!isset($groupedOrders[$orderId])) {
-                 $groupedOrders[$orderId] = [
-                     'id' => $row['id'],
-                     'user_id' => $row['user_id'],
-                     'orderDate' => $row['orderDate'],
-                     'status' => $row['status'],
-                     'shipping_address_id' => $row['shipping_address_id'],
-                     'shipping' => $row['shipping'],
-                     'totalAmount' => $row['totalAmount'],
-                     'subTotal' => $row['subTotal'],
-                     'items' => [],
-                     'shipping_address' => new UserAddress([
-                        'id' => $row['shipping_address_id'],
-                        'user_id' => $row['user_id'],
-                        'first_name' => $row['first_name'],
-                        'last_name' => $row['last_name'],
-                        'email' => $row['email'],
-                        'phone' => $row['phone'],
-                        'address' => $row['address'],
-                        'city' => $row['city'],
-                        'postal_code' => $row['postal_code'],
-                        'country' => $row['country'],
-                     ])
-                 ];
-             }
-             
-             $groupedOrders[$orderId]['items'][] = $row; 
-         }
-
-         $orders = [];
-         foreach ($groupedOrders as $groupedOrder) {
-             $orders[] = new Order($groupedOrder);
-         }
-     
+        $orders = [];
+        foreach ($orderData as $order) {
+            $orders[] = new Order($order);
+        }
         return $orders;
     }
+
+    public function getOrderItemByUserId($userId){
+        $stmt =  $this->query("SELECT * FROM  orders where user_id = ? ",[$userId]) ; 
+        $orderData = $stmt->fetchAll(PDO::FETCH_OBJ);
+        
+        
+        $orders = [];
+        $groupedOrders = [];
+        foreach ($orderData as  $obj) {
+            $orderItems = $this->getOrderItems($obj->id);
+            $obj->items = $orderItems; 
+            $orders[] = new Order((array)$obj);
+        }
+        
+        return $orders;
+    }
+
+
+    public function getOrderStock($orderId)
+    {
+        try {
+            $this->conn->beginTransaction();
+    
+            $stmt = $this->query('SELECT 
+                oi.id,
+                oi.product_id,
+                oi.quantity,
+                oi.selectedColor as selected_color,
+                oi.selectedSize as selected_size,
+                p.stock,
+                ps.id as size_id,
+                ps.stock_quantity as stock_size,
+                ps.size_name,
+                pc.id as color_id,
+                pc.stock_quantity as stock_color,
+                pc.color_name
+                FROM orders o
+                INNER JOIN order_items oi ON o.id = oi.order_id
+                INNER JOIN Products p ON p.id = oi.product_id
+                INNER JOIN Product_sizes ps ON ps.product_id = p.id AND ps.size_name = oi.selectedSize
+                INNER JOIN Product_colors pc ON pc.product_id = p.id AND pc.color_name = oi.selectedColor
+                WHERE oi.order_id = ?', [$orderId]);
+    
+            $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+            foreach ($items as $item) {
+                $quantity = (int) $item['quantity'];
+    
+                if (
+                    $item['stock'] < $quantity ||
+                    $item['stock_size'] < $quantity ||
+                    $item['stock_color'] < $quantity
+                ) {
+                    throw new Exception("Stock insuffisant pour le produit ID: {$item['product_id']}");
+                }
+    
+                $this->update("Products", $item['product_id'], [
+                    "stock" => $item['stock'] - $quantity
+                ]);
+    
+                $this->update("Product_sizes", $item['size_id'], [
+                    "stock_quantity" => $item['stock_size'] - $quantity
+                ]);
+    
+                $this->update("Product_colors", $item['color_id'], [
+                    "stock_quantity" => $item['stock_color'] - $quantity
+                ]);
+            }
+    
+            $this->conn->commit();
+            return true;
+    
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            echo "Erreur : " . $e->getMessage();
+            return false;
+        }
+    }
+    
 
     
     
