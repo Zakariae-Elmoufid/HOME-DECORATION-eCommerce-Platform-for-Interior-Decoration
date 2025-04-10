@@ -28,9 +28,9 @@ class ProductService {
     $countProducts = $this->productRepository->countProducts();
     $countAvailable = $this->productRepository->countAvailable();
     $countCategories = $this->productRepository->countCategories();
-    
+     
     return $data =  [
-        'products' => $products ,
+        'products' => $products,
         'categories' => $categories ,
         "countProducts" => $countProducts,
         "countAvailable" => $countAvailable ,
@@ -212,7 +212,7 @@ class ProductService {
         $reviews = $this->reviewRepository->getReviewByProduct($id);
         $AvgandCountReviews = $this->reviewRepository-> avgAndCountReview($id);
         $products = $this->productRepository->selectAll();
-        dump($products);
+        
         $data = [
             "p" => $products,
             "categories" => $categories,

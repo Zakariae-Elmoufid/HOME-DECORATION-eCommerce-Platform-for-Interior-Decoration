@@ -12,55 +12,61 @@ class ProductRepository extends BaseRepository {
 
     public function selectAll(){
         $stmt = $this->query("SELECT 
-                p.id,
-                p.title,
-                p.description,
-                p.stock,
-                p.base_price,
-                p.isAvailable,
-                c.title AS category_name,
-                c.icon AS category_icon,
-                (
-                    SELECT JSON_ARRAYAGG(
-                        JSON_OBJECT(
-                            'id', ps.id,
-                            'size_name', ps.size_name,
-                            'price_adjustment', ps.price_adjustment,
-                            'stock_quantity', ps.stock_quantity
-                        )
-                    )
-                    FROM Product_sizes ps 
-                    WHERE ps.product_id = p.id
-                ) AS sizes,
-                (
-                    SELECT JSON_ARRAYAGG(
-                        JSON_OBJECT(
-                            'id', pc.id,
-                            'color_name', pc.color_name,
-                            'price_adjustment', pc.price_adjustment,
-                            'stock_quantity', pc.stock_quantity
-                        )
-                    )
-                    FROM Product_colors pc 
-                    WHERE pc.product_id = p.id
-                ) AS colors,
-                (
-                    SELECT JSON_ARRAYAGG(
-                        JSON_OBJECT(
-                            'id', pi.id,
-                            'image_path', pi.image_path,
-                            'is_primary', pi.is_primary
-                        )
-                    )
-                    FROM Product_images pi 
-                    WHERE pi.product_id = p.id
-                ) AS images
-            FROM 
-                Products p
-            LEFT JOIN 
-                categorys c ON p.category_id = c.id
-            WHERE 
-                p.deleted_at IS NULL; ");
+        p.id,
+        p.title,
+        p.description,
+        p.stock,
+        p.base_price,
+        p.isAvailable,
+        c.title AS category_name,
+        c.icon AS category_icon,
+        AVG(r.rating) AS average_rating,
+        COUNT(DISTINCT r.id) AS review_count,
+        (
+            SELECT JSON_ARRAYAGG(
+                JSON_OBJECT(
+                    'id', ps.id,
+                    'size_name', ps.size_name,
+                    'price_adjustment', ps.price_adjustment,
+                    'stock_quantity', ps.stock_quantity
+                )
+            )
+            FROM Product_sizes ps 
+            WHERE ps.product_id = p.id
+        ) AS sizes,
+        (
+            SELECT JSON_ARRAYAGG(
+                JSON_OBJECT(
+                    'id', pc.id,
+                    'color_name', pc.color_name,
+                    'price_adjustment', pc.price_adjustment,
+                    'stock_quantity', pc.stock_quantity
+                )
+            )
+            FROM Product_colors pc 
+            WHERE pc.product_id = p.id
+        ) AS colors,
+        (
+            SELECT JSON_ARRAYAGG(
+                JSON_OBJECT(
+                    'id', pi.id,
+                    'image_path', pi.image_path,
+                    'is_primary', pi.is_primary
+                )
+            )
+            FROM Product_images pi 
+            WHERE pi.product_id = p.id
+        ) AS images
+    FROM 
+        Products p
+    LEFT JOIN 
+        categorys c ON p.category_id = c.id
+    LEFT JOIN 
+        reviews r ON r.product_id = p.id
+    WHERE 
+        p.deleted_at IS NULL
+    GROUP BY 
+        p.id, p.title, p.description, p.stock, p.base_price, p.isAvailable, c.title, c.icon");
         $data =  $stmt->fetchAll(PDO::FETCH_OBJ);
         $products = [];
         
@@ -188,8 +194,10 @@ class ProductRepository extends BaseRepository {
         p.stock,
         p.base_price,
         p.isAvailable,
-        p.category_id
+        p.category_id,
+        c.title AS category_name
         FROM Products p
+        inner join categorys c on c.id = p.category_id 
         WHERE p.id = $id");
         $product = $stmt->fetch(PDO::FETCH_OBJ);
 

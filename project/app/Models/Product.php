@@ -10,6 +10,8 @@ class Product {
     private $base_price;
     private $stock;
     private $isAvailable;
+    private $total_reviews;
+    private $average_rating;
     private $sizes = [];
     private $colors = [];
     private $images = [];
@@ -26,6 +28,8 @@ class Product {
         $this->isAvailable = $dataArray['isAvailable'] ?? null;
         $this->base_price = $dataArray['base_price'] ?? null;
         $this->stock = $dataArray['stock'] ?? null;
+        $this->total_reviews = $dataArray['review_count'] ?? null;
+        $this->average_rating = $dataArray['average_rating'] ?? null;
         
         if (isset($dataArray['sizes'])) {
             $this->sizes = is_string($dataArray['sizes']) ? json_decode($dataArray['sizes'], true) : $dataArray['sizes'];
@@ -84,6 +88,14 @@ class Product {
 
     public function getIsAvailable(){
         return $this->isAvailable;
+    }
+
+    public function getTotalReviews(){
+        return $this->total_reviews;
+    }
+
+    public function getAverageRating(){
+        return $this->average_rating;
     }
 
     public function getSizes() {

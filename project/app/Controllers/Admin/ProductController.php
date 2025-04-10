@@ -39,7 +39,6 @@ class ProductController extends Controller {
         $body = $request->getbody();
         $id = isset($body['id']) ? (int) $body['id'] : null;
         $data = $this->ProductService->show($id);
-        
         $this->response->render('customer/pageProduct', [
         "product" => $data['product'] ,
         'reviews' => $data['reviews'] , 

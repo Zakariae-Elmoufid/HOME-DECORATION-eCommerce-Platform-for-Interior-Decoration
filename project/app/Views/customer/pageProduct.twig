@@ -27,25 +27,31 @@
           <!-- Main Image -->
           {% set primaryImage = null %}
           {% for image in product.images %}
-          {% if image.is_primary == 1 %}
-          {% set primaryImage = image %}
-          {% endif %}
+            {% if image.is_primary == 1 %}
+              {% set primaryImage = image %}
+            {% endif %}
           {% endfor %}
 
           <div class="mb-4 border border-gray-200 rounded-lg overflow-hidden">
-            <img id="main-product-image" src="/public/uploads/{{ primaryImage.image_path }}"
-              class="w-full h-96 object-cover" alt="{{ product.title }}">
+            {% if primaryImage %}
+              <img id="main-product-image" src="/public/uploads/{{ primaryImage.image_path }}"
+                class="w-full h-96 object-cover" alt="{{ product.title }}">
+            {% else %}
+              <div class="w-full h-96 bg-gray-100 flex items-center justify-center">
+                <span class="text-gray-400">No image available</span>
+              </div>
+            {% endif %}
           </div>
 
           <!-- Thumbnail Gallery -->
           <div class="grid grid-cols-4 gap-2">
             {% for image in product.images %}
-            <div class="image-thumbnail border border-gray-200 rounded-lg overflow-hidden cursor-pointer 
+              <div class="image-thumbnail border border-gray-200 rounded-lg overflow-hidden cursor-pointer 
                           {% if image.is_primary == 1 %}border-2 border-gold{% endif %}"
-              data-image="/public/uploads/{{ image.image_path }}">
-              <img src="/public/uploads/{{ image.image_path }}" class="w-full h-24 object-cover"
-                alt="{{ product.title }}">
-            </div>
+                data-image="/public/uploads/{{ image.image_path }}">
+                <img src="/public/uploads/{{ image.image_path }}" class="w-full h-24 object-cover"
+                  alt="{{ product.title }}">
+              </div>
             {% endfor %}
           </div>
         </div>
@@ -53,38 +59,42 @@
         <!-- Product Information -->
         <div>
           <div class="mb-2">
-            {% if product.stock <= 5 and product.stock> 0 %}
+            {% if product.stock <= 5 and product.stock > 0 %}
               <span class="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">Limited Stock</span>
-              {% elseif product.stock == 0 %}
+            {% elseif product.stock == 0 %}
               <span class="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">Out of Stock</span>
-              {% else %}
+            {% else %}
               <span class="bg-gold text-white text-xs font-bold px-3 py-1 rounded-full">Available</span>
-              {% endif %}
+            {% endif %}
           </div>
 
           <h1 class="text-3xl font-bold text-charcoal mb-2">{{ product.title }}</h1>
 
           <!-- Star Rating -->
-          <!-- Star Rating -->
           <div class="flex items-center mb-3">
             <div class="flex text-gold">
               {% for i in 1..5 %}
-              {% if average >= i %}
-              <i class="fas fa-star"></i>
-              {% elseif average >= i - 0.5 %}
-              <i class="fas fa-star-half-alt"></i>
-              {% else %}
-              <i class="far fa-star"></i>
-              {% endif %}
+                {% if average >= i %}
+                  <i class="fas fa-star"></i>
+                {% elseif average >= i - 0.5 %}
+                  <i class="fas fa-star-half-alt"></i>
+                {% else %}
+                  <i class="far fa-star"></i>
+                {% endif %}
               {% endfor %}
             </div>
-            <span class="text-sm text-gray-500 ml-1">({{ count}} reviews)</span>
+            <span class="text-sm text-gray-500 ml-1">({{ count }} reviews)</span>
           </div>
 
           <!-- Price -->
           <div class="mb-6">
             <span id="current-price" class="text-3xl font-bold text-charcoal"
-              data-base-price="{{product.base_price }}">${{ product.base_price }}</span>
+              data-base-price="{{ product.base_price }}">${{ product.base_price }}</span>
+          </div>
+
+          <div class="mb-8">
+            <h4 class="text-lg font-semibold text-charcoal mb-2">Category</h4>
+            <p class="text-gray-700">{{ product.category_name }}</p>
           </div>
 
           <!-- Description -->
@@ -93,6 +103,7 @@
             <p class="text-gray-700">{{ product.description }}</p>
           </div>
 
+
           <!-- Product Options -->
           <form id="product-options-form" class="space-y-6">
             <input type="hidden" id="product-id" value="{{ product.id }}" name="product_id">
@@ -100,53 +111,53 @@
 
             <!-- Size Option -->
             {% if product.sizes|length > 0 %}
-            <div>
-              <h3 class="text-sm font-medium text-charcoal mb-2">Size</h3>
-              <div class="flex flex-wrap gap-2">
-                {% for size in product.sizes %}
-                <label class="size-option cursor-pointer">
-                  <input type="radio" name="size" value="{{ size.size_id }}"
-                    data-price-adjustment="{{ size.price_adjustment }}" data-stock="{{ size.stock_quantity }}"
-                    class="sr-only">
-                  <span
-                    class="px-4 py-2 border border-gray-300 rounded-md text-sm 
+              <div>
+                <h3 class="text-sm font-medium text-charcoal mb-2">Size</h3>
+                <div class="flex flex-wrap gap-2">
+                  {% for size in product.sizes %}
+                    <label class="size-option cursor-pointer">
+                      <input type="radio" name="size" value="{{ size.id }}"
+                        data-price-adjustment="{{ size.price_adjustment }}" data-stock="{{ size.stock_quantity }}"
+                        class="sr-only">
+                      <span
+                        class="px-4 py-2 border border-gray-300 rounded-md text-sm 
                                 {% if size.stock_quantity <= 0 %}bg-gray-100 text-gray-400 cursor-not-allowed{% endif %}">
-                    {{ size.size_name }}
-                    {% if size.price_adjustment != '0.00' %}
-                    {% if size.price_adjustment starts with '-' %}
-                    <span class="text-green-600">-${{ size.price_adjustment|abs }}</span>
-                    {% else %}
-                    <span class="text-red-600">+${{ size.price_adjustment }}</span>
-                    {% endif %}
-                    {% endif %}
-                  </span>
-                </label>
-                {% endfor %}
+                        {{ size.size_name }}
+                        {% if size.price_adjustment != '0.00' %}
+                          {% if size.price_adjustment starts with '-' %}
+                            <span class="text-green-600">-${{ size.price_adjustment|abs }}</span>
+                          {% else %}
+                            <span class="text-red-600">+${{ size.price_adjustment }}</span>
+                          {% endif %}
+                        {% endif %}
+                      </span>
+                    </label>
+                  {% endfor %}
+                </div>
               </div>
-            </div>
             {% endif %}
 
             <!-- Color Option -->
             {% if product.colors|length > 0 %}
-            <div>
-              <h3 class="text-sm font-medium text-charcoal mb-2">Color</h3>
-              <div class="flex flex-wrap gap-3">
-                {% for color in product.colors %}
-                <label class="color-option cursor-pointer" title="{{ color.color_name }}">
-                  <input type="radio" name="color" value="{{ color.color_id }}"
-                    data-price-adjustment="{{ color.price_adjustment }}" data-stock="{{ color.stock_quantity }}"
-                    class="sr-only">
-                  <span class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center
+              <div>
+                <h3 class="text-sm font-medium text-charcoal mb-2">Color</h3>
+                <div class="flex flex-wrap gap-3">
+                  {% for color in product.colors %}
+                    <label class="color-option cursor-pointer" title="{{ color.color_name }}">
+                      <input type="radio" name="color" value="{{ color.id }}"
+                        data-price-adjustment="{{ color.price_adjustment }}" data-stock="{{ color.stock_quantity }}"
+                        class="sr-only">
+                      <span class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center
                                 {% if color.stock_quantity <= 0 %}opacity-50 cursor-not-allowed{% endif %}"
-                    style="background-color: {{ color.color_code }}">
-                    <span class="color-check hidden text-white">
-                      <i class="fas fa-check"></i>
-                    </span>
-                  </span>
-                </label>
-                {% endfor %}
+                        style="background-color: {{ color.color_code }}">
+                        <span class="color-check hidden text-white">
+                          <i class="fas fa-check"></i>
+                        </span>
+                      </span>
+                    </label>
+                  {% endfor %}
+                </div>
               </div>
-            </div>
             {% endif %}
 
             <!-- Quantity -->
@@ -168,15 +179,14 @@
             <!-- Add to Cart Button -->
             <div class="flex space-x-4">
               <button type="submit" id="add-to-cart-btn"
-                class="add-cart  {% if product.isAvailable and product.stock > 0 %}
+                class="add-cart {% if product.isAvailable and product.stock > 0 %}
                       bg-gold hover:bg-gold-dark{% else %}bg-gray-300{% endif %} text-white px-6 py-3 rounded-lg transition duration-300 flex items-center"
-                data-product-id="{{ product.id }}" {% if not product.isAvailable or product.stock <=0 %}disabled{% endif
-                %}>
+                data-product-id="{{ product.id }}" {% if not product.isAvailable or product.stock <= 0 %}disabled{% endif %}>
                 <i class="fas fa-shopping-cart mr-2"></i>
                 {% if product.isAvailable and product.stock > 0 %}
-                Add to Cart
+                  Add to Cart
                 {% else %}
-                Out of Stock
+                  Out of Stock
                 {% endif %}
               </button>
               <button type="button" id="add-to-wishlist-btn"
@@ -285,102 +295,99 @@
       <div id="reviews-tab" class="product-tab hidden">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-2xl font-bold text-charcoal">Customer Reviews</h2>
-          <button class="bg-gold hover:bg-gold-dark text-white px-5 py-2 rounded-lg transition duration-300">
-
-            {{ review.username }}
-
-          </button>
+          <a href="/customer/review?id={{ product.id }}" class="bg-gold hover:bg-gold-dark text-white px-5 py-2 rounded-lg transition duration-300">
+            Write a Review
+          </a>
         </div>
 
-
-
         <!-- Review List -->
-        {# {% if reviews|length > 0 %} #}
-        <div class="space-y-6">
-          {% for review in reviews %}
-          <div class="border-b border-gray-200 pb-6">
-            <div class="flex justify-between mb-2">
-              <div class="flex items-center">
-
-                <div>
-                  <h4 class="text-sm font-semibold">{{ review.username }}</h4>
-                  <div class="text-xs text-gray-500">{{ review.createdAt }}</div>
+        {% if reviews|length > 0 %}
+          <div class="space-y-6">
+            {% for review in reviews %}
+              <div class="border-b border-gray-200 pb-6">
+                <div class="flex justify-between mb-2">
+                  <div class="flex items-center">
+                    <div>
+                      <h4 class="text-sm font-semibold">{{ review.username }}</h4>
+                      <div class="text-xs text-gray-500">{{ review.createdAt }}</div>
+                    </div>
+                  </div>
+                  <div class="flex text-gold">
+                    {% for i in 1..5 %}
+                      {% if review.rating >= i %}
+                        <i class="fas fa-star"></i>
+                      {% elseif review.rating >= i - 0.5 %}
+                        <i class="fas fa-star-half-alt"></i>
+                      {% else %}
+                        <i class="far fa-star"></i>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
                 </div>
+                <p class="text-gray-700">{{ review.content }}</p>
               </div>
-              <div class="flex text-gold">
-                {% for i in 1..5 %}
-              {% if review.rating >= i %}
-              <i class="fas fa-star"></i>
-              {% elseif review.rating >= i - 0.5 %}
-              <i class="fas fa-star-half-alt"></i>
-              {% else %}
-              <i class="far fa-star"></i>
-              {% endif %}
-              {% endfor %}
-      
-              </div>
-            </div>
-            <p class="text-gray-700">{{ review.content }}</p>
+            {% endfor %}
           </div>
-          {% endfor %}
-        
-        {# {% endif %} #}
-
+        {% else %}
+          <div class="text-center py-8 bg-gray-50 rounded-lg">
+            <p class="text-gray-500">No reviews yet. Be the first to leave a review!</p>
+          </div>
+        {% endif %}
       </div>
     </div>
-  </div>
   </div>
 </section>
 
 <!-- Related Products Section -->
 <section class="py-12 bg-cream">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-2xl font-bold text-charcoal mb-8">You Might Also Like</h2>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <h2 class="text-2xl font-bold text-charcoal mb-8">Related Products</h2>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      {% set count = 0 %}
       {% for product in products %}
-      <div
-        class="bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-        
-        <div class="relative group">
-          {% for image in product.images %}
-            {% if image.is_primary == 1 %}
-            <div class="image-thumbnail border-2 border-gold rounded-lg overflow-hidden cursor-pointer"
-              data-image="/public/uploads/{{ image.image_path }}">
-              <img src="/public/uploads/{{ image.image_path }}" class="w-full h-48 object-cover"
-                alt="{{ product.getTitle }}">
+        {% if count < 5 %}
+          <div class="bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+            <div class="relative group">
+              {% set productImage = null %}
+              {% for image in product.images %}
+                {% if image.is_primary == 1 %}
+                  {% set productImage = image %}
+                {% endif %}
+              {% endfor %}
+              
+              {% if productImage %}
+                <div class="image-thumbnail border-2 border-gold rounded-lg overflow-hidden cursor-pointer">
+                  <img src="/public/uploads/{{ productImage.image_path }}" class="w-full h-48 object-cover"
+                    alt="{{ product.title }}">
+                </div>
+              {% else %}
+                <div class="w-full h-48 bg-gray-100 flex items-center justify-center">
+                  <span class="text-gray-400">No image available</span>
+                </div>
+              {% endif %}
             </div>
-            {% endif %}
-          {% endfor %}
-          
-          <div class="absolute top-2 right-2">
-            
+
+            <div class="p-4">
+              <h3 class="text-lg font-medium text-charcoal">{{ product.title }}</h3>
+              <p class="text-sm text-gray-500 mb-2">{{ product.categoryName }}</p>
+
+              <div class="flex justify-between items-center">
+                <span class="text-xl font-bold text-charcoal">${{ product.basePrice }}</span>
+                <a href="/product?id={{ product.id }}"
+                  class="bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center">
+                  <i class="fas fa-eye mr-1"></i> See
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
-
-        <div class="p-4">
-          <h3 class="text-lg font-medium text-charcoal">{{ product.getTitle }}</h3>
-          <p class="text-sm text-gray-500 mb-2">{{ product.getCategoryName }}</p>
-
-          
-
-          <div class="flex justify-between items-center">
-            <span class="text-xl font-bold text-charcoal">${{ product.getBasePrice }}</span>
-            <a href="/product/{{ product.id }}"
-              class="bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center">
-              <i class="fas fa-eye mr-1"></i> see
-            </a>
-          </div>
-        </div>
-      </div>
+          {% set count = count + 1 %}
+        {% endif %}
       {% endfor %}
-
     </div>
   </div>
 </section>
 
-{#
-<script src="../../../public/js/cart.js" type="module"></script> #}
-<script src="../../../public/js/pageProduct.js" type="module"></script>
+<script src="/public/js/pageProduct.js" type="module"></script>
 
 {% endblock %}

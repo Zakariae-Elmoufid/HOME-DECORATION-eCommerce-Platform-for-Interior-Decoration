@@ -1,0 +1,164 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}Products - ElegantHome{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-cream">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Breadcrumb -->
+    <div class="mb-6 text-sm text-gray-500">
+      <a href="/" class="hover:text-gold">Home</a> &gt; 
+      <span class="text-charcoal">Products</span>
+    </div>
+
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-serif font-bold text-charcoal">Our Collection</h1>
+      <a href="/wishlist" class="flex items-center text-gold hover:text-gold-dark transition">
+        <i class="fas fa-heart mr-2"></i>
+        <span>My Wishlist ({{ wishlistCount|default(0) }})</span>
+      </a>
+    </div>
+
+  
+
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {% for product in products %}
+        <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+          <div class="relative">
+            <!-- Product Image -->
+            <a href="/product/{{ product.id }}" class="block">
+              {% set primaryImage = null %}
+              {% for image in product.images %}
+                {% if image.is_primary == 1 %}
+                  {% set primaryImage = image %}
+                {% endif %}
+              {% endfor %}
+              
+              {% if primaryImage %}
+                <img src="/public/uploads/{{ primaryImage.image_path }}" class="w-full h-64 object-cover" alt="{{ product.title }}">
+              {% else %}
+                <div class="w-full h-64 bg-gray-100 flex items-center justify-center">
+                  <span class="text-gray-400">No image available</span>
+                </div>
+              {% endif %}
+            </a>
+
+            <!-- Wishlist Button -->
+            <button 
+              data-product-id="{{ product.id }}" 
+              class="wishlist-toggle absolute top-3 right-3 bg-white bg-opacity-80 rounded-full p-2 text-gray-600 hover:text-gold transition-colors duration-200 {{ product.in_wishlist ? 'active text-gold' : '' }}"
+            >
+              <i class="fas fa-heart {{ product.in_wishlist ? '' : 'far' }}"></i>
+            </button>
+
+            <!-- Status Badge (Optional) -->
+            {% if product.stock <= 5 and product.stock > 0 %}
+              <span class="absolute top-3 left-3 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">Limited Stock</span>
+            {% elseif product.stock == 0 %}
+              <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">Out of Stock</span>
+            {% endif %}
+          </div>
+
+          <div class="p-4">
+            <!-- Category -->
+            <div class="text-sm text-gray-500 mb-1">{{ product.category_name }}</div>
+            
+            <!-- Product Title -->
+            <a href="/product/{{ product.id }}" class="block">
+              <h3 class="text-lg font-medium text-charcoal hover:text-gold transition-colors duration-200">{{ product.title }}</h3>
+            </a>
+            
+            <!-- Rating (Optional) -->
+            {% if product.average_rating is defined %}
+              <div class="flex items-center mt-1 mb-2">
+                <div class="flex text-gold">
+                  {% for i in 1..5 %}
+                    {% if product.average_rating >= i %}
+                      <i class="fas fa-star text-sm"></i>
+                    {% elseif product.average_rating >= i - 0.5 %}
+                      <i class="fas fa-star-half-alt text-sm"></i>
+                    {% else %}
+                      <i class="far fa-star text-sm"></i>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                <span class="text-xs text-gray-500 ml-1">({{ product.review_count|default(0) }})</span>
+              </div>
+            {% endif %}
+
+            <!-- Price -->
+            <div class="flex justify-between items-center mt-2">
+              <span class="text-xl font-bold text-charcoal">${{ product.base_price|number_format(2, '.', ',') }}</span>
+              
+              <!-- Quick Add Button -->
+              {% if product.isAvailable and product.stock > 0 %}
+                <button 
+                  data-product-id="{{ product.id }}" 
+                  class="quick-add bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center text-sm"
+                >
+                  <i class="fas fa-shopping-cart mr-1"></i> Add
+                </button>
+              {% else %}
+                <button class="bg-gray-300 text-white px-3 py-2 rounded-lg text-sm cursor-not-allowed">
+                  <i class="fas fa-shopping-cart mr-1"></i> Add
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if total_pages > 1 %}
+      <div class="flex justify-center mt-10">
+        <div class="flex space-x-1">
+          {% if current_page > 1 %}
+            <a href="?page={{ current_page - 1 }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gold hover:text-white hover:border-gold transition-colors">
+              <i class="fas fa-chevron-left"></i>
+            </a>
+          {% endif %}
+          
+          {% for i in 1..total_pages %}
+            {% if i == current_page %}
+              <span class="px-4 py-2 border border-gold bg-gold text-white rounded-md">{{ i }}</span>
+            {% elseif i == 1 or i == total_pages or (i >= current_page - 1 and i <= current_page + 1) %}
+              <a href="?page={{ i }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gold hover:text-white hover:border-gold transition-colors">
+                {{ i }}
+              </a>
+            {% elseif i == current_page - 2 or i == current_page + 2 %}
+              <span class="px-4 py-2 text-gray-700">...</span>
+            {% endif %}
+          {% endfor %}
+          
+          {% if current_page < total_pages %}
+            <a href="?page={{ current_page + 1 }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gold hover:text-white hover:border-gold transition-colors">
+              <i class="fas fa-chevron-right"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Quick View Modal (Optional) -->
+<div id="quick-view-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+  <div class="bg-white rounded-lg max-w-4xl w-full max-h-90vh overflow-auto relative">
+    <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+      <i class="fas fa-times text-xl"></i>
+    </button>
+    <div id="quick-view-content" class="p-6">
+      <!-- Content will be loaded via AJAX -->
+      <div class="flex justify-center items-center h-32">
+        <div class="spinner-border text-gold" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
