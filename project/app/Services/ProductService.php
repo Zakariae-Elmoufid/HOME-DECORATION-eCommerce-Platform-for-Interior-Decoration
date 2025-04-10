@@ -6,14 +6,17 @@ use App\Core\Validator;
 use App\Core\Response;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
+use App\Repositories\ReviewRepository;
 
 class ProductService {
     
    private $productRepository;
+   private $reviewRepository;
    private $response;
 
    public function __construct(){
        $this->productRepository = new ProductRepository();
+       $this->reviewRepository = new ReviewRepository();
        $this->response = new Response();
    } 
 
@@ -206,9 +209,17 @@ class ProductService {
     public function show($id){
         $result = $this->productRepository->fetchById($id);
         $categories = $this->productRepository->selectCategories();
+        $reviews = $this->reviewRepository->getReviewByProduct($id);
+        $AvgandCountReviews = $this->reviewRepository-> avgAndCountReview($id);
+        $products = $this->productRepository->selectAll();
+        dump($products);
         $data = [
+            "p" => $products,
             "categories" => $categories,
-            "product" => $result
+            "product" => $result,
+            "reviews" => $reviews,
+            "count"   =>  $AvgandCountReviews->total_reviews,
+            "average" => $AvgandCountReviews->avg_rating,
         ];
         return $data;
     }

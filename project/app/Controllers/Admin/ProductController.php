@@ -6,14 +6,17 @@ use App\Core\Controller;
 use App\Core\Request;
 use App\Core\response;
 use App\Services\ProductService;
+use App\Repositories\ReviewRepository;
 
-class ProductController extends Controller{
+class ProductController extends Controller {
 
     private $ProductService ;
+    private $reviewRepository ;
     private $response ;
 
     public function __construct(){
         $this->ProductService = new ProductService() ; 
+        $this->reviewRepository = new ReviewRepository();
         $this->response = new Response();
     }
 
@@ -36,7 +39,14 @@ class ProductController extends Controller{
         $body = $request->getbody();
         $id = isset($body['id']) ? (int) $body['id'] : null;
         $data = $this->ProductService->show($id);
-        $this->response->render('customer/pageProduct', ["product" => $data['product']]);
+        
+        $this->response->render('customer/pageProduct', [
+        "product" => $data['product'] ,
+        'reviews' => $data['reviews'] , 
+        'count' => $data['count'],
+        'average' => $data['average'],
+         'products' => $data['p'],
+         ]);
     }
 
     public function getProduct(Request $request){

@@ -54,4 +54,11 @@ class ReviewController extends Controller {
         }
     }
 
+
+    public function reviewByProductId(Request $request){
+        $body = $request->getbody();
+        $id = isset($body['id']) ? (int) $body['id'] : null;
+        
+    }
+
 }
