@@ -15,6 +15,7 @@ use App\Controllers\Customer\CartController;
 use App\Controllers\Customer\OrderController;
 use App\Controllers\Customer\PaymentController;
 use App\Controllers\Customer\ReviewController;
+use App\Controllers\Customer\WishlistController;
 
 
 
@@ -74,6 +75,7 @@ $app->router->get('/customer/review',[ReviewController::class , 'create' ]);
 $app->router->post('/customer/review/store',[ReviewController::class , 'store' ]);
 
 $app->router->get('/customer/wishlist', 'Customer\WishlistController@index');
+$app->router->post('/wishlist/add',[WishlistController::class , 'store' ]);
 
 // $app->get('/dashboard', [DashboardController::class, 'index']
 // $app->get('/login', [AuthController::class, 'login']);

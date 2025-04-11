@@ -105,10 +105,10 @@
 
 
           <!-- Product Options -->
-          <form id="product-options-form" class="space-y-6">
+       <form id="product-options-form"  class="space-y-6">
             <input type="hidden" id="product-id" value="{{ product.id }}" name="product_id">
-            <input type="hidden" value="{{ product.base_price }}" name="price">
-
+            <input type="hidden"  value="{{ product.base_price }}" name="price">
+            
             <!-- Size Option -->
             {% if product.sizes|length > 0 %}
               <div>
@@ -116,11 +116,11 @@
                 <div class="flex flex-wrap gap-2">
                   {% for size in product.sizes %}
                     <label class="size-option cursor-pointer">
-                      <input type="radio" name="size" value="{{ size.id }}"
-                        data-price-adjustment="{{ size.price_adjustment }}" data-stock="{{ size.stock_quantity }}"
-                        class="sr-only">
-                      <span
-                        class="px-4 py-2 border border-gray-300 rounded-md text-sm 
+                      <input type="radio" name="size" value="{{ size.size_id }}" 
+                             data-price-adjustment="{{ size.price_adjustment }}"
+                             data-stock="{{ size.stock_quantity }}"
+                             class="sr-only">
+                      <span class="px-4 py-2 border border-gray-300 rounded-md text-sm 
                                 {% if size.stock_quantity <= 0 %}bg-gray-100 text-gray-400 cursor-not-allowed{% endif %}">
                         {{ size.size_name }}
                         {% if size.price_adjustment != '0.00' %}
@@ -144,12 +144,13 @@
                 <div class="flex flex-wrap gap-3">
                   {% for color in product.colors %}
                     <label class="color-option cursor-pointer" title="{{ color.color_name }}">
-                      <input type="radio" name="color" value="{{ color.id }}"
-                        data-price-adjustment="{{ color.price_adjustment }}" data-stock="{{ color.stock_quantity }}"
-                        class="sr-only">
+                      <input type="radio" name="color" value="{{ color.color_id }}"
+                             data-price-adjustment="{{ color.price_adjustment }}"
+                             data-stock="{{ color.stock_quantity }}"
+                             class="sr-only">
                       <span class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center
                                 {% if color.stock_quantity <= 0 %}opacity-50 cursor-not-allowed{% endif %}"
-                        style="background-color: {{ color.color_code }}">
+                            style="background-color: {{ color.color_code }}">
                         <span class="color-check hidden text-white">
                           <i class="fas fa-check"></i>
                         </span>
@@ -168,7 +169,7 @@
                   <i class="fas fa-minus"></i>
                 </button>
                 <input type="number" id="quantity" name="quantity" min="1" max="{{ product.stock }}" value="1"
-                  class="w-full text-center border-0 focus:ring-0">
+                       class="w-full text-center border-0 focus:ring-0">
                 <button type="button" id="increase-quantity" class="px-3 py-2 text-gray-600 hover:text-gold">
                   <i class="fas fa-plus"></i>
                 </button>
@@ -179,10 +180,11 @@
             <!-- Add to Cart Button -->
             <div class="flex space-x-4">
               <button type="submit" id="add-to-cart-btn"
-                class="add-cart {% if product.isAvailable and product.stock > 0 %}
-                      bg-gold hover:bg-gold-dark{% else %}bg-gray-300{% endif %} text-white px-6 py-3 rounded-lg transition duration-300 flex items-center"
-                data-product-id="{{ product.id }}" {% if not product.isAvailable or product.stock <= 0 %}disabled{% endif %}>
-                <i class="fas fa-shopping-cart mr-2"></i>
+                      class="add-cart  {% if product.isAvailable and product.stock > 0 %}
+                      bg-gold hover:bg-gold-dark{% else %}bg-gray-300{% endif %} text-white px-6 py-3 rounded-lg transition duration-300 flex items-center"            
+                               data-product-id="{{ product.id }}" 
+                      {% if not product.isAvailable or product.stock <= 0 %}disabled{% endif %}>
+                <i class="fas fa-shopping-cart mr-2"></i> 
                 {% if product.isAvailable and product.stock > 0 %}
                   Add to Cart
                 {% else %}
@@ -190,7 +192,7 @@
                 {% endif %}
               </button>
               <button type="button" id="add-to-wishlist-btn"
-                class="border border-gold text-gold hover:bg-gold hover:text-white px-4 py-3 rounded-lg transition duration-300">
+               data-product-id="{{ product.id }}"     class="border border-gold text-gold   px-4 py-3 rounded-lg transition duration-300">
                 <i class="fas fa-heart"></i>
               </button>
             </div>
@@ -389,5 +391,6 @@
 </section>
 
 <script src="/public/js/pageProduct.js" type="module"></script>
+<script src="/public/js/wishlist.js" type="module"></script>
 
 {% endblock %}

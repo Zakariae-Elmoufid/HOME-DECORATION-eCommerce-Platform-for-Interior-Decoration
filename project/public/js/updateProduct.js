@@ -248,11 +248,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const result = await response.json();
             if (result.success) {
-                console.log(result.success);
                 displayMessage(result.success, "/products");
             }
             if (result.errors) {
-                console.log(result.errors);
                 displayErrors(result.errors);
             }
        
