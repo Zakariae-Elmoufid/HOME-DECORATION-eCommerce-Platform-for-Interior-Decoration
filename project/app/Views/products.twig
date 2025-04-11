@@ -51,14 +51,6 @@
               class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
               alt="{{ product.title }}">
             
-            <!-- Quick View Button - Appears on hover -->
-            <div class="absolute top-2 right-2">
-              <a href="/product/{{ product.id }}"
-                class="bg-white bg-opacity-90 text-gold hover:bg-gold hover:text-white p-3 rounded-full transform transition-transform duration-300 hover:scale-110">
-                <i class="fas fa-eye"></i>
-              </a>
-            </div>
-            
             <!-- Product Badge -->
             {% if product.stock <= 5 and product.stock > 0 %}
               <div class="absolute top-2 left-2">
@@ -81,36 +73,40 @@
             <p class="category-value text-sm text-gray-500 mb-2">{{ product.getCategoryName }}</p>
             
             <!-- Star Rating -->
+
             <div class="flex items-center mb-3">
               <div class="flex text-gold">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
+             {% for i in 1..5 %}
+              {% if product.getAverageRating >= i %}
+              <i class="fas fa-star"></i>
+              {% elseif product.getAverageRating  >= i - 0.5 %}
+              <i class="fas fa-star-half-alt"></i>
+              {% else %}
+              <i class="far fa-star"></i>
+              {% endif %}
+              {% endfor %}
+              <span class="text-xs text-gray-500 ml-1">({{product.getAverageRating}} reviews)</span>
               </div>
-              <span class="text-xs text-gray-500 ml-1">(24 reviews)</span>
             </div>
+
+
             
             <!-- Price and Add to Cart -->
             <div class="flex justify-between items-center">
               <span class="price text-xl font-bold text-charcoal">${{ product.getBasePrice }}</span>
               <div class="flex space-x-2">
-                <a href="/product?id={{product.id}}"
-                  class="bg-white border border-gold text-gold hover:bg-gold hover:text-white p-2 rounded-lg transition duration-300">
-                  <i class="fas fa-eye"></i>
-                </a>
+               
                 {% if product.getIsAvailable and product.getStock > 0 %}
-                  <button 
+                  <a href="/product?id={{product.id}}" 
                     class="add-cart bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center"
                     data-product-id="{{ product.id }}">
-                    <i class="fas fa-shopping-cart mr-1"></i> Add
-                  </button>
+                    <i class="fas fa-eye mr-1"></i> See Product 
+                  </a>
                 {% else %}
                   <button
                     class=" bg-gray-300 text-gray-600 px-3 py-2 rounded-lg cursor-not-allowed flex items-center"
                     disabled>
-                    <i class="fas fa-shopping-cart mr-1"></i> Unavailable
+                    <i class="fas fa-eye mr-1"></i> Unavailable
                   </button>
                 {% endif %}
               </div>
