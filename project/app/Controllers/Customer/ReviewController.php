@@ -55,10 +55,32 @@ class ReviewController extends Controller {
     }
 
 
-    public function reviewByProductId(Request $request){
-        $body = $request->getbody();
-        $id = isset($body['id']) ? (int) $body['id'] : null;
-        
+    // public function reviewByProductId(Request $request){
+    //     $body = $request->getbody();
+    //     $id = isset($body['id']) ? (int) $body['id'] : null;
+    // }
+
+    public function reviewByUserId(){
+        $user_id = Session::get('id');
+        $reviews = $this->reviewRepository->getReviewByUserId($user_id);
+        $products = [] ;
+        foreach( $reviews as $review ){
+            dump($review->getProductId());
+            $products[] = $this->productRepostory->productId($review->getProductId());
+        }
+
+        $this->render('customer/account/myReview' ,['reviews' => $reviews , 'products' => $products]);
+
+    }
+    public function update(Request $request){
+        $data = $request->getbody();
+        $id = $data['review_id'];
+        unset($data['review_id']);
+       $review =  $this->reviewRepository->updateReview($id,$data);
+       if(!$review){
+       return  $this->response->jsonEncode(['error' => "don't update this review"]); 
+       }
+       return $this->response->jsonEncode(['success' => "review update succussful"]); 
     }
 
 }

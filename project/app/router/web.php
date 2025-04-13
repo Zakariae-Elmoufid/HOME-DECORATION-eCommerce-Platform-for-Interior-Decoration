@@ -72,7 +72,9 @@ $app->router->get('/customer/account', 'Customer\AccountController@index');
 $app->router->get('/customer/account/order', 'Customer\AccountController@order');
 
 $app->router->get('/customer/review',[ReviewController::class , 'create' ]);
-$app->router->post('/customer/review/store',[ReviewController::class , 'store' ]);
+$app->router->post('/customer/review/store',[ReviewController::class ,'store' ]);
+$app->router->patch('/customer/review/update',[ReviewController::class ,'update']);
+$app->router->get('/customer/myReview','Customer\ReviewController@reviewByUserId');
 
 $app->router->get('/customer/wishlist', 'Customer\WishlistController@index');
 $app->router->post('/wishlist/add',[WishlistController::class , 'store' ]);
