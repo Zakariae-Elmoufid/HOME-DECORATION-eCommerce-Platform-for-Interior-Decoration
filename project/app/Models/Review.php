@@ -8,7 +8,8 @@ class Review {
     private $content;
     private $rating;
     private $createdAt;
-    private  $username;
+    private $productId;
+    private $username;
 
  
     public function  __construct($data){
@@ -16,8 +17,12 @@ class Review {
          $this->content = $data['content'] ?? null;
          $this->rating = $data['rating'] ?? null;
          $this->createdAt = $data['created_at'] ?? null;
+         $this->productId = $data['product_id'] ?? null;
          $this->username = $data['username'] ?? '';
     }
+
+
+
 
 
     public function getId(){
@@ -34,6 +39,9 @@ class Review {
 
     public function getCreatedAt(){
         return$this->createdAt;
+    }
+    public function getProductId(){
+        return$this->productId;
     }
 
     public function getUsername(){

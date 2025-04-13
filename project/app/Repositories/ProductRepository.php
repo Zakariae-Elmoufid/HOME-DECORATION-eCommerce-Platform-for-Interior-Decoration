@@ -296,6 +296,17 @@ class ProductRepository extends BaseRepository {
         return $this->delete($this->table ,$id);
     }
 
+    public function productId($id){
+      $stmt = $this->query("SELECT  p.id  , p.title, p.description,
+       c.title as category_name , pi.image_path as primary_image
+      from Products p
+       inner join Product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
+       inner join categorys c on c.id = p.category_id
+       where p.id = ? ",[$id]);
+      $product =  $stmt->fetch(PDO::FETCH_OBJ);
+      return new Product((array)$product) ;
+    }
+
 
 }
 

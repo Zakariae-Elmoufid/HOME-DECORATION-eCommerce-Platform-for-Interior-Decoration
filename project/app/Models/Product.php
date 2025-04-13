@@ -12,9 +12,11 @@ class Product {
     private $isAvailable;
     private $total_reviews;
     private $average_rating;
+    private $primaryImage ;
     private $sizes = [];
     private $colors = [];
     private $images = [];
+    private $reviews ;
 
 
 
@@ -30,6 +32,7 @@ class Product {
         $this->stock = $dataArray['stock'] ?? null;
         $this->total_reviews = $dataArray['review_count'] ?? null;
         $this->average_rating = $dataArray['average_rating'] ?? null;
+        $this->primaryImage = $dataArray['primary_image'] ?? null;
         
         if (isset($dataArray['sizes'])) {
             $this->sizes = is_string($dataArray['sizes']) ? json_decode($dataArray['sizes'], true) : $dataArray['sizes'];
@@ -45,7 +48,11 @@ class Product {
             $this->images = is_string($dataArray['images']) ? json_decode($dataArray['images'], true) : $dataArray['images'];
             $this->images = $this->images ?: [];
         }
-    
+    }
+
+
+    public function addReview(Review $review) {
+        $this->reviews = $review;
     }
 
     public function toArray() {
@@ -108,6 +115,10 @@ class Product {
 
     public function getImages() {
         return $this->images;
+    }
+
+    public function getPrimaryImage(){
+        return $this->primaryImage;
     }
 
    
