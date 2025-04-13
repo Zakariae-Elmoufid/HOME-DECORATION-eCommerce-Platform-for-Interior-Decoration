@@ -45,36 +45,22 @@ document.addEventListener('DOMContentLoaded', function() {
     confirmBtn.addEventListener('click', function() {
       if (reviewIdToDelete) {
         fetch(`/customer/review/delete?id=${reviewIdToDelete}`, {
-          method: 'DELETE',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
         })
         .then(response => response.json())
         .then(data => {
-          if (data.success) {
-            const reviewElement = document.getElementById(`review-${reviewIdToDelete}`);
-            if (reviewElement) {
-              reviewElement.remove();
+            if (data.success) {
+              
+              displayMessage(data.success,'/customer/myReview');
+              
+            } else {
+              displayMessage(data.error,'/customer/myReview','error');
             }
-            
-            if (document.querySelectorAll('.review-item').length === 0) {
-              location.reload(); // Reload to show empty state
-            }
-          } else {
-            console.error('Error deleting review:', data.message);
-            // Show error message to user (optional)
-            alert('Error deleting review. Please try again.');
-          }
         })
-        .catch(error => {
-          console.error('Error:', error);
-          alert('An error occurred. Please try again.');
-        })
-        .finally(() => {
-          modal.classList.add('hidden');
-          reviewIdToDelete = null;
-        });
+        
       }
     });
   

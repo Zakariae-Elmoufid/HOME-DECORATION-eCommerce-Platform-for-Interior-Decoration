@@ -57,10 +57,12 @@ class ReviewRepository extends BaseRepository {
     }
 
     public function updateReview($id,$data){
-
        return $this->update($this->table,$id,$data);
     }
 
+    public function deleteReview($id){
+     return  $this->delete($this->table,$id);
+    }
     
 
 

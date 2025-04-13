@@ -83,4 +83,15 @@ class ReviewController extends Controller {
        return $this->response->jsonEncode(['success' => "review update succussful"]); 
     }
 
+    public function delete(Request $request){
+        $body = $request->getbody();
+        $id = isset($body['id']) ? (int) $body['id'] : null;
+        $review =  $this->reviewRepository->deleteReview($id);
+        dump($review);
+        if(!$review){
+            return  $this->response->jsonEncode(['error' => "don't delete this review"]); 
+            }
+            return $this->response->jsonEncode(['success' => "review delete succussful"]); 
+    }
+
 }
