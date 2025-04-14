@@ -50,6 +50,9 @@ $app->router->post('/products/update', [ProductController::class ,'update']);
 $app->router->delete('/products/delete' ,[ProductController::class , 'delete']);
 
 
+$app->router->get('/products/category' ,[HomeController::class , 'getProductsByCategory']);
+
+
 $app->router->get('/products' , 'HomeController@product');
 $app->router->post('/products/search' , [HomeController::class , 'search']);
 $app->router->get('/cart','Customer\CartController@index');
