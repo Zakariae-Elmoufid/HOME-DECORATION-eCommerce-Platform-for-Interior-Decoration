@@ -104,7 +104,7 @@ class ProductRepository extends BaseRepository {
        }
 
 
-       public function insertProduct($data) {
+    public function insertProduct($data) {
         $product = [
             "title" => $data["title"],
             "category_id" => $data["category_id"],
@@ -305,6 +305,58 @@ class ProductRepository extends BaseRepository {
        where p.id = ? ",[$id]);
       $product =  $stmt->fetch(PDO::FETCH_OBJ);
       return new Product((array)$product) ;
+    }
+
+    public function getNewProducts() {
+        $stmt = $this->query("SELECT 
+            p.id,
+            p.title,
+            p.description,
+            p.stock,
+            p.base_price,
+            p.isAvailable,
+            p.category_id,
+            p.created_at,
+            c.title AS category_name
+            FROM Products p
+            INNER JOIN categorys c ON c.id = p.category_id 
+            ORDER BY p.created_at DESC
+            LIMIT 5");
+        $products = $stmt->fetchAll(PDO::FETCH_OBJ);
+        
+        $articles = [];
+        
+        foreach($products as $product) {
+            $stmt = $this->query("SELECT 
+                id as image_id,
+                image_path,
+                is_primary
+                FROM Product_images
+                WHERE product_id = ?", [$product->id]);
+            $product->images = $stmt->fetchAll(PDO::FETCH_OBJ);
+            
+            $stmt = $this->query("SELECT 
+                id as color_id,
+                color_code,
+                color_name,
+                price_adjustment,
+                stock_quantity
+                FROM Product_colors
+                WHERE product_id = ?", [$product->id]);
+            $product->colors = $stmt->fetchAll(PDO::FETCH_OBJ);
+            
+            $stmt = $this->query("SELECT 
+                id as size_id,
+                size_name,
+                stock_quantity,
+                price_adjustment
+                FROM Product_sizes
+                WHERE product_id = ?", [$product->id]);
+            $product->sizes = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $articles[] = new Product($product);
+        }
+        
+        return $articles;
     }
 
 
