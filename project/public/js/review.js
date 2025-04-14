@@ -1,15 +1,16 @@
-import displayMessage from "./alert.js"
+import displayMessage from "./alert.js";
 
 document.addEventListener('DOMContentLoaded', function() {
-    const stars = document.querySelectorAll('.rating-star');
-    const starsLabels = document.querySelectorAll('.rating-star label');
+
+const stars = document.querySelectorAll('.rating-star');
+const starsLabels = document.querySelectorAll('.rating-star label');
+
+stars.forEach(star => {
+  star.addEventListener('click', function() {
+    const value = this.dataset.value;
+    const input = document.getElementById('star' + value);
+    input.checked = true;
     
-    stars.forEach(star => {
-      star.addEventListener('click', function() {
-        const value = this.dataset.value;
-        const input = document.getElementById('star' + value);
-        input.checked = true;
-        
         starsLabels.forEach((label, index) => {
           if (index < value) {
             label.classList.add('text-yellow-500');
@@ -21,6 +22,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       });
     });
+
+
+
+
+
+
+
+    
+    
+
     const deleteButtons = document.querySelectorAll('.delete-review-btn');
     const modal = document.getElementById('deleteReviewModal');
   
@@ -41,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
       reviewIdToDelete = null;
     });
   
-    // Handle delete confirmation
     confirmBtn.addEventListener('click', function() {
       if (reviewIdToDelete) {
         fetch(`/customer/review/delete?id=${reviewIdToDelete}`, {
@@ -53,10 +63,10 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-              
+              modal.classList.add('hidden');
               displayMessage(data.success,'/customer/myReview');
-              
             } else {
+              modal.classList.add('hidden');
               displayMessage(data.error,'/customer/myReview','error');
             }
         })

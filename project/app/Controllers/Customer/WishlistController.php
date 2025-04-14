@@ -34,7 +34,7 @@ class WishlistController extends Controller {
         $data['product_id'] = $product_id;
         $data['user_id'] = $user_id;
         $wishlists = $this->wishlistRepository->fetchByUserAndProduct($data);
-      
+       
         return  $wishlists;
     }
 
@@ -51,5 +51,17 @@ class WishlistController extends Controller {
         }
         $this->wishlistRepository->create($data);
         return $this->response->jsonEncode(['succus' => "wishlist createed seccussful"]);
+    }
+
+    public function delete(Request $request){
+       $data  = $request->getbody();
+       $id  = $data['id'];
+       $wishlist =$this->wishlistRepository->deleteWishlist($id);
+
+       if(!$wishlist){
+        return $this->response->render('customer/account/wishlist' ,['errore' => "don't delete this wishlist"]);
+       }
+       return $this->response->redirect('/customer/wishlist');
+
     }
 }

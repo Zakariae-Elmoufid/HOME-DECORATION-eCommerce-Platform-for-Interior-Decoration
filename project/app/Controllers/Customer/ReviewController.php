@@ -65,7 +65,6 @@ class ReviewController extends Controller {
         $reviews = $this->reviewRepository->getReviewByUserId($user_id);
         $products = [] ;
         foreach( $reviews as $review ){
-            dump($review->getProductId());
             $products[] = $this->productRepostory->productId($review->getProductId());
         }
 
@@ -87,10 +86,9 @@ class ReviewController extends Controller {
         $body = $request->getbody();
         $id = isset($body['id']) ? (int) $body['id'] : null;
         $review =  $this->reviewRepository->deleteReview($id);
-        dump($review);
         if(!$review){
             return  $this->response->jsonEncode(['error' => "don't delete this review"]); 
-            }
+       }
             return $this->response->jsonEncode(['success' => "review delete succussful"]); 
     }
 
