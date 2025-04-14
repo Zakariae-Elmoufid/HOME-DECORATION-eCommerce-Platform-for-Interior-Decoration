@@ -36,10 +36,10 @@
 
         {% for category in categories %}
         <div class="flex-shrink-0  w-36 md:w-44 text-center transition duration-300 transform hover:-translate-y-1">
-          <div
+          <a href="/products/category?id={{category.id}}" data-category-id="{{category.getId}}"
             class="bg-white rounded-full h-24 w-24 mx-auto flex items-center justify-center shadow-md mb-4 transition duration-300 hover:bg-amber-600 group">
             <i class="fa {{ category.icon }} text-3xl text-gray-800 group-hover:text-white transition duration-300"></i>
-          </div>
+          </a>
           <h3 class="font-medium text-gray-900">{{ category.title }}</h3>
         </div>
         {% endfor %}
@@ -61,22 +61,23 @@
           class="fas fa-arrow-right ml-1"></i></a>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- Product 1 -->
+      <!-- new Products  -->
+        {% for product in newProducts %}
       <div
         class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
         <div class="relative group">
+          {% set primary_image = null %}
+            {% for image in product.images %}
+              {% if image.is_primary == 1 %}
+                {% set primary_image = image %}
+              {% endif %}
+            {% endfor %}
           <img
-            src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            src="/public/uploads/{{ primary_image.image_path }}"
             class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
             alt="Scandinavian armchair">
 
-          <!-- Quick View Button - Appears on hover -->
-          <div class="absolute top-2 right-2">
-            <a href="#"
-              class="bg-white bg-opacity-90 text-gold hover:bg-gold hover:text-white p-3 rounded-full transform transition-transform duration-300 hover:scale-110">
-              <i class="fas fa-eye"></i>
-            </a>
-          </div>
+          
 
 
 
@@ -88,231 +89,41 @@
 
         <div class="p-4">
           <!-- Product Title -->
-          <h3 class="text-lg font-medium text-charcoal">Scandinavian Velvet Armchair</h3>
-          <p class="text-sm text-gray-500 mb-2">Modern armchair</p>
+          <h3 class="text-lg font-medium text-charcoal">{{ product.title}}</h3>
+          <p class="text-sm text-gray-500 mb-2">{{product.categoryName}}</p>
 
           <!-- Star Rating -->
           <div class="flex items-center mb-3">
             <div class="flex text-gold">
+
+
+
+               {% for i in 1..5 %}
+              {% if product.getAverageRating >= i %}
               <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
+              {% elseif product.getAverageRating  >= i - 0.5 %}
               <i class="fas fa-star-half-alt"></i>
-            </div>
-            <span class="text-xs text-gray-500 ml-1">(24 reviews)</span>
-          </div>
-
-          <!-- Price and Add to Cart -->
-          <div class="flex justify-between items-center">
-            <span class="text-xl font-bold text-charcoal">€299.00</span>
-            <div class="flex space-x-2">
-              <a href="#"
-                class="bg-white border border-gold text-gold hover:bg-gold hover:text-white p-2 rounded-lg transition duration-300">
-                <i class="fas fa-eye"></i>
-              </a>
-              <button
-                class="bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center">
-                <i class="fas fa-shopping-cart mr-1"></i> Add
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 2 -->
-      <div
-        class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-        <div class="relative group">
-          <img
-            src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-            class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
-            alt="Designer lamp">
-
-          <!-- Quick View Button - Appears on hover -->
-          <div
-            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <a href="#"
-              class="bg-white bg-opacity-90 text-gold hover:bg-gold hover:text-white p-3 rounded-full transform transition-transform duration-300 hover:scale-110">
-              <i class="fas fa-eye"></i>
-            </a>
-          </div>
-
-          <!-- Wishlist Button -->
-          <div class="absolute top-2 right-2">
-            <button class="bg-white rounded-full p-2 shadow-sm hover:text-gold hover:scale-110 transition duration-300">
-              <i class="far fa-heart"></i>
-            </button>
-          </div>
-
-          <!-- Product Badge -->
-          <div class="absolute top-2 left-2">
-            <span class="bg-gold text-white text-xs font-bold px-3 py-1 rounded-full">New</span>
-          </div>
-        </div>
-
-        <div class="p-4">
-          <!-- Product Title -->
-          <h3 class="text-lg font-medium text-charcoal">Art Deco Table Lamp</h3>
-          <p class="text-sm text-gray-500 mb-2">Designer lighting</p>
-
-          <!-- Star Rating -->
-          <div class="flex items-center mb-3">
-            <div class="flex text-gold">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
+              {% else %}
               <i class="far fa-star"></i>
+              {% endif %}
+            {% endfor %}
             </div>
-            <span class="text-xs text-gray-500 ml-1">(18 reviews)</span>
+            <span class="text-xs text-gray-500 ml-1"> ({{product.totalReviews}}  reviews)</span>
           </div>
 
           <!-- Price and Add to Cart -->
           <div class="flex justify-between items-center">
-            <span class="text-xl font-bold text-charcoal">€159.00</span>
+            <span class="text-xl font-bold text-charcoal">${{product.basePrice}}</span>
             <div class="flex space-x-2">
-              <a href="#"
-                class="bg-white border border-gold text-gold hover:bg-gold hover:text-white p-2 rounded-lg transition duration-300">
+              <a href="/product?id={{product.id}}"
+                class="bg-gold hover:bg-gold-dark text-white px-5 py-3 rounded-lg  transition duration-300 flex items-center ">
                 <i class="fas fa-eye"></i>
               </a>
-              <button
-                class="bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center">
-                <i class="fas fa-shopping-cart mr-1"></i> Add
-              </button>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Product 3 -->
-      <div
-        class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-        <div class="relative group">
-          <img
-            src="https://images.unsplash.com/photo-1567016557979-2d1c7519c6d2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-            class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
-            alt="Decorative vase">
-
-          <!-- Quick View Button - Appears on hover -->
-          <div
-            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <a href="#"
-              class="bg-white bg-opacity-90 text-gold hover:bg-gold hover:text-white p-3 rounded-full transform transition-transform duration-300 hover:scale-110">
-              <i class="fas fa-eye"></i>
-            </a>
-          </div>
-
-          <!-- Wishlist Button -->
-          <div class="absolute top-2 right-2">
-            <button class="bg-white rounded-full p-2 shadow-sm hover:text-gold hover:scale-110 transition duration-300">
-              <i class="far fa-heart"></i>
-            </button>
-          </div>
-
-          <!-- Product Badge -->
-          <div class="absolute top-2 left-2">
-            <span class="bg-gold text-white text-xs font-bold px-3 py-1 rounded-full">New</span>
-          </div>
-        </div>
-
-        <div class="p-4">
-          <!-- Product Title -->
-          <h3 class="text-lg font-medium text-charcoal">Geometric Ceramic Vase</h3>
-          <p class="text-sm text-gray-500 mb-2">Decorative accessory</p>
-
-          <!-- Star Rating -->
-          <div class="flex items-center mb-3">
-            <div class="flex text-gold">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <span class="text-xs text-gray-500 ml-1">(32 reviews)</span>
-          </div>
-
-          <!-- Price and Add to Cart -->
-          <div class="flex justify-between items-center">
-            <span class="text-xl font-bold text-charcoal">€89.00</span>
-            <div class="flex space-x-2">
-              <a href="#"
-                class="bg-white border border-gold text-gold hover:bg-gold hover:text-white p-2 rounded-lg transition duration-300">
-                <i class="fas fa-eye"></i>
-              </a>
-              <button
-                class="bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center">
-                <i class="fas fa-shopping-cart mr-1"></i> Add
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 4 -->
-      <div
-        class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-        <div class="relative group">
-          <img
-            src="https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-            class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105" alt="Coffee table">
-
-          <!-- Quick View Button - Appears on hover -->
-          <div
-            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <a href="#"
-              class="bg-white bg-opacity-90 text-gold hover:bg-gold hover:text-white p-3 rounded-full transform transition-transform duration-300 hover:scale-110">
-              <i class="fas fa-eye"></i>
-            </a>
-          </div>
-
-          <!-- Wishlist Button -->
-          <div class="absolute top-2 right-2">
-            <button class="bg-white rounded-full p-2 shadow-sm hover:text-gold hover:scale-110 transition duration-300">
-              <i class="far fa-heart"></i>
-            </button>
-          </div>
-
-          <!-- Product Badge -->
-          <div class="absolute top-2 left-2">
-            <span class="bg-gold text-white text-xs font-bold px-3 py-1 rounded-full">New</span>
-          </div>
-        </div>
-
-        <div class="p-4">
-          <!-- Product Title -->
-          <h3 class="text-lg font-medium text-charcoal">Marble Coffee Table</h3>
-          <p class="text-sm text-gray-500 mb-2">Living room furniture</p>
-
-          <!-- Star Rating -->
-          <div class="flex items-center mb-3">
-            <div class="flex text-gold">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star-half-alt"></i>
-              <i class="far fa-star"></i>
-            </div>
-            <span class="text-xs text-gray-500 ml-1">(12 reviews)</span>
-          </div>
-
-          <!-- Price and Add to Cart -->
-          <div class="flex justify-between items-center">
-            <span class="text-xl font-bold text-charcoal">€449.00</span>
-            <div class="flex space-x-2">
-              <a href="#"
-                class="bg-white border border-gold text-gold hover:bg-gold hover:text-white p-2 rounded-lg transition duration-300">
-                <i class="fas fa-eye"></i>
-              </a>
-              <button
-                class="bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center">
-                <i class="fas fa-shopping-cart mr-1"></i> Add
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -451,7 +262,7 @@
   </div>
 </section>
 
-    <script src="../../../public/js/cart.js" ></script>
+  <script src="../../../public/js/cart.js" ></script>
 
 
 {% endblock %}

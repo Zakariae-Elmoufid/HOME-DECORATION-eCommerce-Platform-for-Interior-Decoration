@@ -32,7 +32,6 @@ class HomeController extends Controller{
         $products = $this->ProductService->fetchAll();
         $newProducts =   $this->productRepository->getNewProducts();
         
-        
 
         return $this->render('home', [
             'categories' => $categories,
@@ -53,13 +52,17 @@ class HomeController extends Controller{
         $query = $request->getbody();
         // $products = $this->ProductService->fechByKey();
         return $this->response->jsonEncode($query);
-
     }
 
-    // public function newProducts(){
-    //   $product =   $this->productRepository->getNewProducts();
-      
-    // }
+    public function getProductsByCategory(Request $request){
+        $data = $request->getbody();
+        $id = $data['id'];
+        $products = $this->productRepository->getProductsByCategory($id);
+        dump($products);
+        return $this->render('customer/productsByCategory', [ 'products' => $products ]);
+    }
+
+    
 
 
 
