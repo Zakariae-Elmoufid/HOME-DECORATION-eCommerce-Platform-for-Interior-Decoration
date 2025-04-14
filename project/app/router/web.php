@@ -79,6 +79,7 @@ $app->router->get('/customer/myReview','Customer\ReviewController@reviewByUserId
 
 $app->router->get('/customer/wishlist', 'Customer\WishlistController@index');
 $app->router->post('/wishlist/add',[WishlistController::class , 'store' ]);
+$app->router->get('/wishlist/delete',[WishlistController::class , 'delete' ]);
 
 // $app->get('/dashboard', [DashboardController::class, 'index']
 // $app->get('/login', [AuthController::class, 'login']);

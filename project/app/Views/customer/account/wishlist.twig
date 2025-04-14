@@ -27,7 +27,7 @@
         <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
           <div class="relative">
             <!-- Product Image -->
-            <a href="/product/{{ wishlist.getProductId }}" class="block">
+            <a href="/product/{{ wishlist.getProductId}}" class="block">
               
               
               {% if wishlist.getProductImage %}
@@ -40,12 +40,16 @@
             </a>
 
             <!-- Wishlist Button -->
-            <button 
+            {# <button 
               data-product-id="{{ wishlist.getProductId }}" 
               class="wishlist-toggle absolute top-3 right-3 bg-white bg-opacity-80 rounded-full p-2 text-gray-600 hover:text-gold transition-colors duration-200 {{ product.in_wishlist ? 'active text-gold' : '' }}"
             >
               <i class="fas fa-heart {{ wishlist.in_wishlist ? '' : 'far' }}"></i>
-            </button>
+            </button> #}
+
+            <a href="/wishlist/delete?id={{wishlist.getId}}" class="wishlist-toggle absolute top-3 right-3 bg-gold bg-opacity-80  rounded-full p-2 text-gray-600 hover:text-gold">
+                  <i class="fas fa-trash"></i>
+            </a>
 
             <!-- Status Badge (Optional) -->
             {% if wishlist.getStock <= 5 and wishlist.getStock > 0 %}
