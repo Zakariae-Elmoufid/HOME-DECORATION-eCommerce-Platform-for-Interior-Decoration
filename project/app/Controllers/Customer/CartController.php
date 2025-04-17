@@ -102,7 +102,7 @@ class CartController extends Controller {
    public function countItem(){
     $cart_id =  $this->cartService->cartId();
    $result= $this->cartService->countItem($cart_id);
-   $this->response->jsonEncode([ "count" => $result ]);
+   $this->response->jsonEncode(["count" => $result ]);
    }
 
 

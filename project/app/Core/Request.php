@@ -48,8 +48,9 @@ class Request {
         $body = [];
         if($this->getMethod()==='get')
         {   
-           
-            $body['id'] = $_GET['id'];
+            $body = $_GET;
+            // $body['id'] = $_GET['id'];
+            // $body['page'] = $_GET['page'];
 
         }
    

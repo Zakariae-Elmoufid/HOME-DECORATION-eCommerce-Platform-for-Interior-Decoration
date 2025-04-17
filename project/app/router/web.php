@@ -54,7 +54,9 @@ $app->router->get('/products/category' ,[HomeController::class , 'getProductsByC
 
 
 $app->router->get('/products' , 'HomeController@product');
-$app->router->post('/products/search' , [HomeController::class , 'search']);
+$app->router->post('/products/search' , [HomeController::class ,'search']);
+$app->router->get('/products/fetch' ,[HomeController::class ,'productsPaginator']);
+
 $app->router->get('/cart','Customer\CartController@index');
 $app->router->post('/cart/add', [CartController::class , 'addToCart']);
 $app->router->patch('/cart/update', [CartController::class , 'update']);

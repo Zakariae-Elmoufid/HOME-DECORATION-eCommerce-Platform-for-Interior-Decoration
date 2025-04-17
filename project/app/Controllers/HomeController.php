@@ -49,17 +49,26 @@ class HomeController extends Controller{
     }
     
     public function search(Request $request){
-        $query = $request->getbody();
-        // $products = $this->ProductService->fechByKey();
-        return $this->response->jsonEncode($query);
+        $body = $request->getbody();
+        $products = $this->productRepository->fechByKeyWord($body['keyword']);
+         $this->response->jsonEncode(["products" => $products]);
     }
 
     public function getProductsByCategory(Request $request){
         $data = $request->getbody();
         $id = $data['id'];
         $products = $this->productRepository->getProductsByCategory($id);
-        dump($products);
-        return $this->render('customer/productsByCategory', [ 'products' => $products ]);
+        return $this->render('customer/productsByCategory', ['products' => $products ]);
+    }
+
+    public function productsPaginator(Request $request){
+     $data =  $request->getbody();
+     $page = $data['page'];
+     $products = $this->productRepository->paginationProduct($page);
+     if(!$products){
+        $this->response->jsonEncode(['errors' => 'error']);
+     }
+     $this->response->jsonEncode(['products' => $products , 'totalPages' => $page ]);
     }
 
     

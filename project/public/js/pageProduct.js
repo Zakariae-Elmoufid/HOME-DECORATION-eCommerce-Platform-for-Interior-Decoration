@@ -53,7 +53,6 @@ const decreaseBtn = document.getElementById('decrease-quantity');
     const remainingStock = maxStock - parseInt(quantityInput.value);
     stockInfo.textContent = `${remainingStock} units available`;
   }
-  //Size options
   const sizeOptions = document.querySelectorAll('input[name="size"]');
   let selectedSize = null;
 
