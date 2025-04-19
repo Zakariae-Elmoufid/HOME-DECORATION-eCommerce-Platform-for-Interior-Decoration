@@ -11,6 +11,12 @@ use Exception;
 class OrderRepository  extends BaseRepository {
 
 
+    private $table = "orders";
+
+    public function fetchAll(){
+        return $this->getAll($this->table);
+    }
+
  
     public function  createUserAddresse($data){
        $user_addresse_id = $this->insert("user_addresses",$data);

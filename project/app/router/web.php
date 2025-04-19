@@ -51,6 +51,8 @@ $app->router->get('/product', [ProductController::class ,'show']);
 $app->router->post('/products/update', [ProductController::class ,'update']);
 $app->router->delete('/products/delete' ,[ProductController::class , 'delete']);
 
+$app->router->get('/admin/orders','Admin\OrderController@index');
+
 
 $app->router->get('/products/bycategory' ,[HomeController::class , 'getProductsByCategory']);
 
