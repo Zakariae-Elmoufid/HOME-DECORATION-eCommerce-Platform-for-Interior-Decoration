@@ -10,7 +10,7 @@
     <div class="bg-white rounded-lg shadow-md p-6">
         <h1 class="text-2xl font-bold text-charcoal mb-6">Account Details</h1>
         
-        <!-- Personal Information -->
+        {# ===== Personal Information Section ===== #}
         <div class="border-b border-gray-200 pb-6 mb-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-semibold text-charcoal">Personal Information</h2>
@@ -19,6 +19,7 @@
                 </button>
             </div>
             
+            {# Personal Information Display #}
             <div id="personal-info-display" class="grid md:grid-cols-2 gap-4">
                 <div>
                     <p class="text-gray-500 text-sm">Full Name</p>
@@ -28,7 +29,6 @@
                     <p class="text-gray-500 text-sm">Email</p>
                     <p class="text-charcoal">{{ customer.email }}</p>
                 </div>
-            
                 <div>
                     <p class="text-gray-500 text-sm">Date Joined</p>
                     <p class="text-charcoal">{{ customer.created_at|date("F d, Y") }}</p>
@@ -36,9 +36,9 @@
             </div>
         </div>
 
-        <!-- Edit Personal Information Form (Hidden by default) -->
+        {# Personal Information Edit Form (Hidden by default) #}
         <div id="personal-information-edit" class="hidden bg-gray-50 rounded-lg p-6 mb-6">
-            <form id="personal-information-form" method="PATCH" >
+            <form id="personal-information-form" method="PATCH">
                 <input type="hidden" name="user_id" value="{{ customer.id }}">
                 
                 <div class="flex justify-between items-center mb-4">
@@ -72,28 +72,36 @@
             </form>
         </div>
         
-        <!-- Shipping Address -->
+        {# ===== Shipping Address Section ===== #}
         <div class="border-b border-gray-200 pb-6 mb-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-semibold text-charcoal">Shipping Address</h2>
+                {% if userAddress %}
                 <button id="edit-address-btn" class="text-gold hover:text-gold-dark transition">
                     <i class="fas fa-edit mr-1"></i> Edit Address
                 </button>
+                {% else %}
+                <button id="add-address-btn" class="text-gold hover:text-gold-dark transition">
+                    <i class="fas fa-plus mr-1"></i> Add Address
+                </button>
+                {% endif %}
             </div>
             
+            {# Address Display #}
             <div id="address-display">
                 {% if userAddress %}
                     <div class="bg-gray-50 rounded p-4">
                         <p class="font-medium">{{ userAddress.getFirstName }} {{ userAddress.getLastName }}</p>
                         <p>{{ userAddress.address }}</p>
-                        <p>{{ userAddress.city }}, {{ userAddress.postalCode }}</p>
+                        <p>{{ userAddress.city }} {{ userAddress.postalCode }}</p>
                         <p>{{ userAddress.country }}</p>
                         <p>{{ userAddress.phone }}</p>
+                        <p>{{ userAddress.email }}</p>
                     </div>
                 {% else %}
                     <div class="bg-gray-50 rounded p-4 text-gray-500">
                         <p>No shipping address set.</p>
-                        <button id="add-address-btn" class="text-gold hover:text-gold-dark transition mt-2 inline-block">
+                        <button id="add-address-btn-alt" class="text-gold hover:text-gold-dark transition mt-2 inline-block">
                             <i class="fas fa-plus-circle mr-1"></i> Add Address
                         </button>
                     </div>
@@ -101,10 +109,10 @@
             </div>
         </div>
         
-        <!-- Edit Shipping Address Form (Hidden by default) -->
+        {# Edit Shipping Address Form (Hidden by default) #}
         <div id="shipping-address-edit" class="hidden bg-gray-50 rounded-lg p-6 mb-6">
-            <form id="shipping-address-form" method="PATCH">
-                <input type="hidden" name="id" value="{{ userAddress.id }}">
+            <form id="shipping-address-form" method="POST">
+                <input type="hidden" name="id" value="{{ userAddress ? userAddress.id : '' }}">
                 
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-medium text-charcoal">Edit Your Shipping Address</h3>
@@ -115,65 +123,62 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                        <input type="text" value="{{ userAddress ? userAddress.getFirstName : '' }}" id="firstName" name="firstName" class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                        <label for="edit-firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                        <input type="text" value="{{ userAddress ? userAddress.getFirstName : '' }}" id="edit-firstName" name="first_name" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
                     </div>
                     
                     <div>
-                        <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                        <input type="text" value="{{ userAddress ? userAddress.getLastName : '' }}" id="lastName" name="lastName" class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                        <label for="edit-lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                        <input type="text" value="{{ userAddress ? userAddress.getLastName : '' }}" id="edit-lastName" name="last_name" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
                     </div>
                     
                     <div class="md:col-span-2">
-                        <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                        <input type="text" value="{{ userAddress ? userAddress.address : '' }}" id="address" name="address" class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                        <label for="edit-address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                        <input type="text" value="{{ userAddress ? userAddress.address : '' }}" id="edit-address" name="address" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
                     </div>
                     
                     <div>
-                        <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
-                        <input type="text" value="{{ userAddress ? userAddress.city : '' }}" id="city" name="city" class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                        <label for="edit-city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                        <input type="text" value="{{ userAddress ? userAddress.city : '' }}" id="edit-city" name="city" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
                     </div>
                     
                     <div>
-                        <label for="postalCode" class="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
-                        <input type="text" value="{{ userAddress ? userAddress.postalCode : '' }}" id="postalCode" name="postalCode" class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                        <label for="edit-postalCode" class="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+                        <input type="text" value="{{ userAddress ? userAddress.postalCode : '' }}" id="edit-postalCode" name="postal_code" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
                     </div>
                     
                     <div>
-                        <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
-                        <select id="country" name="country" class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
-                            <option value="United States" {{ userAddress and userAddress.country == 'United States' ? 'selected' : '' }}>United States</option>
-                            <option value="Canada" {{ userAddress and userAddress.country == 'Canada' ? 'selected' : '' }}>Canada</option>
-                            <option value="United Kingdom" {{ userAddress and userAddress.country == 'United Kingdom' ? 'selected' : '' }}>United Kingdom</option>
-                            <option value="Afghanistan" {{ userAddress and userAddress.country == 'Afghanistan' ? 'selected' : '' }}>Afghanistan</option>
-                            <option value="Albania" {{ userAddress and userAddress.country == 'Albania' ? 'selected' : '' }}>Albania</option>
-                            <option value="Algeria" {{ userAddress and userAddress.country == 'Algeria' ? 'selected' : '' }}>Algeria</option>
-                            <option value="Andorra" {{ userAddress and userAddress.country == 'Andorra' ? 'selected' : '' }}>Andorra</option>
-                            <option value="Angola" {{ userAddress and userAddress.country == 'Angola' ? 'selected' : '' }}>Angola</option>
-                            <option value="Argentina" {{ userAddress and userAddress.country == 'Argentina' ? 'selected' : '' }}>Argentina</option>
-                            <option value="Armenia" {{ userAddress and userAddress.country == 'Armenia' ? 'selected' : '' }}>Armenia</option>
-                            <option value="Australia" {{ userAddress and userAddress.country == 'Australia' ? 'selected' : '' }}>Australia</option>
-                            <option value="Austria" {{ userAddress and userAddress.country == 'Austria' ? 'selected' : '' }}>Austria</option>
-                            <!-- Autres pays... -->
-                            <option value="France" {{ userAddress and userAddress.country == 'France' ? 'selected' : '' }}>France</option>
-                            <option value="Germany" {{ userAddress and userAddress.country == 'Germany' ? 'selected' : '' }}>Germany</option>
-                            <option value="Japan" {{ userAddress and userAddress.country == 'Japan' ? 'selected' : '' }}>Japan</option>
-                            <option value="China" {{ userAddress and userAddress.country == 'China' ? 'selected' : '' }}>China</option>
-                            <option value="Brazil" {{ userAddress and userAddress.country == 'Brazil' ? 'selected' : '' }}>Brazil</option>
-                            <option value="Mexico" {{ userAddress and userAddress.country == 'Mexico' ? 'selected' : '' }}>Mexico</option>
-                            <option value="Italy" {{ userAddress and userAddress.country == 'Italy' ? 'selected' : '' }}>Italy</option>
-                            <option value="Spain" {{ userAddress and userAddress.country == 'Spain' ? 'selected' : '' }}>Spain</option>
-                            <!-- Vous pouvez ajouter tous les pays de votre liste originale ici -->
+                        <label for="edit-country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                        <select id="edit-country" name="country" class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                            {% set countries = [
+                                "United States", "Canada", "United Kingdom", "Afghanistan", "Albania", "Algeria", 
+                                "Andorra", "Angola", "Argentina", "Armenia", "Australia", "Austria", 
+                                "France", "Germany", "Japan", "China", "Brazil", "Mexico", "Italy", "Spain"
+                            ] %}
+                            
+                            {% for country in countries %}
+                                <option value="{{ country }}" {{ userAddress and userAddress.country == country ? 'selected' : '' }}>
+                                    {{ country }}
+                                </option>
+                            {% endfor %}
                         </select>
                     </div>
                     
                     <div>
-                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                        <input type="tel" value="{{ userAddress ? userAddress.phone : '' }}" id="phone" name="phone" class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                        <label for="edit-phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                        <input type="tel" value="{{ userAddress ? userAddress.phone : '' }}" id="edit-phone" name="phone" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
                     </div>
+                    
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                        <input type="email" value="{{ userAddress ? userAddress.email : '' }}" id="email" name="email" class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                        <label for="edit-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" value="{{ userAddress ? userAddress.email : '' }}" id="edit-email" name="email" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
                     </div>
                 </div>
                 
@@ -187,43 +192,90 @@
                 </div>
             </form>
         </div>
-        
-        <!-- Account Preferences -->
-        <div class="border-t border-gray-200 pt-6">
-            <h2 class="text-xl font-semibold text-charcoal mb-4">Communication Preferences</h2>
-            
-            <form action="/account/update-preferences" method="POST">
-                <div class="space-y-3">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="newsletter" name="newsletter" class="h-4 w-4 text-gold focus:ring-gold border-gray-300 rounded" 
-                            {% if customer.newsletter_subscribed %}checked{% endif %}>
-                        <label for="newsletter" class="ml-2 block text-charcoal">
-                            Receive newsletter and promotional emails
-                        </label>
+
+        {# Add Shipping Address Form (Hidden by default) #}
+        <div id="shipping-address-add" class="hidden bg-gray-50 rounded-lg p-6 mb-6">
+            <form id="shipping-address-form-add">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium text-charcoal">Add Your Shipping Address</h3>
+                    <button type="button" class="text-gray-500 hover:text-gray-700 cancel-add-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <input type="hidden" name="user_id" value="{{ customer.id }}">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="add-firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                        <input type="text" id="add-firstName" name="first_name" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
                     </div>
                     
-                    <div class="flex items-center">
-                        <input type="checkbox" id="order_updates" name="order_updates" class="h-4 w-4 text-gold focus:ring-gold border-gray-300 rounded"
-                            {% if customer.order_updates_enabled %}checked{% endif %}>
-                        <label for="order_updates" class="ml-2 block text-charcoal">
-                            Receive order status updates via email
-                        </label>
+                    <div>
+                        <label for="add-lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                        <input type="text" id="add-lastName" name="last_name" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
                     </div>
                     
-                    <div class="flex items-center">
-                        <input type="checkbox" id="sms_updates" name="sms_updates" class="h-4 w-4 text-gold focus:ring-gold border-gray-300 rounded"
-                            {% if customer.sms_updates_enabled %}checked{% endif %}>
-                        <label for="sms_updates" class="ml-2 block text-charcoal">
-                            Receive SMS notifications for orders
-                        </label>
+                    <div class="md:col-span-2">
+                        <label for="add-address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                        <input type="text" id="add-address" name="address" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                    </div>
+                    
+                    <div>
+                        <label for="add-city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                        <input type="text" id="add-city" name="city" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                    </div>
+                    
+                    <div>
+                        <label for="add-postalCode" class="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+                        <input type="text" id="add-postalCode" name="postal_code" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                    </div>
+                    
+                    <div>
+                        <label for="add-country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                        <select id="add-country" name="country" class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                            {% set countries = [
+                                "United States", "Canada", "United Kingdom", "Afghanistan", "Albania", "Algeria", 
+                                "Andorra", "Angola", "Argentina", "Armenia", "Australia", "Austria", 
+                                "France", "Germany", "Japan", "China", "Brazil", "Mexico", "Italy", "Spain"
+                            ] %}
+                            
+                            {% for country in countries %}
+                                <option value="{{ country }}">{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="add-phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                        <input type="tel" id="add-phone" name="phone" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
+                    </div>
+                    
+                    <div>
+                        <label for="add-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="add-email" name="email" 
+                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
                     </div>
                 </div>
                 
-                <button type="submit" class="mt-4 bg-charcoal hover:bg-charcoal-dark text-white px-4 py-2 rounded transition">
-                    Save Preferences
-                </button>
+                <div class="flex justify-end space-x-4 mt-6">
+                    <button type="button" class="cancel-add-btn px-4 py-2 border border-gray-300 rounded text-charcoal hover:bg-gray-200 transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-gold hover:bg-gold-dark text-white rounded transition">
+                        Add Address
+                    </button>
+                </div>
             </form>
         </div>
+        
+   
     </div>
 </div>
 

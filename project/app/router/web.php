@@ -80,7 +80,8 @@ $app->router->get('/customer/account', 'Customer\AccountController@index');
 $app->router->get('/customer/account/details', 'Customer\AccountController@account');
 $app->router->get('/customer/account/order', 'Customer\AccountController@order');
 $app->router->patch('/account/update', [AccountController::class , 'update']);
-$app->router->post('/account/update-address', [AccountController::class , 'updateAddress']);
+$app->router->patch('/account/update-address', [AccountController::class , 'updateAddress']);
+$app->router->post('/account/add-address', [AccountController::class , 'addAddress']);
 
 $app->router->get('/customer/review',[ReviewController::class , 'create' ]);
 $app->router->post('/customer/review/store',[ReviewController::class ,'store' ]);
