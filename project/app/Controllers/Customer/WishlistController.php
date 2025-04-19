@@ -50,7 +50,7 @@ class WishlistController extends Controller {
             return $this->response->jsonEncode(['errore' => "this product has a wishlist"]);
         }
         $this->wishlistRepository->create($data);
-        return $this->response->jsonEncode(['succus' => "wishlist createed seccussful"]);
+        return $this->response->jsonEncode(['success' => "wishlist createed seccussful"]);
     }
 
     public function delete(Request $request){

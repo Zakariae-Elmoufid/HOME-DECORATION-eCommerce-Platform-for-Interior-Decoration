@@ -66,6 +66,7 @@ class CartController extends Controller {
 
     public function update(Request $request){
       $data = $request->getbody();
+
       $cartId =$data[0]['cart_id'];
       $total = $data[0]['total'];
      
@@ -84,10 +85,10 @@ class CartController extends Controller {
       foreach($data as $item){
         $id = $item['id'];
         unset($item["id"]);
-        $cartItem = $this->cartRepository->updateCartItem($id,$item);
-        $this->countItem();
-        $this->response->jsonEncode([ "success" => "item update to cart  succussful" ]);
+        $cartItem[] = $this->cartRepository->updateCartItem($id,$item);
       }
+      $this->countItem();
+      $this->response->jsonEncode([ "success" => "item update to cart  succussful" ]);
 
    }
 

@@ -11,20 +11,19 @@ const increaseBtn = document.querySelectorAll('.increase');
 const decreaseBtn = document.querySelectorAll('.decrease');
 const items = document.querySelectorAll('.item');
 increaseBtn.forEach(button => {
-
+    
     button.addEventListener('click', function(e) {
         const input = this.parentElement.querySelector('input');
-         const currentQuantity = parseInt(input.value);
-
-         const stockSize  = input.dataset.stockSize;
-         const stockColor  = input.dataset.stockColor;
-
-         const maxStock = Math.min(stockSize, stockColor);
-      
-         if (currentQuantity < maxStock) {
-           input.value = currentQuantity + 1;
-           updateTotals();
-           updateCount();
+        const currentQuantity = parseInt(input.value);
+        
+        const stockSize  = input.dataset.stockSize;
+        const stockColor  = input.dataset.stockColor;
+        
+        const maxStock = Math.min(stockSize, stockColor);
+        if (currentQuantity < maxStock) {
+            input.value = currentQuantity + 1;
+            updateTotals();
+            updateCount();
          }
     });
 })

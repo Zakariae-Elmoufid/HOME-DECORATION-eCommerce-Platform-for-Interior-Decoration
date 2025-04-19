@@ -1,5 +1,29 @@
 {% extends "layouts/main.twig" %}
 {% block title %}Products{% endblock %}
+
+{% block SearchDesktop %}
+     <!-- Search Bar (visible on desktop) -->
+          <div class="hidden md:flex flex-grow max-w-lg mx-6">
+            <div class="w-full">
+              <form class="flex" id="search-bar">
+                <input type="text" placeholder="Search for products..." class="w-full border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold" />
+                <button type="submit"  class="bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-r-lg transition duration-300"><i class="fas fa-search"></i></button>
+              </form>
+            </div>
+          </div>
+{% endblock %}
+
+{% block SearchMobile %}
+  <!-- Mobile Search (visible on mobile) -->
+        <div class="md:hidden mt-3">
+          <form class="flex"  id="search-bar">
+            <input type="text" placeholder="Search for products..." class="w-full border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold" />
+            <button type="submit" class="bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-r-lg transition duration-300"> <i class="fas fa-search"></i></button>
+          </form>
+        </div>
+{% endblock %}
+
+
 {% block content %}
 
 <section class="py-16 bg-cream">
@@ -33,41 +57,103 @@
         </div>
       </div>
     </div>
-    <div id="search-results" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
-
+    <nav class="mb-8">
+      <ol class="flex flex-wrap items-center text-sm">
+        <li class="text-gray-500">
+          <a href="/products" class="hover:text-gold transition">products</a>
+          <span class="mx-2">/</span>
+        </li>
+      </ol>
+    </nav>
+  <div id="search-results" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+  </div>
 
     <div  id="product-container" class=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-     
+      {% for product in products.products %}
+        <!-- Product Card -->
+        <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+          <div class="relative group">
+            {% set primary_image = null %}
+            {% for image in product.images %}
+              {% if image.is_primary == 1 %}
+                {% set primary_image = image %}
+              {% endif %}
+            {% endfor %}
+            
+            <img 
+              src="/public/uploads/{{ primary_image.image_path }}" 
+              class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
+              alt="{{ product.title }}">
+            
+            <!-- Product Badge -->
+            {% if product.stock <= 5 and product.stock > 0 %}
+              <div class="absolute top-2 left-2">
+                <span class="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">Limited Stock</span>
+              </div>
+            {% elseif product.stock == 0 %}
+              <div class="absolute top-2 left-2">
+                <span class="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">Out of Stock</span>
+              </div>
+            {% else %}
+              <div class="absolute top-2 left-2">
+                <span class=" bg-gold text-white text-xs font-bold px-3 py-1 rounded-full">Available</span>
+              </div>
+            {% endif %}
+          </div>
+          
+          <div class="p-4">
+            <!-- Product Title -->
+            <h3 class="title text-lg font-medium text-charcoal">{{ product.getTitle }}</h3>
+            <p class="category-value text-sm text-gray-500 mb-2">{{ product.getCategoryName }}</p>
+            
+            <!-- Star Rating -->
+
+            <div class="flex items-center mb-3">
+              <div class="flex text-gold">
+             {% for i in 1..5 %}
+              {% if product.getAverageRating >= i %}
+              <i class="fas fa-star"></i>
+              {% elseif product.getAverageRating  >= i - 0.5 %}
+              <i class="fas fa-star-half-alt"></i>
+              {% else %}
+              <i class="far fa-star"></i>
+              {% endif %}
+            {% endfor %}
+              <span class="text-xs text-gray-500 ml-1">({{product.getAverageRating}} reviews)</span>
+              </div>
+            </div>
+
+
+            
+            <!-- Price and Add to Cart -->
+            <div class="flex justify-between items-center">
+              <span class="price text-xl font-bold text-charcoal">${{ product.getBasePrice }}</span>
+              <div class="flex space-x-2">
+               
+                {% if product.getIsAvailable and product.getStock > 0 %}
+                  <a href="/product?id={{product.id}}" 
+                    class="add-cart bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center"
+                    data-product-id="{{ product.id }}">
+                    <i class="fas fa-eye mr-1"></i> See  
+                  </a>
+                {% else %}
+                  <button
+                    class=" bg-gray-300 text-gray-600 px-3 py-2 rounded-lg cursor-not-allowed flex items-center"
+                    disabled>
+                    <i class="fas fa-eye mr-1"></i> Unavailable
+                  </button>
+                {% endif %}
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      {% endfor %}
     </div>
   </div>
-   <div id="search-results" class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg hidden overflow-hidden max-h-96 overflow-y-auto">
-    <!-- Les résultats de recherche seront injectés ici par JavaScript -->
-  </div>
-
-<div id="pagination" class="mt-8">
-<nav class="flex justify-center mt-6">
-  <ul class="inline-flex items-center -space-x-px text-sm">
-    <li>
-      <a href="#" class="pagination-prev px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
-        Previous
-      </a>
-    </li>
-
-    <li><a href="#" data-page="1" class="pagination-page px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">1</a></li>
-    <li><a href="#" data-page="2" class="pagination-page px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">2</a></li>
-    <li><a href="#" data-page="3" class="pagination-page px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">3</a></li>
-
-    <li>
-      <a href="#" class="pagination-next px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
-        Next
-      </a>
-    </li>
-  </ul>
-</nav>
-
-</div>
 
 </section>
+
 
 <script src="../../public/js/main.js"></script>
 <script src="../../public/js/products.js"></script>

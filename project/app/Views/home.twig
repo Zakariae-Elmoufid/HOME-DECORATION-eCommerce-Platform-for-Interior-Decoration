@@ -36,7 +36,7 @@
 
         {% for category in categories %}
         <div class="flex-shrink-0  w-36 md:w-44 text-center transition duration-300 transform hover:-translate-y-1">
-          <a href="/products/category?id={{category.id}}" data-category-id="{{category.getId}}"
+          <a href="/products/bycategory?category={{category.id}}" data-category-id="{{category.getId}}"
             class="bg-white rounded-full h-24 w-24 mx-auto flex items-center justify-center shadow-md mb-4 transition duration-300 hover:bg-amber-600 group">
             <i class="fa {{ category.icon }} text-3xl text-gray-800 group-hover:text-white transition duration-300"></i>
           </a>

@@ -359,11 +359,7 @@ class ProductRepository extends BaseRepository {
         p.id, p.title, p.description, p.stock, p.base_price, p.isAvailable, c.title, p.isAvailable , pi.image_path
          ",[$idCategories]);
        $productsData =  $stmt->fetchAll(PDO::FETCH_OBJ);
-       $products= [];
-       foreach($productsData as $product){
-        $products[] = new Product($product);
-       }
-       return $products;
+       return $productsData;
     }
 
     public function fechByKeyWord($title){

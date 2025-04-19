@@ -22,8 +22,6 @@ class HomeController extends Controller{
         $this->ProductService = new ProductService() ; 
         $this->productRepository = new ProductRepository();
         $this->response = new Response();
-
-
     }
 
     public function index()
@@ -56,8 +54,9 @@ class HomeController extends Controller{
 
     public function getProductsByCategory(Request $request){
         $data = $request->getbody();
-        $id = $data['id'];
+        $id = $data['category'];
         $products = $this->productRepository->getProductsByCategory($id);
+        dump($products);
         return $this->render('customer/productsByCategory', ['products' => $products ]);
     }
 

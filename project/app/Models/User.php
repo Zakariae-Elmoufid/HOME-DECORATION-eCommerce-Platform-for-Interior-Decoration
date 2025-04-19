@@ -10,13 +10,15 @@ class User {
     private $email;
     private $password;
     private  $role;
+    private  $createdAt;
 
-    public function __construct( $username , $email , $password , $role , $id = null){
+    public function __construct( $username , $email ,$createdAt , $role ,$password=null , $id = null){
       $this->id = $id ;
       $this->username = $username;
       $this->email = $email;
       $this->password = $password;
       $this->role  = $role;
+      $this->createdAt  = $createdAt;
     } 
     
 
@@ -31,12 +33,12 @@ class User {
     public function getEmail() {
          return $this->email;
     }
-    public function getPassword() 
-    {
-         return $this->password; 
-    }
+
     public function getRole() {
         return $this->role;
+    }
+    public function getCreatedAt() {
+        return $this->createdAt;
     }
 
 

@@ -12,10 +12,12 @@ use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\CategoryController;
 use App\Controllers\Admin\ProductController;
 use App\Controllers\Customer\CartController;
+use App\Controllers\Customer\AccountController;
 use App\Controllers\Customer\OrderController;
 use App\Controllers\Customer\PaymentController;
 use App\Controllers\Customer\ReviewController;
 use App\Controllers\Customer\WishlistController;
+use App\Controllers\Customer\ProductController  as CustomerProductController;
 
 
 
@@ -50,12 +52,13 @@ $app->router->post('/products/update', [ProductController::class ,'update']);
 $app->router->delete('/products/delete' ,[ProductController::class , 'delete']);
 
 
-$app->router->get('/products/category' ,[HomeController::class , 'getProductsByCategory']);
+$app->router->get('/products/bycategory' ,[HomeController::class , 'getProductsByCategory']);
 
 
 $app->router->get('/products' , 'HomeController@product');
 $app->router->post('/products/search' , [HomeController::class ,'search']);
 $app->router->get('/products/fetch' ,[HomeController::class ,'productsPaginator']);
+$app->router->get('/products/category', [CustomerProductController::class ,'getProductsCategory' ]);
 
 $app->router->get('/cart','Customer\CartController@index');
 $app->router->post('/cart/add', [CartController::class , 'addToCart']);
@@ -74,7 +77,10 @@ $app->router->get('/payment/confirmation',[PaymentController::class , 'confirmat
 
 
 $app->router->get('/customer/account', 'Customer\AccountController@index');
+$app->router->get('/customer/account/details', 'Customer\AccountController@account');
 $app->router->get('/customer/account/order', 'Customer\AccountController@order');
+$app->router->patch('/account/update', [AccountController::class , 'update']);
+$app->router->post('/account/update-address', [AccountController::class , 'updateAddress']);
 
 $app->router->get('/customer/review',[ReviewController::class , 'create' ]);
 $app->router->post('/customer/review/store',[ReviewController::class ,'store' ]);

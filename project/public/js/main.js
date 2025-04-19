@@ -9,6 +9,7 @@ bars.addEventListener("click", function () {
 });
 
 const furniture = document.getElementById('mobile-furniture-dropdown');
+console.log(furniture);
 furniture.addEventListener('click', function(){
   document.getElementById('furniture-submenu').classList.toggle('hidden');
 })
@@ -30,15 +31,31 @@ updateCount();
 const productContainer = document.getElementById("product-container");
 const searchForms = document.querySelectorAll('#search-bar');
 let resultsContainer = document.getElementById("search-results");
+
 searchForms.forEach(form => {
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const searchInput = form.querySelector("input");
     const query = searchInput.value.trim();
 
     const data = { keyword: query };
+    const existingMark = form.querySelector('.clear-button');
+    console.log(existingMark);
+    if (existingMark) existingMark.remove();
 
-  
+    const markButton = document.createElement('button'); 
+    markButton.className = 'clear-button bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-r-lg transition duration-300';
+    const icon = document.createElement('i'); 
+
+    icon.classList.add('fa-solid', 'fa-x'); 
+    markButton.appendChild(icon);
+    form.appendChild(markButton);
+
+    markButton.addEventListener('click', function (e) {
+      e.preventDefault(); 
+      handleClearSearch(markButton, searchInput);
+    });
     const response = await fetch(`/products/search`, {
       method: 'POST',
       headers: {
@@ -50,7 +67,6 @@ searchForms.forEach(form => {
     const result = await response.json();
     productContainer.classList.add('hidden')
     resultsContainer.innerHTML = "";
-
     result.products.forEach(product => {
       const badge = product.stock === 0
         ? `<span class="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">Out of Stock</span>`
@@ -59,7 +75,7 @@ searchForms.forEach(form => {
         : `<span class="bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full">Available</span>`;
 
       const rating = renderStars(product.average_rating || 0);
-
+       
       const card = document.createElement("div");
       card.className = "product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl";
 
@@ -102,6 +118,8 @@ searchForms.forEach(form => {
 
 
   });
+
+
 });
 
 
@@ -120,3 +138,14 @@ function renderStars(rating) {
   return stars;
 }
 
+  function handleClearSearch(markButton,searchInput){
+
+
+    productContainer.classList.remove('hidden');
+    
+    searchInput.value = "";
+
+    resultsContainer.innerHTML = "";
+
+     markButton.remove();
+  }

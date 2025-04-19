@@ -216,14 +216,12 @@ const decreaseBtn = document.getElementById('decrease-quantity');
     button.addEventListener('click', () => {
       const target = button.getAttribute('data-tab') + '-tab';
 
-      // Réinitialiser les classes
       tabButtons.forEach(btn => {
         btn.classList.remove('border-gold', 'text-gold');
         btn.classList.add('text-gray-500', 'border-transparent');
       });
       tabContents.forEach(content => content.classList.add('hidden'));
 
-      // Activer l'onglet cliqué
       button.classList.add('border-gold', 'text-gold');
       button.classList.remove('text-gray-500', 'border-transparent');
       document.getElementById(target).classList.remove('hidden');
