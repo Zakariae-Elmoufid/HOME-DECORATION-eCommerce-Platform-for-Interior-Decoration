@@ -1,5 +1,29 @@
 {% extends "layouts/main.twig" %}
 {% block title %}Products{% endblock %}
+
+{% block SearchDesktop %}
+     <!-- Search Bar (visible on desktop) -->
+          <div class="hidden md:flex flex-grow max-w-lg mx-6">
+            <div class="w-full">
+              <form class="flex" id="search-bar">
+                <input type="text" placeholder="Search for products..." class="w-full border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold" />
+                <button type="submit"  class="bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-r-lg transition duration-300"><i class="fas fa-search"></i></button>
+              </form>
+            </div>
+          </div>
+{% endblock %}
+
+{% block SearchMobile %}
+  <!-- Mobile Search (visible on mobile) -->
+        <div class="md:hidden mt-3">
+          <form class="flex"  id="search-bar">
+            <input type="text" placeholder="Search for products..." class="w-full border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold" />
+            <button type="submit" class="bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-r-lg transition duration-300"> <i class="fas fa-search"></i></button>
+          </form>
+        </div>
+{% endblock %}
+
+
 {% block content %}
 
 <section class="py-16 bg-cream">
@@ -33,8 +57,18 @@
         </div>
       </div>
     </div>
+    <nav class="mb-8">
+      <ol class="flex flex-wrap items-center text-sm">
+        <li class="text-gray-500">
+          <a href="/products" class="hover:text-gold transition">products</a>
+          <span class="mx-2">/</span>
+        </li>
+      </ol>
+    </nav>
+  <div id="search-results" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+  </div>
 
-    <div id="product-container" class=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div  id="product-container" class=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {% for product in products.products %}
         <!-- Product Card -->
         <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
@@ -100,7 +134,7 @@
                   <a href="/product?id={{product.id}}" 
                     class="add-cart bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center"
                     data-product-id="{{ product.id }}">
-                    <i class="fas fa-eye mr-1"></i> See Product 
+                    <i class="fas fa-eye mr-1"></i> See  
                   </a>
                 {% else %}
                   <button
@@ -117,10 +151,11 @@
       {% endfor %}
     </div>
   </div>
-   <div id="search-results" class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg hidden overflow-hidden max-h-96 overflow-y-auto">
-    <!-- Les résultats de recherche seront injectés ici par JavaScript -->
-  </div>
+
 </section>
+
+
+<script src="../../public/js/main.js"></script>
 <script src="../../public/js/products.js"></script>
   {# // <script src="../../public/js/cart.js" ></script> #}
 

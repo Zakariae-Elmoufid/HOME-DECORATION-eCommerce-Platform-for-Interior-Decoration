@@ -359,15 +359,46 @@ class ProductRepository extends BaseRepository {
         p.id, p.title, p.description, p.stock, p.base_price, p.isAvailable, c.title, p.isAvailable , pi.image_path
          ",[$idCategories]);
        $productsData =  $stmt->fetchAll(PDO::FETCH_OBJ);
-       $products= [];
-       foreach($productsData as $product){
-        $products[] = new Product($product);
-       }
-       return $products;
+       return $productsData;
     }
 
-
-
+    public function fechByKeyWord($title){
+        $stmt = $this->query("SELECT  p.id  , p.title, p.description,p.stock,p.base_price,p.isAvailable, ROUND(AVG(r.rating),2) AS average_rating,
+        COUNT(DISTINCT r.id) AS review_count,
+        c.title as category_name , pi.image_path as primary_image
+       from Products p
+        inner join Product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
+        inner join categorys c on c.id = p.category_id
+        LEFT JOIN  reviews r ON r.product_id = p.id
+        where p.title LIKE  ?
+        GROUP BY 
+        p.id, p.title, p.description, p.stock, p.base_price, p.isAvailable, c.title, p.isAvailable , pi.image_path
+         ",["%".$title."%"]);
+         $productsData = $stmt->fetchAll(PDO::FETCH_OBJ);
+        //  $products = [] ;
+        //  foreach($productsData as $product){
+        //     $products  = new Product($product);
+        //  }
+         return $productsData;
+    }
+    
+    public function paginationProduct($page){
+        $itemsPerPage = 8;
+        $offset = ($page - 1) * $itemsPerPage;
+        $stmt = $this->query("SELECT  p.id  , p.title, p.description,p.stock,p.base_price,p.isAvailable, ROUND(AVG(r.rating),2) AS average_rating,
+        COUNT(DISTINCT r.id) AS review_count,
+        c.title as category_name , pi.image_path as primary_image
+       from Products p
+        inner join Product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
+        inner join categorys c on c.id = p.category_id
+        LEFT JOIN  reviews r ON r.product_id = p.id
+        where p.isAvailable = 1 
+        GROUP BY 
+        p.id, p.title, p.description, p.stock, p.base_price, p.isAvailable, c.title, p.isAvailable , pi.image_path
+        LIMIT $itemsPerPage OFFSET $offset");
+        $productsData = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $productsData;
+    }
 }
 
 

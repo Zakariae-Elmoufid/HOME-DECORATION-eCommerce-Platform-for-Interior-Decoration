@@ -22,92 +22,76 @@
   
 
     <!-- Products Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {% for wishlist in wishlists %}
-        <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <div class="relative">
-            <!-- Product Image -->
-            <a href="/product/{{ wishlist.getProductId}}" class="block">
-              
-              
-              {% if wishlist.getProductImage %}
-                <img src="/public/uploads/{{ wishlist.getProductImage }}" class="w-full h-64 object-cover" alt="{{ wishlist.title }}">
-              {% else %}
-                <div class="w-full h-64 bg-gray-100 flex items-center justify-center">
-                  <span class="text-gray-400">No image available</span>
-                </div>
-              {% endif %}
-            </a>
-
-            <!-- Wishlist Button -->
-            {# <button 
-              data-product-id="{{ wishlist.getProductId }}" 
-              class="wishlist-toggle absolute top-3 right-3 bg-white bg-opacity-80 rounded-full p-2 text-gray-600 hover:text-gold transition-colors duration-200 {{ product.in_wishlist ? 'active text-gold' : '' }}"
-            >
-              <i class="fas fa-heart {{ wishlist.in_wishlist ? '' : 'far' }}"></i>
-            </button> #}
-
-            <a href="/wishlist/delete?id={{wishlist.getId}}" class="wishlist-toggle absolute top-3 right-3 bg-gold bg-opacity-80  rounded-full p-2 text-gray-600 hover:text-gold">
-                  <i class="fas fa-trash"></i>
-            </a>
-
-            <!-- Status Badge (Optional) -->
-            {% if wishlist.getStock <= 5 and wishlist.getStock > 0 %}
-              <span class="absolute top-3 left-3 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">Limited Stock</span>
-            {% elseif wishlist.getStock == 0 %}
-              <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">Out of Stock</span>
-            {% endif %}
-          </div>
-
-          <div class="p-4">
-            <!-- Category -->
-            <div class="text-sm text-gray-500 mb-1">{{ wishlist.getCategoryName }}</div>
-            
-            <!-- Product Title -->
-            <a href="/product/{{ wishlist.getProductId }}" class="block">
-              <h3 class="text-lg font-medium text-charcoal hover:text-gold transition-colors duration-200">{{ product.title }}</h3>
-            </a>
-            
-            <!-- Rating (Optional) -->
-            {% if wishlist.getAverageRating is defined %}
-              <div class="flex items-center mt-1 mb-2">
-                <div class="flex text-gold">
-                  {% for i in 1..5 %}
-                    {% if wishlist.average_rating >= i %}
-                      <i class="fas fa-star text-sm"></i>
-                    {% elseif wishlist.average_rating >= i - 0.5 %}
-                      <i class="fas fa-star-half-alt text-sm"></i>
-                    {% else %}
-                      <i class="far fa-star text-sm"></i>
-                    {% endif %}
-                  {% endfor %}
-                </div>
-                <span class="text-xs text-gray-500 ml-1">({{ wishlist.review_count|default(0) }})</span>
-              </div>
-            {% endif %}
-
-            <!-- Price -->
-            <div class="flex justify-between items-center mt-2">
-              <span class="text-xl font-bold text-charcoal">${{ wishlist.getBasePrice|number_format(2, '.', ',') }}</span>
-              
-              <!-- Quick Add Button -->
-              {% if wishlist.getIsAvailable and wishlist.getStock > 0 %}
-                <button 
-                  data-product-id="{{ wishlist.getProductId }}" 
-                  class="quick-add bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center text-sm"
-                >
-                  <i class="fas fa-shopping-cart mr-1"></i> Add
-                </button>
-              {% else %}
-                <button class="bg-gray-300 text-white px-3 py-2 rounded-lg text-sm cursor-not-allowed">
-                  <i class="fas fa-shopping-cart mr-1"></i> Add
-                </button>
-              {% endif %}
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  {% for wishlist in wishlists %}
+    <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <div class="relative">
+        <!-- Product Image -->
+        <a href="/product/{{ wishlist.getProductId }}" class="block">
+          {% if wishlist.getProductImage %}
+            <img src="/public/uploads/{{ wishlist.getProductImage }}" class="w-full h-64 object-cover" alt="{{ wishlist.title }}">
+          {% else %}
+            <div class="w-full h-64 bg-gray-100 flex items-center justify-center">
+              <span class="text-gray-400">No image available</span>
             </div>
+          {% endif %}
+        </a>
+
+        <a href="/wishlist/delete?id={{ wishlist.getId }}" class="wishlist-toggle absolute top-3 right-3 bg-gold bg-opacity-80 rounded-full p-2 text-gray-600 hover:text-gold">
+          <i class="fas fa-trash"></i>
+        </a>
+      </div>
+
+      <div class="p-4">
+        <!-- Category -->
+        <div class="text-sm text-gray-500 mb-1">{{ wishlist.getCategoryName }}</div>
+        
+        <!-- Product Title -->
+        <a href="/product/{{ wishlist.getProductId }}" class="block">
+          <h3 class="text-lg font-medium text-charcoal hover:text-gold transition-colors duration-200">{{ wishlist.getTitle }}</h3>
+        </a>
+        
+        <!-- Rating (Optional) -->
+        {% if wishlist.getAverageRating is defined %}
+          <div class="flex items-center mt-1 mb-2">
+            <div class="flex text-gold">
+              {% for i in 1..5 %}
+                {% if wishlist.average_rating >= i %}
+                  <i class="fas fa-star text-sm"></i>
+                {% elseif wishlist.average_rating >= i - 0.5 %}
+                  <i class="fas fa-star-half-alt text-sm"></i>
+                {% else %}
+                  <i class="far fa-star text-sm"></i>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <span class="text-xs text-gray-500 ml-1">({{ wishlist.review_count|default(0) }})</span>
           </div>
+        {% endif %}
+
+        <!-- Price -->
+        <div class="flex justify-between items-center mt-2">
+          <span class="text-xl font-bold text-charcoal">${{ wishlist.getBasePrice|number_format(2, '.', ',') }}</span>
+          
+          <!-- Quick Add Button -->
+          {% if wishlist.getIsAvailable and wishlist.getStock > 0 %}
+            <a 
+              href="/product?id={{ wishlist.getProductId }}"
+              data-product-id="{{ wishlist.getProductId }}" 
+              class="quick-add bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center text-sm"
+            >
+              <i class="fas fa-eye mr-1"></i> See
+            </a>
+          {% else %}
+            <button class="bg-gray-300 text-white px-3 py-2 rounded-lg text-sm cursor-not-allowed">
+              <i class="fas fa-eye mr-1"></i> Unavailable
+            </button>
+          {% endif %}
         </div>
-      {% endfor %}
+      </div>
     </div>
+  {% endfor %}
+</div>
 
   </div>
 </section>

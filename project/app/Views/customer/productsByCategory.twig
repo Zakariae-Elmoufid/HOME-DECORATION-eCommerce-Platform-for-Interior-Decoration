@@ -4,7 +4,17 @@
 
 <section class="py-16 bg-cream">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-
+    <!-- Breadcrumb navigation -->
+    <nav class="mb-8">
+      <ol class="flex flex-wrap items-center text-sm">
+        <li class="text-gray-500">
+          <a href="/" class="hover:text-gold transition">Home</a>
+          <span class="mx-2">/</span>
+        </li>
+        <li class="text-gold font-medium">{{ products[0].category_name }}</li>
+      </ol>
+    </nav>
+  
     
 
 
@@ -16,7 +26,7 @@
            
             
             <img 
-              src="/public/uploads/{{ product.primaryImage }}" 
+              src="/public/uploads/{{ product.primary_image }}" 
               class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
               alt="{{ product.title }}">
             
@@ -38,23 +48,23 @@
           
           <div class="p-4">
             <!-- Product Title -->
-            <h3 class="title text-lg font-medium text-charcoal">{{ product.getTitle }}</h3>
-            <p class="category-value text-sm text-gray-500 mb-2">{{ product.getCategoryName }}</p>
+            <h3 class="title text-lg font-medium text-charcoal">{{ product.title }}</h3>
+            <p class="category-value text-sm text-gray-500 mb-2">{{ product.category_name }}</p>
             
             <!-- Star Rating -->
 
             <div class="flex items-center mb-3">
               <div class="flex text-gold">
              {% for i in 1..5 %}
-              {% if product.getAverageRating >= i %}
+              {% if product.average_rating >= i %}
               <i class="fas fa-star"></i>
-              {% elseif product.getAverageRating  >= i - 0.5 %}
+              {% elseif product.average_rating  >= i - 0.5 %}
               <i class="fas fa-star-half-alt"></i>
               {% else %}
               <i class="far fa-star"></i>
               {% endif %}
             {% endfor %}
-              <span class="text-xs text-gray-500 ml-1">({{product.getAverageRating}} reviews)</span>
+              <span class="text-xs text-gray-500 ml-1">({{product.average_rating}} reviews)</span>
               </div>
             </div>
 
@@ -62,10 +72,10 @@
             
             <!-- Price and Add to Cart -->
             <div class="flex justify-between items-center">
-              <span class="price text-xl font-bold text-charcoal">${{ product.getBasePrice }}</span>
+              <span class="price text-xl font-bold text-charcoal">${{ product.base_price }}</span>
               <div class="flex space-x-2">
                
-                {% if product.getIsAvailable and product.getStock > 0 %}
+                {% if product.isAvailable and product.stock > 0 %}
                   <a href="/product?id={{product.id}}" 
                     class="add-cart bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center"
                     data-product-id="{{ product.id }}">

@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Models\User;
 use App\Models\Role;
 use PDO;
+use DateTime;
 
 class UserRepository extends BaseRepository {
 
@@ -21,9 +22,9 @@ class UserRepository extends BaseRepository {
         
         
         $create_user = $this->insert($this->table,$userdata );
-        
+        $createdAt = new DateTime();
         if($create_user){
-            $user = new User($data['username'],$data['email'],$data['password'],$roleId,$create_user);
+            $user = new User($data['username'],$data['email'],$createdAt,$data['password'],$roleId,$create_user);
             return $user;
         }
 
@@ -48,8 +49,17 @@ class UserRepository extends BaseRepository {
           }
           
          
-          return ['user' => new User($user->username, $user->email, $user->password, $user->role_id ,$user->id)];
+          return ['user' => new User($user->username, $user->email, $user->created_at ,$user->password, $user->role_id ,$user->id)];
         
+    }
+
+    public function getUserById($id){
+        $user = $this->findById($this->table ,$id);
+       return  new User($user->username, $user->email,$user->created_at, $user->password, $user->role_id ,$user->id);
+    }
+
+    public function updateUser($id,$data){
+        return $this->update($this->table,$id ,$data);
     }
 
    

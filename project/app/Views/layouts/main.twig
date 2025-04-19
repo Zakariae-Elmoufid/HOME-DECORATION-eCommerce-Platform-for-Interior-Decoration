@@ -18,7 +18,7 @@
   <body class="bg-cream-light font-sans">
     <!-- Promotional Announcement -->
     <div class="bg-gold text-white text-center py-2 text-sm">
-      <p>Free shipping on all orders over €150 | Promo code: ELEGANCE25</p>
+      <p>Free shipping on all orders over $150 | Promo code: ELEGANCE25</p>
     </div>
 
     <!-- Header / Navbar -->
@@ -30,15 +30,8 @@
             <a href="/" class="flex items-center"><span class="text-2xl font-serif font-bold text-charcoal">Elegant<span class="text-gold">Home</span></span></a>
           </div>
 
-          <!-- Search Bar (visible on desktop) -->
-          <div class="hidden md:flex flex-grow max-w-lg mx-6">
-            <div class="w-full">
-              <form class="flex" id="search-bar">
-                <input type="text" placeholder="Search for products..." class="w-full border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold" />
-                <button type="submit" class="bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-r-lg transition duration-300"><i class="fas fa-search"></i></button>
-              </form>
-            </div>
-          </div>
+     
+          {% block SearchDesktop %}{% endblock %}
 
           <!-- Navigation Icons -->
           <div class="flex items-center space-x-6">
@@ -85,13 +78,9 @@
           </ul>
         </nav>
 
-        <!-- Mobile Search (visible on mobile) -->
-        <div class="md:hidden mt-3">
-          <form class="flex">
-            <input type="text" placeholder="Search for products..." class="w-full border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold" />
-            <button type="submit" class="bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-r-lg transition duration-300"><i class="fas fa-search"></i></button>
-          </form>
-        </div>
+      
+         {% block SearchMobile %}{% endblock %}
+
       </div>
 
     <!-- Menu Mobile  -->
@@ -122,7 +111,7 @@
        {% include "components/alert.twig" %}
 
       {% block content %}
-
+ 
       {% endblock %}
 
     <footer class="bg-charcoal-dark text-white pt-16 pb-6">
@@ -225,6 +214,7 @@
     </footer>
 
     <script src="../../../public/js/main.js" type="module"></script>
+    <script src="../../public/js/products.js" type="module"></script>
     <script>  
         document.addEventListener("DOMContentLoaded", () => {
             updateCount();

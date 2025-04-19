@@ -5,7 +5,7 @@ const wishlistBtn = document.getElementById('add-to-wishlist-btn');
 const productId  = wishlistBtn.dataset.productId;
 
 wishlistBtn.addEventListener('click',async function () {
-
+ 
     const Response = await fetch('/wishlist/add', {
         method: 'POST',
         headers: {
@@ -17,4 +17,6 @@ wishlistBtn.addEventListener('click',async function () {
     if(result.errore){
         displayMessage(result.errore,`/product?id=${productId}` , 'errore');
     }
+    displayMessage(result.success,`/product?id=${productId}` );
+
 } )
