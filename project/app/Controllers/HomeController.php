@@ -56,19 +56,10 @@ class HomeController extends Controller{
         $data = $request->getbody();
         $id = $data['category'];
         $products = $this->productRepository->getProductsByCategory($id);
-        dump($products);
         return $this->render('customer/productsByCategory', ['products' => $products ]);
     }
 
-    public function productsPaginator(Request $request){
-     $data =  $request->getbody();
-     $page = $data['page'];
-     $products = $this->productRepository->paginationProduct($page);
-     if(!$products){
-        $this->response->jsonEncode(['errors' => 'error']);
-     }
-     $this->response->jsonEncode(['products' => $products , 'totalPages' => $page ]);
-    }
+
 
     
 

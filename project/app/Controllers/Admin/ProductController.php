@@ -6,17 +6,20 @@ use App\Core\Controller;
 use App\Core\Request;
 use App\Core\response;
 use App\Services\ProductService;
+use App\Repositories\ProductRepository;
 use App\Repositories\ReviewRepository;
 
 class ProductController extends Controller {
 
     private $ProductService ;
     private $reviewRepository ;
+    private $ProductRepository ;
     private $response ;
 
     public function __construct(){
         $this->ProductService = new ProductService() ; 
-        $this->reviewRepository = new ReviewRepository();
+        $this->ProductRepository = new ProductService() ; 
+        $this->reviewRepository = new ProductRepository();
         $this->response = new Response();
     }
 
@@ -67,5 +70,7 @@ class ProductController extends Controller {
         $id = $data['id'];
         $this->ProductService->delete($id);
     }
+
+
 
 }

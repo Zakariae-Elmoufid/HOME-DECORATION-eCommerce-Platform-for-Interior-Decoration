@@ -41,7 +41,6 @@ searchForms.forEach(form => {
 
     const data = { keyword: query };
     const existingMark = form.querySelector('.clear-button');
-    console.log(existingMark);
     if (existingMark) existingMark.remove();
 
     const markButton = document.createElement('button'); 

@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const result = await response.json();
             if (result.success) {
-                displayMessage(result.success, "/products");
+                displayMessage(result.success, "/admin/products");
             }
             if (result.errors) {
                 displayErrors(result.errors);

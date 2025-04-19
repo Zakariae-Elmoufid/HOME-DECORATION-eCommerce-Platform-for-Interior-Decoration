@@ -4,6 +4,7 @@ namespace App\Controllers\Customer;
 
 use App\repositories\OrderRepository;
 use App\repositories\CartRepository;
+use App\repositories\AccountRepository;
 use App\Services\OrderServise;
 use App\Services\CartService;
 use App\Core\controller;
@@ -17,12 +18,14 @@ class OrderController extends Controller {
     private $cartService ;
     private $orderRepository ;
     private $cartRepository ;
+    private $accountRepository ;
     private $response ;
 
     public function __construct(){
         $this->orderService = new OrderServise;
         $this->orderRepository = new OrderRepository;
         $this->cartRepository = new CartRepository();
+        $this->accountRepository = new AccountRepository();
         $this->cartService = new CartService();
         $this->response = new Response;
         
@@ -37,9 +40,10 @@ class OrderController extends Controller {
          $guest_id = $this->cartService->getOrCreateGuestId();
          $user_id = null; 
         }
-
+        
         $items = $this->cartRepository->getcartItems($user_id, $guest_id);
-        $this->response->render('customer/order',["items" => $items]);
+        $user_Address  = $this->accountRepository->getUserAdress($user_id);
+        $this->response->render('customer/order',["items" => $items ,'userAddress' => $user_Address->getId() ? $user_Address : null]);
     }
 
 
