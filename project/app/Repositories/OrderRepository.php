@@ -13,8 +13,24 @@ class OrderRepository  extends BaseRepository {
 
     private $table = "orders";
 
-    public function fetchAll(){
-        return $this->getAll($this->table);
+    public function fetchAllOrder(){
+        $stmt = $this->query("SELECT 
+        o.id ,
+         o.status,
+        o.totalAmount,
+        o.created_at,
+        o.subTotal,
+        o.shipping,
+         us.first_name,
+        us.last_name,
+        us.email,
+        us.phone
+         FROM orders o
+        inner join user_addresses us on us.id = o.shipping_address_id 
+        ");
+        $orders = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+       return $orders;
     }
 
  
@@ -179,8 +195,57 @@ class OrderRepository  extends BaseRepository {
             return false;
         }
     }
+
+    public function fetchAllOrderItems($orderId) {
+        // 1. Get order info
+        $orderStmt = $this->query("SELECT 
+            o.id,
+            o.status,
+            o.totalAmount,
+            o.created_at,
+            o.subTotal,
+            o.shipping,
+            us.first_name,
+            us.last_name,
+            us.email,
+            us.phone
+            FROM orders o
+            INNER JOIN user_addresses us ON us.id = o.shipping_address_id
+            WHERE o.id = ?", [$orderId]);
+    
+        $order = $orderStmt->fetch(PDO::FETCH_OBJ);
+    
+        if (!$order) {
+            return null; 
+        }
+    
+        $itemsStmt = $this->query("SELECT 
+            oi.id,
+            oi.order_id,
+            oi.product_id AS productId,
+            oi.quantity,
+            oi.price,
+            oi.selectedColor,
+            oi.selectedSize,
+            oi.total_item,
+          
+            p.title AS productTitle,
+            pg.image_path AS productImage
+            FROM order_items oi
+            INNER JOIN Products p ON oi.product_id = p.id
+            INNER JOIN Product_images pg ON pg.product_id = p.id AND pg.is_primary = 1
+            WHERE oi.order_id = ?", [$orderId]);
+    
+        $order->items = $itemsStmt->fetchAll(PDO::FETCH_OBJ);
+    
+        return $order;
+    }
+    
+    }
+
+
     
 
     
     
-}
+

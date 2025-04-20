@@ -56,7 +56,6 @@ class HomeController extends Controller{
         $data = $request->getbody();
         $id = $data['category'];
         $products = $this->productRepository->getProductsByCategory($id);
-        dump($products);
         return $this->render('customer/productsByCategory', ['products' => $products ]);
     }
 

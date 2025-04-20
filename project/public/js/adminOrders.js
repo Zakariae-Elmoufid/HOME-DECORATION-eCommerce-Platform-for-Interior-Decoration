@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Configuration de pagination
     const ordersTable = document.querySelector('tbody');
     const paginationContainer = document.getElementById('pagination-container');
     const paginationInfo = document.getElementById('pagination-info');
@@ -189,5 +188,128 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
- 
+    // async function showOrderDetails(orderId){
+    //     const response = await fetch(`/admin/orders/details?id=${orderId}`,{
+    //         method :"GET",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //     });
+    
+    //     const result = await response.json();
+    //     console.log("Response text:", result);
+    // }
+
+         
+     const viewDetailsBtns = document.querySelectorAll('button[title="View Details"]');
+     const orderDetailsModal = document.getElementById('order-details-modal');
+   viewDetailsBtns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const tr = this.closest('tr');
+      const orderId = btn.dataset.orderId;
+      console.log(orderId);
+      showOrderDetails(orderId);
+    
+    });
+  });
+
+  function showOrderDetails(orderId) {
+    
+    fetch(`/admin/orders/details?id=${orderId}`)
+      .then(response => response.json())
+      .then(data => {
+
+        document.getElementById('modal-order-id').textContent = `#${data.order.id}`;
+        document.getElementById('modal-customer-name').textContent = data.order.first_name+" "+data.order.last_name;
+        document.getElementById('modal-customer-email').textContent = data.order.email;
+        document.getElementById('modal-order-date').textContent = new Date(data.order.created_at).toLocaleString();
+        document.getElementById('modal-order-status').textContent = data.order.status;
+        document.getElementById('modal-order-total').textContent = `$${parseFloat(data.order.totalAmount).toFixed(2)}`;
+        
+        const itemsContainer = document.getElementById('modal-order-items');
+        itemsContainer.innerHTML = '';
+        data.order.items.forEach(item => {
+          const row = document.createElement('tr');
+          
+          const productCell = document.createElement('td');
+          productCell.className = 'px-4 py-4 whitespace-nowrap';
+          productCell.innerHTML = `
+            <div class="flex items-center">
+              <div class="flex-shrink-0 h-10 w-10">
+                <img class="h-10 w-10 rounded-lg object-cover" src="/public/uploads/${item.productImage}" alt="${item.productTitle}" />
+              </div>
+              <div class="ml-4">
+                <div class="text-sm font-medium text-gray-900">${item.productTitle}</div>
+              </div>
+            </div>
+          `;
+          
+          const detailsCell = document.createElement('td');
+          detailsCell.className = 'px-4 py-4 whitespace-nowrap';
+          let detailsText = '';
+          if (item.selectedColor) detailsText += `Color: ${item.selectedColor}`;
+          if (item.selectedSize) {
+            if (detailsText) detailsText += '<br>';
+            detailsText += `Size: ${item.selectedSize}`;
+          }
+          detailsCell.innerHTML = `<div class="text-sm text-gray-500">${detailsText || 'N/A'}</div>`;
+          
+          const priceCell = document.createElement('td');
+          priceCell.className = 'px-4 py-4 whitespace-nowrap';
+          priceCell.innerHTML = `<div class="text-sm text-gray-900">$${parseFloat(item.price).toFixed(2)}</div>`;
+          
+          const qtyCell = document.createElement('td');
+          qtyCell.className = 'px-4 py-4 whitespace-nowrap';
+          qtyCell.innerHTML = `<div class="text-sm text-gray-900">${item.quantity}</div>`;
+          
+          const totalCell = document.createElement('td');
+          totalCell.className = 'px-4 py-4 whitespace-nowrap';
+          totalCell.innerHTML = `<div class="text-sm font-medium text-gray-900">$${parseFloat(item.total_item).toFixed(2)}</div>`;
+          
+          row.appendChild(productCell);
+          row.appendChild(detailsCell);
+          row.appendChild(priceCell);
+          row.appendChild(qtyCell);
+          row.appendChild(totalCell);
+          
+          itemsContainer.appendChild(row);
+        });
+        
+        document.getElementById('modal-subtotal').textContent = `$${parseFloat(data.order.subtotal || data.order.totalAmount).toFixed(2)}`;
+        document.getElementById('modal-shipping').textContent = `$${parseFloat(data.order.shipping || 0).toFixed(2)}`;
+        document.getElementById('modal-grand-total').textContent = `$${parseFloat(data.order.totalAmount).toFixed(2)}`;
+        
+        // Configurer le bouton d'impression
+        printOrderBtn.setAttribute('data-order-id', orderId);
+        
+        orderDetailsModal.classList.remove('hidden');
+      })
+      .catch(error => {
+        console.error('Error fetching order details:', error);
+        alert('Failed to load order details. Please try again.');
+      });
+  }
+   
+  const closeOrderDetailsModal = document.getElementById('close-order-details-modal');
+  if (closeOrderDetailsModal) {
+    closeOrderDetailsModal.addEventListener('click', closeModal);
+  }
+  const closeModalBtn = document.getElementById('close-modal-btn')
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', closeModal);
+  }
+  function closeModal() {
+    if (orderDetailsModal) {
+      orderDetailsModal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+  }
+
+
+
+
+
+
+    
   });

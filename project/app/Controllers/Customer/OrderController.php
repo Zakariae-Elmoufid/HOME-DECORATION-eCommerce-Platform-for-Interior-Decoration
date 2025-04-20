@@ -93,8 +93,8 @@ class OrderController extends Controller {
                     break;
                 }
             }
-            //  if the item is find ,create a order_item
-         
+
+            
             if($cartItem) {
             $order_item =   $this->orderRepository->createOrderItem([
                     'order_id' => $order->getId(),
@@ -122,6 +122,5 @@ class OrderController extends Controller {
     public function show(Request $request){
         $body = $request->getbody();
         $id = isset($body['id']) ? (int) $body['id'] : null;
-        dump($id);
     }    
 }
