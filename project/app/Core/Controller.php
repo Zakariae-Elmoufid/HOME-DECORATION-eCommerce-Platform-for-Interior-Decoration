@@ -5,22 +5,7 @@ namespace App\Core;
 // use Twig\Loader\FilesystemLoader;
 // use Twig\TwigFunction;
 
-class Controller
-{
-
-    // protected Environment $twig;
-    // public function __construct()
-    // {
-    //     $loader = new FilesystemLoader(dirname(__DIR__) . '/Views');
-    //     $this->twig = new Environment($loader, [
-    //         'cache' => false, 
-    //     ]);
-
-    //     $this->twig->addFunction(new TwigFunction('flash', function ($key) {
-    //         return Session::getFlash($key);
-    //     }));
-    // }
-    
+class Controller {
 
     public function render($view, $params = []): string
     {
@@ -30,11 +15,5 @@ class Controller
     public function redirect($uri){
         return Application::$app->response->redirect($uri);
     }
-
-
-
-    
-    
-
 
 }

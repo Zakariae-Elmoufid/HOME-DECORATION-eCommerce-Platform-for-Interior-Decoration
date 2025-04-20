@@ -85,7 +85,7 @@ class AccountController extends Controller {
          'city' => 'required|min:4|max:50|string',
          'country' => 'required|min:2|max:50|string',
          'address' => '|min:8|max:50|string',
-         'phone' => 'required|min:10|max:50|string',
+         'phone' => 'required|min:8|max:50|string',
      ]);
      
      if (!$validator->validate()) {
