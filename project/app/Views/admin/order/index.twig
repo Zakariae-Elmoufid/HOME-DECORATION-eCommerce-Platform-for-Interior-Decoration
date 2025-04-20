@@ -152,7 +152,10 @@
                      class="text-blue hover:text-blue-dark" title="View Details">
                      <i class="fas fa-eye"></i>
                      </button>
-                    <button data-order-id="{{ order.id }}" class="print-invoice text-green-600 hover:text-green-800" title="Print Invoice"><i class="fas fa-print"></i></button>
+
+                    <button data-order-id="{{ order.id }}"  class=" text-green-600 hover:text-green-800" title="Print Invoice">
+                    <i class="fas fa-print"></i>
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -215,7 +218,7 @@
       </div>
       
       <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t">
-        <button id="printOrderBtn" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+        <button id="print-order-btn" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
           <i class="fas fa-print mr-2"></i> Print Invoice
         </button>
         <button id="close-modal-btn" class="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-100">
