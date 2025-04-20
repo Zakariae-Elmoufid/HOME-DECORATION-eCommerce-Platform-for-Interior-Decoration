@@ -240,6 +240,31 @@ class OrderRepository  extends BaseRepository {
     
         return $order;
     }
+
+    public function countTotal() {
+        $stmt = $this->query('SELECT COUNT(id) AS total FROM orders');
+        $total = $stmt->fetch(PDO::FETCH_OBJ); 
+        return $total->total;
+    }
+    
+    public function completedOrders() {
+        $stmt = $this->query('SELECT COUNT(id) AS total FROM orders where `status` = "completed"');
+        $total = $stmt->fetch(PDO::FETCH_OBJ); 
+        return $total->total;
+    }
+
+    public function pendingOrders() {
+        $stmt = $this->query('SELECT COUNT(id) AS total FROM orders where `status` = "pending"');
+        $total = $stmt->fetch(PDO::FETCH_OBJ); 
+        return $total->total;
+    }
+
+    public function totalRevenue() {
+        $stmt = $this->query("SELECT SUM(totalAmount) AS totalRevenue FROM orders WHERE `status` = 'completed'");
+        $totalRevenue = $stmt->fetch(PDO::FETCH_OBJ); 
+        return $totalRevenue->totalRevenue; 
+    }
+    
     
     }
 

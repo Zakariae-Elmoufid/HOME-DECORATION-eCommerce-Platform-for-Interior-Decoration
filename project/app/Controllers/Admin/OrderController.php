@@ -18,7 +18,18 @@ class OrderController {
 
     public function index(){
         $orders = $this->orderRepository->fetchAllOrder();
-        $this->response->render('admin/order/index',  ['orders' => $orders  ]);
+        $totalOrder = $this->orderRepository->countTotal();
+        $completedOrders = $this->orderRepository->completedOrders();
+        $pendingOrders = $this->orderRepository->pendingOrders();
+        $totalRevenue= $this->orderRepository->totalRevenue();
+        
+
+        $this->response->render('admin/order/index',  ['orders' => $orders ,
+        'countOrders' => $totalOrder ,
+        "countCompleted" => $completedOrders,
+        'countPending' => $pendingOrders,
+        'totalRevenue' => $totalRevenue
+     ]);
     }
     
     public function orderDetails(Request $request){
