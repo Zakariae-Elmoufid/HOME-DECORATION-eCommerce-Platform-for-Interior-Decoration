@@ -55,4 +55,6 @@ class WishlistRepository extends BaseRepository {
         return $this->delete($this->table, $id);
     }
 
+
+
 }    

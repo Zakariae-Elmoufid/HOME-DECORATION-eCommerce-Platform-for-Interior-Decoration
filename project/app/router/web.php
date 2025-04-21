@@ -57,6 +57,7 @@ $app->router->get('/admin/orders/details' , [AdminOrderController::class ,'order
 
 $app->router->get('/products/bycategory' ,[HomeController::class , 'getProductsByCategory']);
 
+$app->router->get('/admin/customer','Admin\CustomerController@index');
 
 $app->router->get('/products' , 'HomeController@product');
 $app->router->post('/products/search' , [HomeController::class ,'search']);
