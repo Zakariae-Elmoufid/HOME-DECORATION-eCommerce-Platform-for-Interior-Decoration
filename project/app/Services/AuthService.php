@@ -26,7 +26,7 @@ class AuthService {
 
   
 
-    public function register($data) {
+    public function register($data,$role_id) {
 
         $errors = [];
         $validator = new Validator($data);
@@ -50,9 +50,8 @@ class AuthService {
            
             
         }
-
         
-        $user = $this->userRepository->createUser($data);
+        $user = $this->userRepository->createUser($data,$role_id);
         return $user;
 
     }

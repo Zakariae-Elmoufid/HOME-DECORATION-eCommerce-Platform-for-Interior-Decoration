@@ -12,6 +12,7 @@ use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\CategoryController;
 use App\Controllers\Admin\ProductController;
 use App\Controllers\Admin\OrderController as  AdminOrderController;
+use App\Controllers\Admin\AccessController ;
 use App\Controllers\Customer\CartController;
 use App\Controllers\Customer\AccountController;
 use App\Controllers\Customer\OrderController;
@@ -58,6 +59,12 @@ $app->router->get('/admin/orders/details' , [AdminOrderController::class ,'order
 $app->router->get('/products/bycategory' ,[HomeController::class , 'getProductsByCategory']);
 
 $app->router->get('/admin/customer','Admin\CustomerController@index');
+
+
+$app->router->get('/admin/access', 'Admin\AccessController@index');
+$app->router->get('/admin/access/create', 'Admin\AccessController@create');
+$app->router->post('/admin/access/add', [AccessController::class , 'addAdmin']);
+$app->router->get('/admin/status',[AccessController::class , 'updateStatusAdmin']);
 
 $app->router->get('/products' , 'HomeController@product');
 $app->router->post('/products/search' , [HomeController::class ,'search']);

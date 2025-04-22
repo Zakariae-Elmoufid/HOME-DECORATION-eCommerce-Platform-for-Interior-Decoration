@@ -10,9 +10,8 @@ class UserRepository extends BaseRepository {
 
     private $table = "users";
 
-    public function createUser($data) {
-        $role = new Role(2,"customer");
-        $roleId = $role->getId();
+    public function createUser($data,$roleId,) {
+      
         $userdata = [
             'username' => $data['username'],
             'email' => $data['email'],
