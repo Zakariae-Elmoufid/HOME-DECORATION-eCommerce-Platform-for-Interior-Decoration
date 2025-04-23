@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Core;
-// use Twig\Environment;
-// use Twig\Loader\FilesystemLoader;
-// use Twig\TwigFunction;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+use Twig\TwigFunction;
 
 class Controller {
 

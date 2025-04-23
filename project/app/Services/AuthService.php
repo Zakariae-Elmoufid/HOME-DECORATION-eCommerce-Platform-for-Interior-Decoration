@@ -189,6 +189,31 @@ class AuthService {
     }
 
 
+    public function updateAdmin($id,$data){
+        $errors = [];
+        $validator = new Validator($data);
+
+        $validator->setRules([
+            'username' => 'required|min:8|max:50',
+            'email' => 'required|email',
+        ]);
+
+         
+        $oldData = $data;
+
+        if (!$validator->validate()) {
+            $errors = $validator->getErrors();
+
+            return  [
+                'errors' => $errors,
+                'old' => $oldData
+            ];
+        }
+        return $this->userRepository->updateUser($id,$data);
+   
+    }
+
+
     public function logout(){
         Session::destroy();
         $this->response->redirect('login');

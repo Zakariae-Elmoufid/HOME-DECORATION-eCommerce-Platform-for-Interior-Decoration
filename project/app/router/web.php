@@ -64,6 +64,9 @@ $app->router->get('/admin/customer','Admin\CustomerController@index');
 $app->router->get('/admin/access', 'Admin\AccessController@index');
 $app->router->get('/admin/access/create', 'Admin\AccessController@create');
 $app->router->post('/admin/access/add', [AccessController::class , 'addAdmin']);
+$app->router->get('/admin/access/edit', [AccessController::class ,'edit']);
+$app->router->post('/admin/access/update', [AccessController::class ,'update']);
+$app->router->get('/admin/access/delete', [AccessController::class ,'delete']);
 $app->router->get('/admin/status',[AccessController::class , 'updateStatusAdmin']);
 
 $app->router->get('/products' , 'HomeController@product');

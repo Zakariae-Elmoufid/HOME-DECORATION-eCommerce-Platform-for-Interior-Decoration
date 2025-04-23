@@ -17,7 +17,7 @@ class RoleMiddleware implements MiddlewareInterface {
     public function handle(Request $request): bool
     {
         Session::start();
-        $userRole = Session::get('role'); // Exemple: "admin"
+        $userRole = Session::get('role');
 
         if (!in_array($userRole, $this->allowedRoles)) {
             http_response_code(403);

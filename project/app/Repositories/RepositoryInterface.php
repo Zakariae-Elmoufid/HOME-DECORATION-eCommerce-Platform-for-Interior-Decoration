@@ -1,5 +1,6 @@
 <?php
 namespace App\Repositories;
+
 interface RepositoryInterface{
     public function getAll($table);
     public function findById($table, int $id);

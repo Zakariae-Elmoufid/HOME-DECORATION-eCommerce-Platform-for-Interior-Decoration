@@ -1,20 +1,15 @@
 <?php 
 
 namespace App\Controllers\Admin;
-
-use App\Core\Controller;
 use App\Core\Request;
 use App\Services\CategoryService;
-use App\Core\Response;
 
 class CategoryController extends Controller{
 
     private $CategoryService ;
-    private $response;
 
     public function __construct(){
         $this->CategoryService = new CategoryService() ; 
-        $this->response = new Response();
 
     }
 
@@ -23,6 +18,10 @@ class CategoryController extends Controller{
     }
 
     public function fech(){
+        $currentAdmin = $this->getCurrentAdmin();
+        if (!$currentAdmin->hasPermission('Manage Admins')) {
+            return $this->renderError('Access denied');
+        }
        $result = $this->CategoryService->fechAll();
        return $this->response->jsonEncode($result);
     }

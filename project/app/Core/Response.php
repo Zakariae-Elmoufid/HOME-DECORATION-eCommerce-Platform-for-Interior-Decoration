@@ -45,6 +45,11 @@ class Response
         exit;
     }
 
+    public  function renderError(string $message) {
+        $this->render('error', ['message' => $message]);
+    }
+    
+
     public function jsonEncode($data){
         echo json_encode($data);
         exit;
