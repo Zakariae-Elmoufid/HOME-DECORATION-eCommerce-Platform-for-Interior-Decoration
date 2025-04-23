@@ -24,10 +24,10 @@ class AccessController  extends BaseControllerAdmin{
 
     public function index(){
         try {
-            $currentAdmin = $this->getCurrentAdmin();
-            if (!$currentAdmin->hasPermission('Manage Admins')) {
-                return $this->renderError('Access denied');
-            }
+            // $currentAdmin = $this->getCurrentAdmin();
+            // if (!$currentAdmin->hasPermission('Manage Admins')) {
+            //     return $this->renderError('Access denied');
+            // }
             $admins = $this->adminRepository->fetchAdmin();
             $this->response->render('admin/adminAccess/index', ["admins" => $admins]);
         } catch (Exception $e) {

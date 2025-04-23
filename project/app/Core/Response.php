@@ -48,6 +48,8 @@ class Response
     public  function renderError(string $message) {
         $this->render('error', ['message' => $message]);
     }
+
+
     
 
     public function jsonEncode($data){

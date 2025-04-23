@@ -227,13 +227,11 @@ class ProductRepository extends BaseRepository {
         FROM Product_sizes
         WHERE product_id = $id");
         $product->sizes = $stmt->fetchAll(PDO::FETCH_OBJ);
-   
         return $product;
 
     }
 
     public function updatProduct($id , $data){
-
         $product = [
             "title" => $data["title"],
             "category_id" => $data["category_id"],

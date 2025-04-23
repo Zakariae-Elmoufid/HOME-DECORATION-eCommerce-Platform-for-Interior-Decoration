@@ -6,6 +6,7 @@ class Admin extends User {
 
     private $isSuperAdmin;
     private $permissions = [];
+    private $permissionsId = [];
     private $isActive;
 
     public function __construct($username , $email ,$createdAt , $role ,$password=null , $id=null ,$isActive = null , $isSuperAdmin = false){
@@ -18,8 +19,16 @@ class Admin extends User {
  
 
 
-    public function setPermissions( $permission): void {
+    public function setPermissions( $permission) {
         $this->permissions = array_map('trim', explode(',', $permission));
+    }
+
+    public function setPermissionsIds( $id) {
+        $this->permissions = array_map('trim', explode(',', $id));
+    }
+
+    public function getPermissionIds() {
+       return  $this->permissionsId ;
     }
 
     public function getPermissions(): array {

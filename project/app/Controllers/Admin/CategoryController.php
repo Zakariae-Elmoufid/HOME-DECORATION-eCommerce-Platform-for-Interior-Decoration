@@ -2,30 +2,33 @@
 
 namespace App\Controllers\Admin;
 use App\Core\Request;
+use App\Core\Response;
+use App\Core\Session;
 use App\Services\CategoryService;
 
-class CategoryController extends Controller{
+class CategoryController extends BaseControllerAdmin{
 
-    private $CategoryService ;
+    private $CategoryService;
+    private $response;
 
     public function __construct(){
+        parent::__construct();
         $this->CategoryService = new CategoryService() ; 
-
+        $this->response = new Response();
     }
 
     public function index(){
-        $this->render('admin/categorys/index');
+       
+        $this->response->render('admin/categorys/index');
     }
 
     public function fech(){
-        $currentAdmin = $this->getCurrentAdmin();
-        if (!$currentAdmin->hasPermission('Manage Admins')) {
-            return $this->renderError('Access denied');
-        }
+        
        $result = $this->CategoryService->fechAll();
        return $this->response->jsonEncode($result);
     }
     public function show(Request $request){
+      
         $body = $request->getbody();
         $id = isset($body['id']) ? (int) $body['id'] : null;
         $result = $this->CategoryService->show($id);
@@ -42,6 +45,7 @@ class CategoryController extends Controller{
     }
 
     public function store(Request $request){
+       
         $data = $request->getbody();
         $category = $this->CategoryService->create($data);
 
@@ -56,6 +60,7 @@ class CategoryController extends Controller{
 
     
     public function update(Request $request){
+       
         $data = $request->getBody();
         $result = $this->CategoryService->update($data);
         if($result){

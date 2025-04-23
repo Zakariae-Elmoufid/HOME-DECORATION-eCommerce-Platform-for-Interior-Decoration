@@ -48,7 +48,7 @@ class UserRepository extends BaseRepository {
           }
           
          
-          return ['user' => new User($user->username, $user->email, $user->created_at ,$user->password, $user->role_id ,$user->id)];
+          return ['user' => new User($user->username, $user->email, $user->created_at ,$user->role_id ,$user->password ,$user->id)];
         
     }
 

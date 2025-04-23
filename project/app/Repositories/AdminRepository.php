@@ -25,7 +25,7 @@ class AdminRepository extends BaseRepository{
     public function fetchAdmin(){
         $admin_id = Session::get('id');
         $stmt = $this->query("SELECT u.id,
-        u.username, u.email, u.status,u.created_at ,GROUP_CONCAT(p.name) AS permissions
+        u.username, u.email, u.status,u.created_at ,GROUP_CONCAT(p.name) AS permissions 
         FROM users u
         INNER JOIN admin_permissions ap ON ap.user_id = u.id
         INNER JOIN permissions p ON p.id = ap.permission_id
@@ -38,6 +38,7 @@ class AdminRepository extends BaseRepository{
             
             $adminInstance = new Admin($admin->username, $admin->email,$admin->created_at, 1, null, $admin->id, $admin->status);
             $adminInstance->setPermissions($admin->permissions);
+
             $adminInstances[] = $adminInstance;
         }
 
@@ -87,7 +88,7 @@ class AdminRepository extends BaseRepository{
 
             $adminInstanse = new Admin($admin->username, $admin->email, $admin->created_at, $admin->role_id, null, $admin->id, $admin->status);
             $adminInstanse->setPermissions($admin->permissions);
-            return$adminInstanse ;
+            return $adminInstanse ;
         } catch (Exception $e) {
             
             echo "Error: " . $e->getMessage(); 

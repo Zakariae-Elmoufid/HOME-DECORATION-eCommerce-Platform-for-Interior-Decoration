@@ -1,4 +1,4 @@
-import displayMessage from "./alert.js"
+import {displayMessage } from "./alert.js"
 
 const addSizeBtn = document.getElementById('addSizeBtn');
 const sizesContainer = document.getElementById('sizesContainer');
@@ -149,16 +149,16 @@ const deleteButtons = document.querySelectorAll('.delete-product');
         const productId = this.getAttribute('data-product-id');
         const data = {};
         data.id = productId;
-        fetch(`/products/delete`, {
+        fetch(`/admin/products/delete`, {
           method: 'DELETE',
           body: JSON.stringify(data),
         })
         
         .then(response => {
           if (response.ok) {
-            displayMessage(response.success,"/products");
+            displayMessage(response.message,"/admin/products");
           } else {
-            alert('Failed to delete the product.');
+            displayMessage('Failed to delete the product.',"/admin/products");
           }
         })
       

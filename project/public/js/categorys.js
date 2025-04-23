@@ -22,16 +22,19 @@ formAdd.addEventListener("submit" , async (e) => {
     formData.forEach((value, key) => {
         data[key] = value;
       });
-    const response = await fetch("/categorys/store", {
+    const response = await fetch("/admin/categorys/store", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'X-Requested-With': 'XMLHttpRequest' 
         },
         body: JSON.stringify(data),
     });
     
     const result = await response.json();
-
+    if(result.error_permission) {
+      window.location.href = '/error/permission';
+    }
     let hasErrors = false; 
 
     const inputs = formAdd.querySelectorAll('input');
@@ -66,10 +69,17 @@ function displayMessage(responseMessage){
 
 let categoriesData = []
 const fetchallCategories = async () => {
-    const data = await fetch("allCategorys", {
+    const data = await fetch("/admin/allCategorys", {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        'X-Requested-With': 'XMLHttpRequest' 
+      },
     });
     const response = await data.json();
+    if(response.error_permission) {
+      window.location.href = '/error/permission';
+    }
     categoriesData = response;
     displayCategories();
 
@@ -144,15 +154,20 @@ updatForm.addEventListener("submit", async (e) => {
   });
   data.id = idInput;
 
-  const response = await fetch("/categorys/update", {
+  const response = await fetch("/admin/categorys/update", {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
+      'X-Requested-With': 'XMLHttpRequest'
+
     },
     body: JSON.stringify(data),
 });
 
 const result = await response.json();
+if(result.error_permission) {
+  window.location.href = '/error/permission';
+}
 
 let hasErrors = false; 
 
@@ -182,11 +197,18 @@ let hasErrors = false;
 
  
 const remplireFormUpdate = async (id) => {
-  const data = await fetch(`/categorys/show?id=${id}`, {
+  const data = await fetch(`/admin/categorys/show?id=${id}`, {
     method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      'X-Requested-With': 'XMLHttpRequest' 
+    },
   });
   const response = await data.json();
 
+    if(response.error_permission) {
+      window.location.href = '/error/permission';
+    }
     idInput = document.createElement('input');
     idInput.setAttribute("type","hidden"); 
     idInput.setAttribute("name", "id");                     
@@ -200,15 +222,20 @@ const remplireFormUpdate = async (id) => {
 async function deleteItem(id){
   const data = {};
   data.id = id;
-  const response = await fetch("/categorys/delete", {
+  const response = await fetch("/admin/categorys/delete", {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
+      'X-Requested-With': 'XMLHttpRequest'
     },
-     
+
+
     body: JSON.stringify(data),
   });
   const result = await response.json();
+  if(result.error_permission) {
+    window.location.href = '/error/permission';
+  }
   displayMessage(result.message);
   fetchallCategories();
 };

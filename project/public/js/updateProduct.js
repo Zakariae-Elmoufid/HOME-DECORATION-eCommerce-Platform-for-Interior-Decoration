@@ -1,4 +1,4 @@
-import displayMessage from "./alert.js"
+import {displayMessage} from "./alert.js"
 
 document.addEventListener('DOMContentLoaded', function() {
     const product = window.ProductData || {};
@@ -93,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             coloresContainer.innerHTML = colorsHTML;
-            console.log(`${product.colors.length} couleurs chargées`);
         }
         
         if (product.images && Array.isArray(product.images) && product.images.length > 0) {
@@ -115,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     imagePreviews.insertAdjacentHTML('beforeend', preview);
                 }
             });
-            console.log(`${product.images.length} images chargées`);
         }
     }
 
@@ -238,17 +236,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 existingImages.push(input.value);
             }
         });
+        console.log(existingImages);
         
-       
-        
-            const response = await fetch(`/products/update`, {
+            const response = await fetch(`/admin/products/update`, {
                 method: 'POST',
                 body: formData
             });
             
             const result = await response.json();
             if (result.success) {
-                displayMessage(result.success, "/products");
+                // displayMessage(result.success, "/admin/products");
             }
             if (result.errors) {
                 displayErrors(result.errors);
@@ -263,9 +260,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const preview = `
                     <div class="relative">
                         <img src="${e.target.result}" class="w-32 h-32 object-cover rounded-md">
-                        <button type="button" class="remove-image absolute top-1 right-1 bg-red-500 text-white rounded-full p-1">
+                        <a type="button" class="remove-image absolute top-1 right-1 bg-red-500 text-white rounded-full p-1">
                             <i class="fas fa-times"></i>
-                        </button>
+                        </a>
 
                     </div>
                 `;
