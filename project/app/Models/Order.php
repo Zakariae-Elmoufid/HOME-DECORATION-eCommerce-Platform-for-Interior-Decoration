@@ -35,7 +35,6 @@ class Order {
 
     }
 
-    // Getters & Setters
     public function getId() {
         return $this->id;
     }

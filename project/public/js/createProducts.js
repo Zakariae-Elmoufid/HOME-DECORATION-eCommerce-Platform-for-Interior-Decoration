@@ -1,6 +1,4 @@
-import displayMessage from "./alert.js"
-
-
+import {displayMessage} from "./alert.js"
 
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('productForm');
@@ -120,14 +118,14 @@ document.addEventListener('DOMContentLoaded', function() {
       
        
         
-            const response = await fetch('/products/store', {
+            const response = await fetch('/admin/products/store', {
                 method: 'POST',
                 body: formData
             });
 
             const result = await response.json();
                 if(result.success) {
-                    displayMessage(result.success,"/products");
+                    displayMessage(result.success,"/admin/products");
                 }
                 if (result.errors) {
                     displayErrors(result.errors );

@@ -9,7 +9,6 @@ bars.addEventListener("click", function () {
 });
 
 const furniture = document.getElementById('mobile-furniture-dropdown');
-console.log(furniture);
 furniture.addEventListener('click', function(){
   document.getElementById('furniture-submenu').classList.toggle('hidden');
 })
@@ -41,7 +40,6 @@ searchForms.forEach(form => {
 
     const data = { keyword: query };
     const existingMark = form.querySelector('.clear-button');
-    console.log(existingMark);
     if (existingMark) existingMark.remove();
 
     const markButton = document.createElement('button'); 

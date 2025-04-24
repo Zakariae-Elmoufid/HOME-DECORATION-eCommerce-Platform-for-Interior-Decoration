@@ -10,9 +10,8 @@ class UserRepository extends BaseRepository {
 
     private $table = "users";
 
-    public function createUser($data) {
-        $role = new Role(2,"customer");
-        $roleId = $role->getId();
+    public function createUser($data,$roleId,) {
+      
         $userdata = [
             'username' => $data['username'],
             'email' => $data['email'],
@@ -49,7 +48,7 @@ class UserRepository extends BaseRepository {
           }
           
          
-          return ['user' => new User($user->username, $user->email, $user->created_at ,$user->password, $user->role_id ,$user->id)];
+          return ['user' => new User($user->username, $user->email, $user->created_at ,$user->role_id ,$user->password ,$user->id)];
         
     }
 
@@ -61,6 +60,8 @@ class UserRepository extends BaseRepository {
     public function updateUser($id,$data){
         return $this->update($this->table,$id ,$data);
     }
+    
+
 
    
 }

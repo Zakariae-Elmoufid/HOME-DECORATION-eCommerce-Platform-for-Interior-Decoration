@@ -12,6 +12,7 @@ use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\CategoryController;
 use App\Controllers\Admin\ProductController;
 use App\Controllers\Admin\OrderController as  AdminOrderController;
+use App\Controllers\Admin\AccessController ;
 use App\Controllers\Customer\CartController;
 use App\Controllers\Customer\AccountController;
 use App\Controllers\Customer\OrderController;
@@ -20,6 +21,7 @@ use App\Controllers\Customer\ReviewController;
 use App\Controllers\Customer\WishlistController;
 use App\Controllers\Customer\ProductController  as CustomerProductController;
 
+use App\Middlewares\PermissionMiddleware;
 
 
 
@@ -35,28 +37,66 @@ $app->router->get('/customer',[CustomerController::class,'index']);
 // ->middleware('/customer', AuthMiddleware::class);
 $app->router->get('/logout', 'Auth\LogoutController@logout' );
 
-$app->router->get('/admin' ,'Admin\DashboardController@index');
-$app->router->get('/categorys' ,'Admin\CategoryController@index');
-$app->router->get('/allCategorys' ,'Admin\CategoryController@fech');
+$app->router->get('/error/permission', 'errorController@errorPermission' );
 
-$app->router->post('/categorys/store', [CategoryController::class ,'store']);
-$app->router->get('/categorys/show', [CategoryController::class ,'show']);
-$app->router->patch('/categorys/update',[CategoryController::class ,'update']);
-$app->router->delete('/categorys/delete',[CategoryController::class ,'delete']);
+$app->router->get('/admin' ,'Admin\DashboardController@index');
+$app->router->get('/admin/categorys' ,'Admin\CategoryController@index');
+$app->router->middleware('/admin/categorys', new PermissionMiddleware('Manage Categories'));
+
+$app->router->get('/admin/allCategorys' ,'Admin\CategoryController@fech');
+$app->router->middleware('/admin/allCategorys', new PermissionMiddleware('Manage Categories'));
+
+$app->router->post('/admin/categorys/store', [CategoryController::class ,'store']);
+$app->router->middleware('/admin/categorys/store', new PermissionMiddleware('Manage Categories'));
+
+$app->router->get('/admin/categorys/show', [CategoryController::class ,'show']);
+$app->router->middleware('/admin/categorys/show', new PermissionMiddleware('Manage Categories'));
+
+
+$app->router->patch('/admin/categorys/update',[CategoryController::class ,'update']);
+$app->router->middleware('/admin/categorys/update', new PermissionMiddleware('Manage Categories'));
+
+$app->router->delete('/admin/categorys/delete',[CategoryController::class ,'delete']);
+$app->router->middleware('/admin/categorys/delete', new PermissionMiddleware('Manage Categories'));
+
 
 $app->router->get('/admin/products' ,'Admin\ProductController@index');
-$app->router->get('/products/create' , 'Admin\ProductController@create');
-$app->router->post('/products/store' ,[ProductController::class , 'store']);
-$app->router->get('/products/edit', [ProductController::class ,'getProduct']);
+$app->router->get('/admin/products/create' , 'Admin\ProductController@create');
+$app->router->post('/admin/products/store' ,[ProductController::class , 'store']);
+$app->router->get('/admin/products/edit', [ProductController::class ,'getProduct']);
 $app->router->get('/product', [ProductController::class ,'show']);
-$app->router->post('/products/update', [ProductController::class ,'update']);
-$app->router->delete('/products/delete' ,[ProductController::class , 'delete']);
+$app->router->post('/admin/products/update', [ProductController::class ,'update']);
+$app->router->delete('/admin/products/delete' ,[ProductController::class , 'delete']);
 
 $app->router->get('/admin/orders','Admin\OrderController@index');
 $app->router->get('/admin/orders/details' , [AdminOrderController::class ,'orderDetails']);
 
 $app->router->get('/products/bycategory' ,[HomeController::class , 'getProductsByCategory']);
 
+$app->router->get('/admin/customer','Admin\CustomerController@index');
+
+
+$app->router->get('/admin/access', 'Admin\AccessController@index')->middleware('/admin/access', new  PermissionMiddleware('Manage Admins'));
+
+
+$app->router->get('/admin/access/create', 'Admin\AccessController@create');
+$app->router->middleware('/admin/access/create', new PermissionMiddleware('Manage Admins'));
+
+$app->router->post('/admin/access/add', [AccessController::class, 'addAdmin']);
+$app->router->middleware('/admin/access/add', new PermissionMiddleware('Manage Admins'));
+
+$app->router->get('/admin/access/edit', [AccessController::class, 'edit']);
+$app->router->middleware('/admin/access/edit', new PermissionMiddleware('Manage Admins'));
+
+$app->router->post('/admin/access/update', [AccessController::class, 'update']);
+$app->router->middleware('/admin/access/update', new PermissionMiddleware('Manage Admins'));
+
+$app->router->get('/admin/access/delete', [AccessController::class, 'delete']);
+$app->router->middleware('/admin/access/delete', new PermissionMiddleware('Manage Admins'));
+
+
+$app->router->get('/admin/status', [AccessController::class, 'updateStatusAdmin']);
+$app->router->middleware('/admin/status', new PermissionMiddleware('Manage Admins'));
 
 $app->router->get('/products' , 'HomeController@product');
 $app->router->post('/products/search' , [HomeController::class ,'search']);

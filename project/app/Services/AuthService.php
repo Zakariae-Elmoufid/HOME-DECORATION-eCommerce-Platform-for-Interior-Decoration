@@ -26,7 +26,7 @@ class AuthService {
 
   
 
-    public function register($data) {
+    public function register($data,$role_id) {
 
         $errors = [];
         $validator = new Validator($data);
@@ -50,9 +50,8 @@ class AuthService {
            
             
         }
-
         
-        $user = $this->userRepository->createUser($data);
+        $user = $this->userRepository->createUser($data,$role_id);
         return $user;
 
     }
@@ -187,6 +186,31 @@ class AuthService {
             die('Invalid token');
         }
 
+    }
+
+
+    public function updateAdmin($id,$data){
+        $errors = [];
+        $validator = new Validator($data);
+
+        $validator->setRules([
+            'username' => 'required|min:8|max:50',
+            'email' => 'required|email',
+        ]);
+
+         
+        $oldData = $data;
+
+        if (!$validator->validate()) {
+            $errors = $validator->getErrors();
+
+            return  [
+                'errors' => $errors,
+                'old' => $oldData
+            ];
+        }
+        return $this->userRepository->updateUser($id,$data);
+   
     }
 
 

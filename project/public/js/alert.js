@@ -1,4 +1,4 @@
-export default function displayMessage(responseMessage, url, type = 'success') {
+ function displayMessage(responseMessage, url, type = 'success') {
     const alert = document.getElementById("alert");
     const message = document.getElementById("message");
     const icon = document.getElementById("message-icon");
@@ -44,3 +44,41 @@ export default function displayMessage(responseMessage, url, type = 'success') {
         }
     }, 2000);
 }
+
+
+ function showNotification(parent, message, isSuccess = true) {
+    const notification = document.createElement('div');
+    
+    notification.className = `
+        transition-opacity duration-300 ease-in-out
+        ${isSuccess 
+            ? 'bg-green-100 border border-green-400 text-green-700' 
+            : 'bg-red-100 border border-red-400 text-red-700'
+        }
+        px-4 py-3 rounded mb-4 mt-4 opacity-0
+    `.trim();
+
+    notification.textContent = message;
+    
+    parent.insertBefore(notification, parent.firstChild);
+
+    // Animation fade-in
+    setTimeout(() => {
+        notification.classList.remove('opacity-0');
+        notification.classList.add('opacity-100');
+    }, 10);
+
+    // Animation fade-out + remove
+    setTimeout(() => {
+        notification.classList.remove('opacity-100');
+        notification.classList.add('opacity-0');
+        setTimeout(() => notification.remove(), 300); // match transition duration
+    }, 3000);
+
+    return notification;
+}
+
+export {
+    displayMessage,
+    showNotification
+};

@@ -30,7 +30,7 @@ class RegisterController extends Controller  {
         $data = $request->getBody();
         
         
-        $user = $this->authService->register($data);
+        $user = $this->authService->register($data,2);
         if (is_array($user) && isset($user['errors'])) {
             return $this->render('auth/register', 
             ['errors' => $user['errors'],
@@ -47,8 +47,6 @@ class RegisterController extends Controller  {
             $this->cartServise->associateCartAfterLogin($user->getId());
             $this->response->redirect('customer/account');
         }
-        
-
           $this->redirect('/login');
 
 

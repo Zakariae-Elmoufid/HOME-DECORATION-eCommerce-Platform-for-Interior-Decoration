@@ -8,18 +8,21 @@ use App\Core\Request;
 use App\Core\Response;
 use App\Services\AuthService;
 use App\Services\CartService;
+use App\Repositories\AdminRepository;
 
 class LoginController extends Controller  {
 
   private $authService;
   private $cartServise;
   private $response;
+  private $adminRepository;
 
   public function __construct(){
       $this->authService = new AuthService(); 
       $this->cartServise = new CartService();
       $this->response = new Response;
-  }
+      $this->adminRepository = new AdminRepository;
+    }
 
 public function index(){
   return $this->render('auth/login');
@@ -46,7 +49,12 @@ public function login(Request $request){
     if ($user->getRole() == 2) {
         $this->cartServise->associateCartAfterLogin($user->getId());
         $this->response->redirect('customer/account');
-    } else {
+    } else if($user->getRole() == 1) {  
+        $admin =  $this->adminRepository->getAdminById($user->getId());
+        if ($admin->getStatus() == 0) {
+            return $this->render('auth/login', ['errors' => ['error' => 'Your account is not active.']]);
+        }
+        Session::set('permissions',$admin->getPermissions()); 
         $this->response->redirect('admin');
     }
   

@@ -4,12 +4,13 @@
   Product Management - Admin Dashboard
 {% endblock %}
 
+
 {% block content %}
   <div class="p-6 bg-gray-light flex-1">
     <!-- Page Header -->
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-semibold text-navy">Product Management</h1>
-      <button id="addProductBtn" class="bg-blue hover:bg-blue-dark text-white px-4 py-2 rounded-lg flex items-center"><a href="/products/create"><i class="fas fa-plus mr-2"></i> Add New productModal</a></button>
+      <button id="addProductBtn" class="bg-blue hover:bg-blue-dark text-white px-4 py-2 rounded-lg flex items-center"><a href="/admin/products/create"><i class="fas fa-plus mr-2"></i> Add New product</a></button>
     </div>
 
     <!-- Stats Cards -->
@@ -97,11 +98,12 @@
         </div>
       </div>
     </div>
+<div id="notification-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
     <!-- Product Table -->
     <div class="bg-white rounded-lg shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
+        <table  id="table_products"class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
@@ -112,11 +114,11 @@
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
+          <tbody  id="table_products" class="bg-white divide-y divide-gray-200">
             {% for product in products %}
               <tr>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex items-center">
+                <td  class="px-6 py-4 whitespace-nowrap">
+                  <div id="product" class="flex items-center">
                     {% for image in product.images %}
                       {% if image.is_primary == 1 %}
                         <div class="flex-shrink-0 h-10 w-10">
@@ -174,8 +176,8 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div class="flex space-x-3">
-                    <a href="/products/edit?id={{ product.id }}" class="text-blue hover:text-blue-dark" title="Edit"><i class="fas fa-edit"></i></a>
-                    <a href="/products/images/{{ product.id }}" class="text-blue hover:text-blue-dark" title="Manage Images"><i class="fas fa-images"></i></a>
+                    <a href="/admin/products/edit?id={{ product.id }}" class="text-blue hover:text-blue-dark" title="Edit"><i class="fas fa-edit"></i></a>
+                    <a href="/admin/products/images/{{ product.id }}" class="text-blue hover:text-blue-dark" title="Manage Images"><i class="fas fa-images"></i></a>
                     <button data-product-id="{{ product.id }}" class="delete-product text-red-500 hover:text-red-700" title="Delete"><i class="fas fa-trash-alt"></i></button>
                   </div>
                 </td>

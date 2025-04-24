@@ -58,6 +58,7 @@ class CartController extends Controller {
         'selected_size' => $data['size'] ?? null,
       ];
      $item_id =$this->cartRepository->addCartItem($item);
+ 
       if($item_id){
         $this->response->jsonEncode([ "success" => "item add to cart  succussful" ]);
       }
