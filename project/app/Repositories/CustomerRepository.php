@@ -48,6 +48,23 @@ public function fetchAllCustomer(){
         return $countCustomers->total;
     }
 
+    public function currentMonth(){
+        $stmt = $this->query('SELECT COUNT(*) as month_total     FROM users 
+                WHERE role_id = 2
+                AND MONTH(created_at) = MONTH(CURRENT_DATE())
+                AND YEAR(created_at) = YEAR(CURRENT_DATE())');
+        return $stmt->fetchColumn();        
+    }
+    public function prevMonth(){
+        $stmt = $this->query('SELECT COUNT(*) as month_total     FROM users 
+                WHERE role_id = 2
+                AND MONTH(created_at) = MONTH(DATE_SUB(CURRENT_DATE(),INTERVAL 1 MONTH))
+                AND YEAR(created_at) = YEAR(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))');
+        return $stmt->fetchColumn();        
+    }
+
+
+
 
 
 

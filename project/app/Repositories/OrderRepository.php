@@ -283,6 +283,118 @@ class OrderRepository  extends BaseRepository {
         FROM orders where status  ='completed'");
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
+
+    public function getPopularProducts($period){
+        $startDate = ($period === 'current') ? date('Y-m-01') :  date('Y-m-01', strtotime('first day of last month'));
+       $endDate = ($period === 'current') ? date('Y-m-d') : date('Y-m-t', strtotime('last day of last month'));
+
+       $stmt = $this->query(
+        "SELECT 
+            p.id, 
+            p.title, 
+            p.base_price, 
+            (
+                SELECT pi.image_path 
+                FROM Product_images pi 
+                WHERE pi.product_id = p.id AND pi.is_primary = 1  
+                LIMIT 1
+            ) AS image_path,
+            COUNT(oi.id) AS units_sold,
+            SUM(oi.quantity) AS total_quantity,
+            ROUND(
+                SUM(oi.quantity) * 100.0 / (
+                    SELECT MAX(total) FROM (
+                        SELECT SUM(oi2.quantity) AS total
+                        FROM Products p2
+                        JOIN order_items oi2 ON p2.id = oi2.product_id
+                        JOIN orders o2 ON oi2.order_id = o2.id 
+                        WHERE o2.created_at BETWEEN :start_date AND :end_date
+                        AND o2.status = 'completed'
+                        GROUP BY p2.id
+                    ) AS sub
+                ), 2
+            ) AS percentage
+        FROM 
+            Products p
+        JOIN 
+            order_items oi ON p.id = oi.product_id
+        JOIN 
+            orders o ON oi.order_id = o.id
+        WHERE 
+            o.created_at BETWEEN :start_date AND :end_date
+            AND o.status = 'completed'
+        GROUP BY 
+            p.id, p.title, p.base_price
+        ORDER BY 
+            total_quantity DESC
+        LIMIT 4",
+        ['start_date' => $startDate, 'end_date' => $endDate]
+     );
+    
+        $products = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $products;
+    }
+
+    public function currentMonth(){
+        $stmt = $this->query("SELECT SUM(totalAmount) as month_total  FROM orders 
+                 WHERE status = 'completed' 
+                 AND MONTH(created_at) = MONTH(CURRENT_DATE())
+                 AND YEAR(created_at) = YEAR(CURRENT_DATE())
+                  AND  status = 'completed'"
+                 );
+        return $stmt->fetchColumn() ;        
+    }
+
+    public function prevMonth(){
+        $stmt = $this->query("SELECT SUM(totalAmount) as month_total  FROM orders 
+        WHERE status = 'completed' 
+        AND MONTH(created_at) = MONTH(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+        AND YEAR(created_at) = YEAR(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+         AND  status = 'completed'");
+        return $stmt->fetchColumn();        
+    }
+
+    public function currentMonthOrder(){
+        $stmt = $this->query("SELECT COUNT(*) as month_total FROM orders 
+            WHERE MONTH(created_at) = MONTH(CURRENT_DATE())
+            AND YEAR(created_at) = YEAR(CURRENT_DATE())
+             AND  status = 'completed'");
+        return $stmt->fetchColumn();     
+    }
+
+    public function prevMonthOrder(){
+        $stmt = $this->query("SELECT count(*)  as month_total FROM orders 
+             WHERE MONTH(created_at) = MONTH(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+             AND YEAR(created_at) = YEAR(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+             AND  status = 'completed'");
+        return $stmt->fetchColumn();     
+    }
+
+
+    public function getAvgOrder(){
+        $stmt = $this->query("SELECT AVG(totalAmount) as avg_total FROM orders 
+         where  status = 'completed' ");
+       return $stmt->fetchColumn();     
+    }
+
+    public function currentMonthAvg(){
+        $stmt = $this->query("SELECT AVG(totalAmount) as avg_total FROM orders 
+        WHERE MONTH(created_at) = MONTH(CURRENT_DATE())
+        AND YEAR(created_at) = YEAR(CURRENT_DATE())
+         AND  status = 'completed' ");
+        return $stmt->fetchColumn();   
+    }
+
+    public function prevMonthAvg(){
+        $stmt = $this->query("SELECT AVG(totalAmount)  as avg_total FROM orders 
+        WHERE MONTH(created_at) = MONTH(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+        AND YEAR(created_at) = YEAR(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+        AND  status = 'completed'");
+        return $stmt->fetchColumn();   
+
+    }
+
+
     
     
     }

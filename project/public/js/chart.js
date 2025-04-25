@@ -101,7 +101,6 @@ async function initialize() {
         const defaultYearIndex = result.years.indexOf(currentYear) !== -1 
         ? result.years.indexOf(currentYear) 
         : 0;
-            console.log(defaultYearIndex);
         populateYearSelector(result.years, result.years[defaultYearIndex]);
         renderChart(result.data);
         
@@ -116,4 +115,71 @@ async function initialize() {
 }
     
     initialize();
+
+    
+
+        const periodSelector = document.getElementById('popularProductsPeriod');
+        const productsList = document.getElementById('popularProductsList');
+        
+        if (!periodSelector || !productsList) return;
+        
+        periodSelector.addEventListener('change', async function() {
+            const period = this.value;
+            
+            try {
+                // Show loading state
+                productsList.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin mr-2"></i>Loading...</div>';
+                
+                const response = await fetch(`/admin/dashboard/popular-products?period=${period}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load products data');
+                }
+                
+                const data = await response.json();
+                
+                // Build HTML for products
+                let html = '';
+                
+                if (data.products && data.products.length > 0) {
+                    data.products.forEach(product => {
+                        html += `
+                            <div class="flex items-center">
+                                <img src="/public/uploads/${product.image_path || 'placeholder.jpg'}" 
+                                     alt="${product.name}" 
+                                     class="w-12 h-12 object-cover rounded-md">
+                                <div class="ml-4 flex-1">
+                                    <div class="flex justify-between">
+                                        <h4 class="text-sm font-medium text-navy">${product.name}</h4>
+                                        <span class="text-sm font-semibold text-navy">$${product.price}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                                        <div class="bg-blue h-2 rounded-full" style="width: ${product.percentage}%"></div>
+                                    </div>
+                                    <div class="flex justify-between mt-1">
+                                        <span class="text-xs text-gray-500">${product.units_sold} sold</span>
+                                        <span class="text-xs text-gray-500">${product.percentage}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html = '<div class="text-center py-4 text-gray-500">No product sales data available for this period</div>';
+                }
+                
+                productsList.innerHTML = html;
+            } catch (error) {
+                console.error('Error loading popular products:', error);
+                productsList.innerHTML = '<div class="text-center py-4 text-red-500">Failed to load products data</div>';
+            }
+        });
+
+
+
+
+
+
+
+
 });
