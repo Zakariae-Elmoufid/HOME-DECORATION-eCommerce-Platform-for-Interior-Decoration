@@ -39,7 +39,12 @@ $app->router->get('/logout', 'Auth\LogoutController@logout' );
 
 $app->router->get('/error/permission', 'errorController@errorPermission' );
 
+
+
 $app->router->get('/admin' ,'Admin\DashboardController@index');
+
+$app->router->get('/admin/dashboard/sales-data',[DashboardController::class ,'getSalesData']);
+
 $app->router->get('/admin/categorys' ,'Admin\CategoryController@index');
 $app->router->middleware('/admin/categorys', new PermissionMiddleware('Manage Categories'));
 

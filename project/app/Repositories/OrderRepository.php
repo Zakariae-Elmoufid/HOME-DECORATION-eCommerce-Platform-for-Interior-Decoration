@@ -264,6 +264,25 @@ class OrderRepository  extends BaseRepository {
         $totalRevenue = $stmt->fetch(PDO::FETCH_OBJ); 
         return $totalRevenue->totalRevenue; 
     }
+
+    public function getMonthlyData($year){
+        $stmt = $this->query("SELECT  MONTH(created_at) as month, SUM(totalAmount) as total
+        FROM orders  WHERE YEAR(created_at) = ? AND status = 'completed'
+        GROUP BY MONTH(created_at) 
+        ORDER BY month" ,[$year]);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $monthlyData = array_fill(1, 12, 0);
+        foreach ($results as $row) {
+            $monthlyData[$row['month']] = (float) $row['total'];
+        }
+        return $monthlyData;
+    }
+
+    public function getAvailableYears(){
+        $stmt = $this->query("SELECT DISTINCT YEAR(created_at) as year 
+        FROM orders where status  ='completed'");
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
     
     
     }
