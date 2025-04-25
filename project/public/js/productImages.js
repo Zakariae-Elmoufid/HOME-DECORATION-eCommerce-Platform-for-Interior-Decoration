@@ -43,13 +43,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData();
         formData.append('product_id', productId);
         
-        // Add all selected files
         for (let i = 0; i < imageInput.files.length; i++) {
             formData.append('images[]', imageInput.files[i]);
         }
         
         
-        console.log(formData);
         
         try {
             const response = await fetch('/admin/products/upload-images', {
@@ -74,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Set image as primary
     imageGallery.addEventListener('click', async function(e) {
         const setPrimaryBtn = e.target.closest('.set-primary-btn');
         if (setPrimaryBtn) {
@@ -82,56 +79,40 @@ document.addEventListener('DOMContentLoaded', function() {
             const imageId = imageContainer.dataset.imageId;
             
             try {
-                const response = await fetch('/admin/products/set-primary-image', {
-                    method: 'POST',
+                const response = await fetch(`/admin/products/set-primary-image?id=${imageId}`, {
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        image_id: imageId,
-                        product_id: productId
-                    })
+                    }
                 });
                 
                 const result = await response.json();
                 
                 if (result.success) {
                     displayMessage(result.success, null);
-                    // Reload the page to update primary image
                     setTimeout(() => window.location.reload(), 1500);
                 } else if (result.error) {
                     displayMessage(result.error, null, "error");
                 }
             } catch (error) {
-                console.error("Error setting primary image:", error);
                 displayMessage("An error occurred while setting the primary image", null, "error");
             }
         }
     });
     
-    // Delete image
     imageGallery.addEventListener('click', async function(e) {
         const deleteBtn = e.target.closest('.delete-image-btn');
-        if (deleteBtn) {
-            if (!confirm('Are you sure you want to delete this image? This action cannot be undone.')) {
-                return;
-            }
+       
             
             const imageContainer = deleteBtn.closest('[data-image-id]');
             const imageId = imageContainer.dataset.imageId;
             
             try {
-                const response = await fetch('/admin/products/delete-image', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        image_id: imageId,
-                        product_id: productId
-                    })
+                const response = await fetch(`/admin/products/delete-image?id=${imageId}`, {
+                    method: 'GET',
+    
+                    
                 });
                 
                 const result = await response.json();
@@ -146,6 +127,5 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error("Error deleting image:", error);
                 displayMessage("An error occurred while deleting the image", null, "error");
             }
-        }
+        })
     });
-});

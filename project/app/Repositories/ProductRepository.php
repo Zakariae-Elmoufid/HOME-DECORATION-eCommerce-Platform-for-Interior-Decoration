@@ -397,28 +397,54 @@ class ProductRepository extends BaseRepository {
          return $images;
     }
     
-    public function addImages($data,$product_id) {
+    public function addImages($data, $product_id) {
         $results = [
             'success' => [],
             'errors' => []
         ];
-
+    
         if (!empty($data["images"])) {
-            foreach ($data["images"] as $image) {
+            foreach ($data["images"] as $index => $image) {
                 $imageData = [
                     "is_primary" => $image["is_primary"],
                     "product_id" => $product_id,
                     "image_path" => $image["path"],
                 ];
                 try {
-                $this->insert("Product_images", $imageData);
-                $results['success'][] = "Image index $index add successful.";
+                    $this->insert("Product_images", $imageData);
+                    $results['success'][] = "Image at index $index added successfully.";
                 } catch (Exception $e) {
-                 $results['errors'][] = "error here  $index : " . $e->getMessage();
+                    $results['errors'][] = "Error at index $index: " . $e->getMessage();
                 }
             }
         }
+    
+        return $results;
     }
+    
+
+    public function deleteImage($id){
+      return  $this->delete("Product_images",$id);
+    }
+
+    public function setPrimaryImage($id) {
+        $image = $this->findById("Product_images", $id);
+    
+        if (!$image) {
+            throw new Exception("Image not found.");
+        }
+    
+        $newPriority = ($image->is_primary == 1) ? 0 : 1;
+    
+        $updateSuccess = $this->update("Product_images", $id, ["is_primary" => $newPriority]);
+    
+        if (!$updateSuccess) {
+            throw new Exception("Failed to update status.");
+        }
+    
+        return true;
+    }
+    
     
 }
 

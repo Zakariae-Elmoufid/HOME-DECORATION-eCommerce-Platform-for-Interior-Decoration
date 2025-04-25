@@ -204,7 +204,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Gestion de la suppression des images
     imagePreviews.addEventListener('click', function(e) {
         if (e.target.closest('.remove-image')) {
             const imageDiv = e.target.closest('div[data-image-id]');

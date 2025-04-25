@@ -95,7 +95,28 @@ class ProductController extends Controller {
                 $this->response->renderError($error);
             }
         }
-        $this->jsonEncode(["success" => "Images add successuf "]); 
+        $this->response->jsonEncode(["success" => "Images add successuf "]); 
+    }
+
+    public function deleteImage(Request $request){
+        $data = $request->getbody();
+        $id = $data['id'];
+        $isDelete =$this->productRepository->deleteImage($id);
+        if($isDelete){
+            $this->response->jsonEncode(["success" => "Image delete successuf "]); 
+        }
+        $this->response->jsonEncode(["error" => "this image d'ont delete "]); 
+
+    }
+
+    public function setPrimaryImage(Request $request){
+        $data = $request->getbody();
+        $id = $data['id'];
+        $isUpdate = $this->productRepository->setPrimaryImage($id);
+        if($isUpdate){
+            $this->response->jsonEncode(["success" => "setPrimaryImage is successuf "]); 
+        }
+        $this->response->jsonEncode(["error" => "setPrimaryImage failed  "]); 
     }
 
 

@@ -82,8 +82,12 @@ $app->router->middleware('/admin/products/upload-images', new PermissionMiddlewa
 $app->router->post('/admin/products/update', [ProductController::class ,'update']);
 $app->router->middleware('/admin/products/update', new PermissionMiddleware('Manage Products'));
 
+$app->router->get('/admin/products/set-primary-image' ,[ProductController::class , 'setPrimaryImage']);
+$app->router->get('/admin/products/delete-image' ,[ProductController::class , 'deleteImage']);
+
 $app->router->delete('/admin/products/delete' ,[ProductController::class , 'delete']);
 $app->router->middleware('/admin/products/delete', new PermissionMiddleware('Manage Products'));
+
 
 
 $app->router->get('/product', [ProductController::class ,'show']);

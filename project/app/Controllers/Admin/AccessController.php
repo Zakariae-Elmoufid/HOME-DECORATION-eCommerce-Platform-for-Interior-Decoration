@@ -24,10 +24,6 @@ class AccessController  extends BaseControllerAdmin{
 
     public function index(){
         try {
-            // $currentAdmin = $this->getCurrentAdmin();
-            // if (!$currentAdmin->hasPermission('Manage Admins')) {
-            //     return $this->renderError('Access denied');
-            // }
             $admins = $this->adminRepository->fetchAdmin();
             $this->response->render('admin/adminAccess/index', ["admins" => $admins]);
         } catch (Exception $e) {
@@ -37,10 +33,7 @@ class AccessController  extends BaseControllerAdmin{
 
     public function create(){
         try {
-            $currentAdmin = $this->getCurrentAdmin();
-            if (!$currentAdmin->hasPermission('Manage Admins')) {
-                return $this->response->renderError('Access denied');
-            }
+           
             $permissions = $this->adminRepository->fetchPermission();
             $this->response->render('admin/adminAccess/create', ["permissions" => $permissions]);
         } catch (Exception $e) {
@@ -50,10 +43,7 @@ class AccessController  extends BaseControllerAdmin{
 
     public function addAdmin(Request $request){
         try {
-            $currentAdmin = $this->getCurrentAdmin();
-            if (!$currentAdmin->hasPermission('Manage Admins')) {
-                return $this->response->renderError('Access denied');
-            }
+            
             $data = $request->getbody();
             $permission = $data['permissions'];
             unset($data['permissions']);
@@ -80,10 +70,6 @@ class AccessController  extends BaseControllerAdmin{
 
     public function edit(Request $request){
         try {
-            $currentAdmin = $this->getCurrentAdmin();
-            if (!$currentAdmin->hasPermission('Manage Admins')) {
-                return $this->response->renderError('Access denied');
-            }
             $data = $request->getbody();
             $id = $data['id'];
             $admin = $this->adminRepository->getAdminById($id);
@@ -99,10 +85,6 @@ class AccessController  extends BaseControllerAdmin{
 
     public function update(Request $request){
         try {
-            $currentAdmin = $this->getCurrentAdmin();
-            if (!$currentAdmin->hasPermission('Manage Admins')) {
-                return $this->response->renderError('Access denied');
-            }
             $data = $request->getbody();
             $id = intval($data['id']);
             unset($data['id']);
@@ -130,10 +112,6 @@ class AccessController  extends BaseControllerAdmin{
 
     public function updateStatusAdmin(Request $request){
         try {
-            $currentAdmin = $this->getCurrentAdmin();
-            if (!$currentAdmin->hasPermission('Manage Admins')) {
-                return $this->response->renderError('Access denied');
-            }
             $data = $request->getbody();
             $id = $data['id'];
             $isUpdate = $this->adminRepository->updateStatus($id);
@@ -149,10 +127,6 @@ class AccessController  extends BaseControllerAdmin{
 
     public function delete(Request $request){
         try {
-            $currentAdmin = $this->getCurrentAdmin();
-            if (!$currentAdmin->hasPermission('Manage Admins')) {
-                return $this->response->renderError('Access denied');
-            }
             $data = $request->getbody();
             $id = $data['id'];
             $isDelete = $this->adminRepository->deleteAdmin($id);
