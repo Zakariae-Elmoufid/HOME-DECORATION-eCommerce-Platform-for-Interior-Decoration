@@ -1,0 +1,79 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}
+  Manage Product Images - Admin Dashboard
+{% endblock %}
+
+{% block content %} 
+  {% include "components/alert.twig" %}
+
+  <div class="p-6">
+    <div class="mb-6 flex justify-between items-center">
+      <h2 class="text-2xl font-bold text-navy">Manage Product Images</h2>
+      <a href="/admin/products" class="text-blue hover:text-blue-dark">
+        <i class="fas fa-arrow-left mr-1"></i> Back to Products
+      </a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">      
+      <!-- Image Upload Section -->
+      <form id="uploadImageForm" enctype="multipart/form-data" class="mb-8 p-4 bg-gray-50 rounded-lg">
+        <h4 class="font-medium text-navy mb-3">Add New Images</h4>
+        <input type="hidden" name="product_id" value=" {{images[0].product_id }}">
+         <div class="col-span-2">
+                <h4 class="font-medium text-navy mb-4">Product Images</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  <div class="relative border-2 border-dashed border-gray-300 rounded-md p-4 text-center hover:bg-gray-50 cursor-pointer h-32 flex flex-col items-center justify-center">
+                    <input type="file" name="images[]" id="imageInput" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                    <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                    <p class="text-sm text-gray-500">Click to upload</p>
+                    <p class="text-xs text-gray-400">PNG, JPG (Max 5MB)</p>
+                  </div>
+                </div>
+                <div id="uploadPreview" class="flex flex-wrap gap-4 mt-4"></div>
+              
+              </div>
+          <button type="submit" class="bg-blue hover:bg-blue-dark text-white py-2 mt-10 px-4 rounded-md">
+            <i class="fas fa-upload mr-1"></i> Upload
+          </button>
+      </form>
+
+      <h4 class="font-medium text-navy mb-3">Existing Images</h4>
+      <div id="imageGallery" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4" 
+           data-product-id="{{ images[0].product_id }}" data-product-images="{{images|json_encode }}">
+        {% if images and images|length > 0 %}
+          {% for image in images %}
+            <div class="relative group" data-image-id="{{ image.id }}">
+              <div class="aspect-square overflow-hidden bg-gray-100 rounded-md border border-gray-200">
+                <img src="/public/uploads/{{ image.image_path }}" 
+                     alt="Product image" 
+                     class="w-full h-full object-cover">
+                {% if image.is_primary %}
+                  <div class="absolute bottom-2 left-2 bg-blue text-white text-xs px-2 py-1 rounded">
+                    Primary
+                  </div>
+                {% endif %}
+              </div>
+              <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div class="flex gap-2">
+                    <button type="button" class="set-primary-btn bg-blue hover:bg-blue-dark text-white p-2 rounded">
+                      <i class="fas fa-star"></i>
+                    </button>
+                  <button type="button" class="delete-image-btn bg-red-500 hover:bg-red-700 text-white p-2 rounded">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="col-span-full text-center py-8 text-gray-500">
+            No images available for this product
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <script src="../../../../public/js/productImages.js" type="module"></script>
+{% endblock %}

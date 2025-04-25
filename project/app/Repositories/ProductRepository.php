@@ -57,51 +57,51 @@ class ProductRepository extends BaseRepository {
             FROM Product_images pi 
             WHERE pi.product_id = p.id
         ) AS images
-    FROM 
-        Products p
-    LEFT JOIN 
-        categorys c ON p.category_id = c.id
-    LEFT JOIN 
-        reviews r ON r.product_id = p.id
-    WHERE 
-        p.deleted_at IS NULL
-    GROUP BY 
-        p.id, p.title, p.description, p.stock, p.base_price, p.isAvailable, c.title, c.icon");
-        $data =  $stmt->fetchAll(PDO::FETCH_OBJ);
-        $products = [];
-        
-        foreach($data as $product){
-            $products[] = new Product($product);
-        }
-        return $products;
-       }
+            FROM 
+                Products p
+            LEFT JOIN 
+                categorys c ON p.category_id = c.id
+            LEFT JOIN 
+                reviews r ON r.product_id = p.id
+            WHERE 
+                p.deleted_at IS NULL
+            GROUP BY 
+                p.id, p.title, p.description, p.stock, p.base_price, p.isAvailable, c.title, c.icon");
+                $data =  $stmt->fetchAll(PDO::FETCH_OBJ);
+                $products = [];
+                
+                foreach($data as $product){
+                    $products[] = new Product($product);
+                }
+                return $products;
+            }
 
-       public function selectCategories(){
-        $categories =  $this->getAll("categorys");
-        $data = [];
-        foreach( $categories as $category ){
-           $data = new Category($category);
-        }
-        return $categories;
-       }
+    public function selectCategories(){
+                $categories =  $this->getAll("categorys");
+                $data = [];
+                foreach( $categories as $category ){
+                $data = new Category($category);
+                }
+         return $categories;
+    }
 
-       public function countProducts(){
-        $stmt = $this->query(" SELECT COUNT(id) as total_products FROM $this->table WHERE deleted_at IS NULL");
-        $result = $stmt->fetch(PDO::FETCH_OBJ);
-        return $result->total_products;
-       }
+    public function countProducts(){
+                $stmt = $this->query(" SELECT COUNT(id) as total_products FROM $this->table WHERE deleted_at IS NULL");
+                $result = $stmt->fetch(PDO::FETCH_OBJ);
+                return $result->total_products;
+    }
 
-       public function countAvailable(){
-        $stmt = $this->query(" SELECT COUNT(id) as total_available FROM $this->table WHERE isAvailable = 1 ");
-        $result = $stmt->fetch(PDO::FETCH_OBJ);
-        return $result->total_available;
-       }
+    public function countAvailable(){
+                $stmt = $this->query(" SELECT COUNT(id) as total_available FROM $this->table WHERE isAvailable = 1 ");
+                $result = $stmt->fetch(PDO::FETCH_OBJ);
+                return $result->total_available;
+    }
 
-       public function countCategories(){
-        $stmt = $this->query(" SELECT COUNT(id) as total_categories FROM categorys ");
-        $result = $stmt->fetch(PDO::FETCH_OBJ);
-        return $result->total_categories;
-       }
+    public function countCategories(){
+                $stmt = $this->query(" SELECT COUNT(id) as total_categories FROM categorys ");
+                $result = $stmt->fetch(PDO::FETCH_OBJ);
+                return $result->total_categories;
+    }
 
 
     public function insertProduct($data) {
@@ -252,7 +252,12 @@ class ProductRepository extends BaseRepository {
                     "price_adjustment" =>  $data["size_price_adjustment"][$index],
                     "stock_quantity" => $data["stock_quantity_size"][$index],
                    ];
-                   $this->update("Product_sizes",$data["size_id"][$index],$size);
+                if (!empty($data["size_id"][$index])) {
+                    $this->update("Product_sizes", $data["size_id"][$index], $size);
+                } else {
+                    $this->insert("Product_sizes", $size);
+                }
+                
                 }
             }
             
@@ -263,31 +268,19 @@ class ProductRepository extends BaseRepository {
                         "color_name" => $colorName,
                         "price_adjustment" =>  $data["color_price_adjustment"][$index],
                         "stock_quantity" => $data["stock_quantity_color"][$index],
+                        "color_code" => $data["color_code"][$index],
                     ];
-               $this->update("Product_colors",$data["color_id"][$index],$color);
+                    if(!empty($data["color_id"][$index])){
+                        $this->update("Product_colors",$data["color_id"][$index],$color);
+                    }else{
+                        $this->insert("Product_colors", $color);
+                    }
            }
         }
-
-        if (!empty($data["images"])) {
-            foreach ($data["images"] as $image) {
-                $existingImage = $this->findBy("Product_images", [
-                    "product_id" => $id,
-                    "image_path" => $image["path"]
-                ]);
-                if (empty($existingImage)) {
-                    $newImage = [
-                        "product_id" => $id,
-                        "image_path" => $image["path"],
-                    ];
-                    $this->insert("Product_images", $newImage);
-                } 
-            }
-        }
-        
         return true;
-
-
     }
+
+
 
 
     public function remove($id){
@@ -397,6 +390,62 @@ class ProductRepository extends BaseRepository {
         $productsData = $stmt->fetchAll(PDO::FETCH_OBJ);
         return $productsData;
     }
+
+    public function getImages($product_id){
+         $stmt = $this->query("SELECT * from  Product_images where product_id = ?",[$product_id]);
+         $images = $stmt->fetchAll(PDO::FETCH_OBJ);
+         return $images;
+    }
+    
+    public function addImages($data, $product_id) {
+        $results = [
+            'success' => [],
+            'errors' => []
+        ];
+    
+        if (!empty($data["images"])) {
+            foreach ($data["images"] as $index => $image) {
+                $imageData = [
+                    "is_primary" => $image["is_primary"],
+                    "product_id" => $product_id,
+                    "image_path" => $image["path"],
+                ];
+                try {
+                    $this->insert("Product_images", $imageData);
+                    $results['success'][] = "Image at index $index added successfully.";
+                } catch (Exception $e) {
+                    $results['errors'][] = "Error at index $index: " . $e->getMessage();
+                }
+            }
+        }
+    
+        return $results;
+    }
+    
+
+    public function deleteImage($id){
+      return  $this->delete("Product_images",$id);
+    }
+
+    public function setPrimaryImage($id) {
+        $image = $this->findById("Product_images", $id);
+    
+        if (!$image) {
+            throw new Exception("Image not found.");
+        }
+    
+        $newPriority = ($image->is_primary == 1) ? 0 : 1;
+    
+        $updateSuccess = $this->update("Product_images", $id, ["is_primary" => $newPriority]);
+    
+        if (!$updateSuccess) {
+            throw new Exception("Failed to update status.");
+        }
+    
+        return true;
+    }
+    
+    
 }
 
 

@@ -225,6 +225,7 @@ class ProductService {
     }
 
     public function update($data){
+    
         $errors = [];
         $validator = new Validator($data);
         $validator->setRules([
@@ -346,37 +347,21 @@ class ProductService {
         }
     
 
-        $uploadedImages = [];
-
-        if (!empty($data["images"]["name"])) {
-            foreach ($data["images"]["name"] as $index => $fileName) {
-                $tmpPath = $data["images"]["tmp_name"][$index];
-                $destinationPath = dirname(__DIR__)."/../public/uploads/" . $fileName; 
-                move_uploaded_file($tmpPath, $destinationPath) ;
-                    $uploadedImages[] = [
-                        "path" =>  $fileName,
-                        "is_primary" => $index === 0 ? 1 : 0, 
-                    ];
-            
-                
-            }
-        }
-        
-        $data["images"] = $uploadedImages;
-     
-        $oldData = $data;
-
+   
         $isValid = $isValid && empty($validator->getErrors());
         
         if (!$isValid) {
             $errors = $validator->getErrors();
-            return $this->response->jsonEncode(["errors" => $errors , "oldData" => $oldData ]);
+            return $this->response->jsonEncode(["errors" => $errors ]);
 
-        }
+        }   
+            
             $id = $data["id"];
+            
             $result =$this->productRepository->updatProduct($id ,$data);
             if($result){
-                $this->response->jsonEncode(["success" => "update produt is succusful"]);
+                
+              return  $this->response->jsonEncode(["success" => "update produt is succusful"]);
             }
     }
 

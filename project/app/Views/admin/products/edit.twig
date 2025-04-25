@@ -16,15 +16,16 @@
                 <h4 class="font-medium text-navy mb-4">Basic Information</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
+                    <input type="hidden" name="id" value="{{product.id}}">
                     <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                    <input type="text" id="title" name="title" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                    <input type="text" id="title" value="{{product.title}}" name="title" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue" >
                     <small class="error-message text-red-700 pl-2"></small>
 
                   </div>
                   
                   <div>
                     <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                    <select id="category" name="category_id" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                    <select id="category"  name="category_id" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
                     {% for category in categories %}
                     <option value="{{ category.id}}">{{ category.title}}</option>
                     {% endfor %}
@@ -36,27 +37,27 @@
                   
                   <div class="md:col-span-2">
                     <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea id="description" name="description" rows="3" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue"></textarea>
+                    <textarea id="description" name="description" rows="3" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">{{product.description}}</textarea>
                      <small class="error-message text-red-700 pl-2"></small>
 
                   </div>
                   
                   <div>
                     <label for="base_price" class="block text-sm font-medium text-gray-700 mb-1">Base Price ($)</label>
-                    <input type="number" step="0.01" id="base_price" name="base_price" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                    <input type="number" value="{{product.base_price}}" step="0.01" id="base_price" name="base_price" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
                      <small class="error-message text-red-700 pl-2"></small>
 
                   </div>
                   
                   <div>
                     <label for="stock" class="block text-sm font-medium text-gray-700 mb-1">Stock</label>
-                    <input type="number" id="stock" name="stock" placeholder="." class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                    <input type="number" id="stock" value="{{product.stock}}" name="stock" placeholder="." class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
                         <small class="error-message text-red-700 pl-2"></small>
 
                   </div>
                   
                   <div class="flex items-center mt-4">
-                    <input type="checkbox" id="isAvailable" name="isAvailable" class="h-4 w-4 text-blue focus:ring-blue border-gray-300 rounded">
+                    <input type="checkbox" id="isAvailable" name="isAvailable" value="1" {% if product.isAvailable == 1 %} checked {% endif %} />
                     <label for="isAvailable" class="ml-2 block text-sm text-gray-700">Product Available</label>
                   </div>
                 </div>
@@ -71,23 +72,26 @@
                   </button>
                 </div>
                 
-                <div id="sizesContainer">
-                  <div class="size-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50">
+              <div id="sizesContainer">
+                {%  for   size in product.sizes %}
+                  <div  data-size-id="{{color.size_id}}" class="size-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                         <input type="hidden" name="size_id[{{ loop.index0 }}]" value="{{size.size_id}}">
+
                       <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Size Name</label>
-                        <input type="text" name="size_name[]"  class="size-name w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
-                       <small class="text-red-700 pl-2 error-message" data-field="size_name[0]"></small>
+                        <input type="text" name="size_name[{{ loop.index0 }}]"  value="{{ size.size_name }}" class="size-name w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                       <small class="text-red-700 pl-2 error-message"></small>
                       </div>
                       <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Price Adjustment ($)</label>
-                        <input type="number" step="0.01" name="size_price_adjustment[]" class="size-price w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                        <input type="number" step="0.01" name="size_price_adjustment[{{ loop.index0 }}]" value="{{ size.price_adjustment }}" class="size-price w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
                         <small class="error-message text-red-700 pl-2"></small>
 
                       </div>
                       <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
-                        <input type="number" name="stock_quantity_size[]" class="size-stock w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                        <input type="number" name="stock_quantity_size[{{ loop.index0 }}]"  value="{{ size.stock_quantity }}"class="size-stock w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
                         <small class="error-message text-red-700 pl-2"></small>
 
                       </div>
@@ -96,11 +100,12 @@
                       <i class="fas fa-trash-alt mr-1"></i> Remove
                     </button>
                   </div>
+                {%  endfor %}
                 </div>
               </div>
               
               <!-- Product Colors -->
-              <div class="col-span-2">
+            <div class="col-span-2">
                 <div class="flex justify-between items-center mb-4">
                   <h4 class="font-medium text-navy">Product Colors</h4>
                   <button type="button" id="addColorBtn" class="text-blue hover:text-blue-dark text-sm flex items-center">
@@ -108,27 +113,29 @@
                   </button>
                 </div>
                 
-                <div id="coloresContainer">
-                  <div class="color-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50">
+              <div id="coloresContainer">
+                {% for color in product.colors %}
+                  <div data-color-id="{{color.color_id}}" class="color-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50">
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <input type="hidden" name="color_id[{{ loop.index0 }}]" value="{{color.color_id}}">
                       <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Color Name</label>
-                        <input type="text" name="color_name[]" class="color-name w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Color Name </label>
+                        <input type="text" name="color_name[{{ loop.index0 }}]"  value="{{ color.color_name }}" class="color-name w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
                         <small class="error-message text-red-700 pl-2"></small>
                       </div>
                       <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Color Picker</label>
-                        <input type="color" name="color_code[]" class="color-code w-full h-10 cursor-pointer border border-gray-300 rounded-md">
+                        <input type="color" name="color_code[{{ loop.index0 }}]"  value="{{ color.color_code }}" class="color-code w-full h-10 cursor-pointer border border-gray-300 rounded-md">
                         <small class="error-message text-red-700 pl-2"></small>
                       </div>
                       <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Price Adjustment ($)</label>
-                        <input type="number" step="0.01" name="color_price_adjustment[]" class="color-price w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                        <input type="number" step="0.01" name="color_price_adjustment[{{ loop.index0 }}]"   value="{{ color.price_adjustment}}" class="color-price w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
                         <small class="error-message text-red-700 pl-2"></small>
                       </div>
                       <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
-                        <input type="number" name="stock_quantity_color[]" class="color-stock  w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                        <input type="number" name="stock_quantity_color[{{ loop.index0 }}]" value="{{ color.stock_quantity}}"  class="color-stock  w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
                         <small class="error-message text-red-700 pl-2"></small>
                       </div>
                     </div>
@@ -136,24 +143,10 @@
                       <i class="fas fa-trash-alt mr-1"></i> Remove
                     </button>
                   </div>
+               {%  endfor %}
                 </div>
-              </div>
-              
-              <!-- Product Images -->
-              <div class="col-span-2">
-                <h4 class="font-medium text-navy mb-4">Product Images</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  <div class="relative border-2 border-dashed border-gray-300 rounded-md p-4 text-center hover:bg-gray-50 cursor-pointer h-32 flex flex-col items-center justify-center">
-                    <input type="file" name="images[]" id="imageInput" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                    <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
-                    <p class="text-sm text-gray-500">Click to upload</p>
-                    <p class="text-xs text-gray-400">PNG, JPG (Max 5MB)</p>
-                  </div>
-                </div>
-                <div id="imagePreviews" class="flex flex-wrap gap-4 mt-4"></div>
-              
-              </div>
             </div>
+           
             
             <div class="mt-8 flex justify-end space-x-3">
               <button type="button" id="cancelBtn" class="py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
@@ -163,11 +156,10 @@
                 Save Product
               </button>
             </div>
+
           </form>
         </div>
-        <script>
-          window.ProductData = {{ product|json_encode|raw }};
-      </script>
+       
 
-        <script src="../../../../public/js/updateProduct.js" type="module"></script>
+        <script src="../../../../public/js/update.js" type="module"></script>
 {% endblock %}

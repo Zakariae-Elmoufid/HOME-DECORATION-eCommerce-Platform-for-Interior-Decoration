@@ -8,9 +8,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const addColorBtn = document.getElementById('addColorBtn');
     const sizesContainer = document.getElementById('sizesContainer');
     const coloresContainer = document.getElementById('coloresContainer');
-    const imageInput = document.getElementById('imageInput');
+    const imageInput = document.getElementById('imageInaput');
     const imagePreviews = document.getElementById('imagePreviews');
     
+    document.querySelectorAll('input[name="removed_images[]"]').forEach(el => el.remove());
+
+    imageInput?.addEventListener('change', function(e) {
+        [...e.target.files].forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = `
+                    <div class="relative">
+                        <img src="${e.target.result}" class="w-32 h-32 object-cover rounded-md">
+                        <button type="button" class="remove-image absolute top-1 right-1 bg-red-500 text-white rounded-full p-1">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                imagePreviews.insertAdjacentHTML('beforeend', preview);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
     
     if (product && product.id) {
         document.getElementById('title').value = product.title || '';
@@ -95,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
             coloresContainer.innerHTML = colorsHTML;
         }
         
+        // Gestion des images existantes
         if (product.images && Array.isArray(product.images) && product.images.length > 0) {
             imagePreviews.innerHTML = '';
             
@@ -184,6 +204,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    imagePreviews.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-image')) {
+            const imageDiv = e.target.closest('div[data-image-id]');
+            if (imageDiv) {
+                const imageId = imageDiv.dataset.imageId;
+                if (imageId) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'removed_images[]';
+                    input.value = imageId;
+                    form.appendChild(input);
+                }
+                imageDiv.remove();
+            } else {
+                // image ajoutée localement, juste remove()
+                e.target.closest('.relative')?.remove();
+            }
+        }
+    });
+    
+
+    // Soumission du formulaire
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         clearErrors();
@@ -193,7 +235,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const isAvailable = document.getElementById('isAvailable').checked;
         formData.append('isAvailable', isAvailable ? 1 : 0);
-        
+
+        // Collecte des tailles
         const sizes = [];
         document.querySelectorAll('.size-row').forEach((row, index) => {
             const sizeName = row.querySelector('.size-name')?.value;
@@ -211,6 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
+        // Collecte des couleurs
         const colors = [];
         document.querySelectorAll('.color-row').forEach((row, index) => {
             const colorName = row.querySelector('.color-name')?.value;
@@ -230,14 +274,29 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
+        // Gestion des images existantes
         const existingImages = [];
         document.querySelectorAll('input[name="existing_images[]"]').forEach(input => {
-            if (input.value) {
-                existingImages.push(input.value);
-            }
+            existingImages.push(input.value);
         });
-        console.log(existingImages);
+        formData.append('existing_images', JSON.stringify(existingImages));
         
+        // Gestion des images supprimées
+        const removedImages = [];
+        document.querySelectorAll('input[name="removed_images[]"]').forEach(input => {
+            removedImages.push(input.value);
+        });
+        formData.append('removed_images', JSON.stringify(removedImages));
+        
+        // Gestion des nouvelles images
+        const imageInput = document.getElementById('imageInput');
+        if (imageInput.files.length > 0) {
+            for (let i = 0; i < imageInput.files.length; i++) {
+                formData.append('new_images[]', imageInput.files[i]);
+            }
+        }
+        
+        try {
             const response = await fetch(`/admin/products/update`, {
                 method: 'POST',
                 body: formData
@@ -245,47 +304,26 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const result = await response.json();
             if (result.success) {
-                // displayMessage(result.success, "/admin/products");
+                displayMessage(result.success, "/admin/products");
             }
             if (result.errors) {
                 displayErrors(result.errors);
             }
-       
-    });
-
-    imageInput?.addEventListener('change', function(e) {
-        [...e.target.files].forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = `
-                    <div class="relative">
-                        <img src="${e.target.result}" class="w-32 h-32 object-cover rounded-md">
-                        <a type="button" class="remove-image absolute top-1 right-1 bg-red-500 text-white rounded-full p-1">
-                            <i class="fas fa-times"></i>
-                        </a>
-
-                    </div>
-                `;
-                imagePreviews.insertAdjacentHTML('beforeend', preview);
-            };
-            reader.readAsDataURL(file);
-        });
-    });
-    
-    imagePreviews.addEventListener('click', function(e) {
-        if (e.target.closest('.remove-image')) {
-            e.target.closest('.relative').remove();
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            displayMessage("Une erreur s'est produite lors de la mise à jour du produit.", null, "error");
         }
     });
 
+    // Fonction pour afficher les erreurs de validation
     function displayErrors(errors) {
-        const inputs = document.querySelectorAll("input, textarea");
+        const inputs = document.querySelectorAll("input, textarea, select");
     
-        inputs.forEach((input, index) => {
+        inputs.forEach(input => {
             const inputName = input.getAttribute('name'); 
     
             if (inputName && errors[inputName]) { 
-                const errorMessage = errors[inputName][index] || errors[inputName][0]; 
+                const errorMessage = Array.isArray(errors[inputName]) ? errors[inputName][0] : errors[inputName];
                 
                 if (input.nextElementSibling && input.nextElementSibling.classList.contains('error-message')) {
                     input.nextElementSibling.textContent = errorMessage;
@@ -295,15 +333,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     errorSpan.textContent = errorMessage;
                     input.parentNode.appendChild(errorSpan);
                 }
+                
+                // Ajout d'une classe pour indiquer visuellement l'erreur
+                input.classList.add('border-red-500');
             }
         });
     }
     
+    // Fonction pour effacer les messages d'erreur
     function clearErrors() {
         document.querySelectorAll('.error-message').forEach(el => {
             el.textContent = '';
         });
+        
+        document.querySelectorAll('input, textarea, select').forEach(el => {
+            el.classList.remove('border-red-500');
+        });
     }
-    
-    
 });

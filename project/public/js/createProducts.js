@@ -120,6 +120,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
             const response = await fetch('/admin/products/store', {
                 method: 'POST',
+                headers : {
+                    'X-Requested-With': 'XMLHttpRequest' 
+                },
                 body: formData
             });
 

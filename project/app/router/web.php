@@ -61,12 +61,36 @@ $app->router->middleware('/admin/categorys/delete', new PermissionMiddleware('Ma
 
 
 $app->router->get('/admin/products' ,'Admin\ProductController@index');
+$app->router->middleware('/admin/products', new PermissionMiddleware('Manage Products'));
+
 $app->router->get('/admin/products/create' , 'Admin\ProductController@create');
+$app->router->middleware('/admin/products/create', new PermissionMiddleware('Manage Products'));
+
 $app->router->post('/admin/products/store' ,[ProductController::class , 'store']);
+$app->router->middleware('/admin/products/store', new PermissionMiddleware('Manage Products'));
+
 $app->router->get('/admin/products/edit', [ProductController::class ,'getProduct']);
-$app->router->get('/product', [ProductController::class ,'show']);
+$app->router->middleware('/admin/products/edit', new PermissionMiddleware('Manage Products'));
+
+$app->router->get('/admin/products/images', [ProductController::class ,'editImages']);
+$app->router->middleware('/admin/products/images', new PermissionMiddleware('Manage Products'));
+
+$app->router->post('/admin/products/upload-images' ,[ProductController::class ,'uploadImages']);
+$app->router->middleware('/admin/products/upload-images', new PermissionMiddleware('Manage Products'));
+
+
 $app->router->post('/admin/products/update', [ProductController::class ,'update']);
+$app->router->middleware('/admin/products/update', new PermissionMiddleware('Manage Products'));
+
+$app->router->get('/admin/products/set-primary-image' ,[ProductController::class , 'setPrimaryImage']);
+$app->router->get('/admin/products/delete-image' ,[ProductController::class , 'deleteImage']);
+
 $app->router->delete('/admin/products/delete' ,[ProductController::class , 'delete']);
+$app->router->middleware('/admin/products/delete', new PermissionMiddleware('Manage Products'));
+
+
+
+$app->router->get('/product', [ProductController::class ,'show']);
 
 $app->router->get('/admin/orders','Admin\OrderController@index');
 $app->router->get('/admin/orders/details' , [AdminOrderController::class ,'orderDetails']);
