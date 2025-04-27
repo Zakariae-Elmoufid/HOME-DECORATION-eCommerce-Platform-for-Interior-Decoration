@@ -10,6 +10,7 @@ class ProductRepository extends BaseRepository {
 
     private $table = "Products";
 
+ 
     public function selectAll(){
         $stmt = $this->query("SELECT 
         p.id,
@@ -33,8 +34,8 @@ class ProductRepository extends BaseRepository {
             )
             FROM Product_sizes ps 
             WHERE ps.product_id = p.id
-        ) AS sizes,
-        (
+         ) AS sizes,
+         (
             SELECT JSON_ARRAYAGG(
                 JSON_OBJECT(
                     'id', pc.id,
@@ -45,8 +46,8 @@ class ProductRepository extends BaseRepository {
             )
             FROM Product_colors pc 
             WHERE pc.product_id = p.id
-        ) AS colors,
-        (
+         ) AS colors,
+         (
             SELECT JSON_ARRAYAGG(
                 JSON_OBJECT(
                     'id', pi.id,
@@ -56,7 +57,7 @@ class ProductRepository extends BaseRepository {
             )
             FROM Product_images pi 
             WHERE pi.product_id = p.id
-        ) AS images
+         ) AS images
             FROM 
                 Products p
             LEFT JOIN 
@@ -122,41 +123,27 @@ class ProductRepository extends BaseRepository {
         
         $product["id"] = $product_id;
         
-        $sizes = [];
-        $colors = [];
+        $variant = [];
         $images = [];
         
-        if (!empty($data["size_name"])) {
+        if (!empty($data["size_name"]) || !empty($data["color_name"])) {
             foreach ($data["size_name"] as $index => $sizeName) {
-                $size = [
+                $variant = [
                     "product_id" => $product_id,
                     "size_name" => $sizeName,
-                    "price_adjustment" => $data["size_price_adjustment"][$index],
-                    "stock_quantity" => $data["stock_quantity_size"][$index],
-                ];
-                
-                $this->insert("Product_sizes", $size);
-                
-                $sizes[] = $size;
-            }
-        }
-    
-        if (!empty($data["color_name"])) {
-            foreach ($data["color_name"] as $index => $colorName) {
-                $color = [
-                    "product_id" => $product_id,
-                    "color_name" => $colorName,
+                    "color_name" => $data["color_name"][$index],
                     "color_code" => $data["color_code"][$index],
-                    "price_adjustment" => $data["color_price_adjustment"][$index],
-                    "stock_quantity" => $data["stock_quantity_color"][$index],
+                    "price_adjustment" => $data["price_adjustment"][$index],
+                    "stock_quantity" => $data["stock_quantity"][$index],
                 ];
                 
-                $this->insert("Product_colors", $color);
+                $this->insert("Product_variants", $variant);
                 
-                $colors[] = $color;
+                $variants[] = $variant;
             }
         }
     
+
         if (!empty($data["images"])) {
             foreach ($data["images"] as $image) {
                 $imageData = [
@@ -172,8 +159,7 @@ class ProductRepository extends BaseRepository {
         }
         
         $productData = array_merge($product, [
-            'sizes' => $sizes,
-            'colors' => $colors,
+            'variants' => $variants,
             'images' => $images
         ]);
         

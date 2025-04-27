@@ -212,3 +212,15 @@ CREATE TABLE wishlists (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES Products(id) ON DELETE CASCADE
 );
+
+
+CREATE TABLE Product_variants (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    size_name VARCHAR(50) DEFAULT NULL,  -- Peut être NULL si pas de taille
+    color_name VARCHAR(50) DEFAULT NULL, -- Peut être NULL si pas de couleur
+    color_code VARCHAR(50) DEFAULT NULL, -- Code couleur, utilisé si color_name est défini
+    stock_quantity INT NOT NULL DEFAULT 0,
+    price_adjustment DECIMAL(10, 2) DEFAULT 0.00,  -- Ajustement du prix si nécessaire
+    FOREIGN KEY (product_id) REFERENCES Products(id) ON DELETE CASCADE
+);
