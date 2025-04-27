@@ -29,7 +29,6 @@ class RegisterController extends Controller  {
     public function store(Request $request){ 
         $data = $request->getBody();
         
-        
         $user = $this->authService->register($data,2);
         if (is_array($user) && isset($user['errors'])) {
             return $this->render('auth/register', 

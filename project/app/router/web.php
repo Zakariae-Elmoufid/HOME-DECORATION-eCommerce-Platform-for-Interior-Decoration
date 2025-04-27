@@ -17,6 +17,7 @@ use App\Controllers\Customer\CartController;
 use App\Controllers\Customer\AccountController;
 use App\Controllers\Customer\OrderController;
 use App\Controllers\Customer\PaymentController;
+use App\Controllers\Customer\StripePaymentController;
 use App\Controllers\Customer\ReviewController;
 use App\Controllers\Customer\WishlistController;
 use App\Controllers\Customer\ProductController  as CustomerProductController;
@@ -44,6 +45,8 @@ $app->router->get('/error/permission', 'errorController@errorPermission' );
 $app->router->get('/admin' ,'Admin\DashboardController@index');
 
 $app->router->get('/admin/dashboard/sales-data',[DashboardController::class ,'getSalesData']);
+$app->router->get('/admin/dashboard/popular-products',[DashboardController::class ,'getPopularProducts']);
+
 
 $app->router->get('/admin/categorys' ,'Admin\CategoryController@index');
 $app->router->middleware('/admin/categorys', new PermissionMiddleware('Manage Categories'));
@@ -143,6 +146,12 @@ $app->router->get('/cart/count', [CartController::class , 'countItem']);
 $app->router->get('/order',"Customer\OrderController@index");
 $app->router->get('/order/show',"Customer\OrderController@show");
 $app->router->post('/order/add',[OrderController::class , 'store']);
+
+$app->router->post('/payment/checkout',[StripePaymentController::class,'checkout']);
+$app->router->get('/payment/success',[StripePaymentController::class,'success']);
+$app->router->get('/payment/cancel',[StripePaymentController::class,'cancel']);
+$app->router->post('/stripe/webhook', [StripePaymentController::class, 'webhook']);
+
 $app->router->post('/payment/create-intent',[PaymentController::class , 'createIntent']);
 $app->router->post('/payment/update-status',[PaymentController::class , 'updateStatus']);
 $app->router->get('/payment/confirmation',[PaymentController::class , 'confirmation']);

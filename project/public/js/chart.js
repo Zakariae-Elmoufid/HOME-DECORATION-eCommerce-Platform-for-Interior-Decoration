@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Error loading sales data:', error);
             return { data: Array(12).fill(0), years: [] };
-        }
+        }   
     }
     
     // Function to populate the year selector dropdown

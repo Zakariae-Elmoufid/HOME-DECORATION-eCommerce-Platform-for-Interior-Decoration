@@ -29,7 +29,7 @@ CREATE TABLE permissions (
 );
 
 
-CREATE TABLE user_permissions (
+CREATE TABLE admin_permissions (
     user_id INT,
     permission_id INT,
     PRIMARY KEY (user_id, permission_id),

@@ -15,6 +15,15 @@ class AccountRepository  extends BaseRepository{
         return new UserAddress($addressUser); 
     }
 
+    public function  createUserAddresse($data){
+        $user_addresse_id = $this->insert($this->table,$data);
+        if($user_addresse_id){
+           $data['id'] = $user_addresse_id;
+            $userAddress =   new UserAddress($data);
+            return $userAddress;
+        }
+     }
+
     public function updateAddress($id,$data){
         return $this->update($this->table,$id ,$data);
     }

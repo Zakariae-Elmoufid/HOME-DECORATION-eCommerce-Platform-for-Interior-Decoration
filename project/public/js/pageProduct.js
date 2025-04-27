@@ -1,5 +1,5 @@
 import updateCount from "./main.js "
-import displayMessage from "./alert.js"
+import {displayMessage} from "./alert.js"
 
 
 const mainImage = document.getElementById('main-product-image');

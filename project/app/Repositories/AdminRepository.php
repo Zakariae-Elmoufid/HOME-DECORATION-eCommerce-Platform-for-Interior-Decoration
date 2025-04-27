@@ -3,6 +3,7 @@
 namespace App\Repositories;
 use App\Core\Session;
 use App\Models\Admin;
+use DateTime;
 use PDO;
 
 class AdminRepository extends BaseRepository{
@@ -64,7 +65,6 @@ class AdminRepository extends BaseRepository{
     
             return true;
         } catch (Exception $e) {
-            
             echo "Error: " . $e->getMessage(); 
             return false;
         }
@@ -103,6 +103,22 @@ class AdminRepository extends BaseRepository{
          }
          return true;
 
+    }
+
+    public function updateAdmin($id,$data){
+        $adminData = [
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+            'role_id' => 1  
+        ];
+        
+        $update_admin = $this->update('users',$id,$adminData);
+        $createdAt = new DateTime();
+        if($update_admin){
+            $user = new Admin($data['username'],$data['email'],$createdAt,$data['password'],$adminData['role_id'],$update_admin);
+            return $user;
+        }
     }
 
     public function deleteAdmin($id){

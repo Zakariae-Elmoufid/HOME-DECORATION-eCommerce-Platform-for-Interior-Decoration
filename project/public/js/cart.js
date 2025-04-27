@@ -1,4 +1,4 @@
-import displayMessage from "./alert.js"
+import {displayMessage} from "./alert.js"
 import updateCount from "./main.js "
 
     const cartElement = document.querySelector('[data-id-cart]');

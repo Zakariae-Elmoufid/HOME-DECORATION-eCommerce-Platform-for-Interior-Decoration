@@ -366,10 +366,7 @@ class ProductService {
     }
 
 
-    public function delete($id){
-        $result = $this->productRepository->remove($id);
-        return $this->response->jsonEncode([ "message" => "product susscuful delete" ]);
-    }
+    
 
    
 

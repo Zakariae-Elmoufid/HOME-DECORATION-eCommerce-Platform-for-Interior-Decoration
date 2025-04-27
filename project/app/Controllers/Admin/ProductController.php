@@ -123,8 +123,12 @@ class ProductController extends Controller {
 
     public function delete(Request $request){
         $data = $request->getbody();
-        $id = $data['id'];
-        $this->ProductService->delete($id);
+        $id = $data['id'];        
+        $result = $this->productRepository->remove($id);
+        if($result){
+            $this->response->jsonEncode([ "success" => "product susscuful delete" ]);
+        }
+        $this->response->jsonEncode([ "error" => "delete product failed"]);
     }
 
 }

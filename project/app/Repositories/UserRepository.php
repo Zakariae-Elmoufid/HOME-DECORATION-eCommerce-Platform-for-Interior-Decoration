@@ -57,6 +57,8 @@ class UserRepository extends BaseRepository {
        return  new User($user->username, $user->email,$user->created_at, $user->password, $user->role_id ,$user->id);
     }
 
+   
+
     public function updateUser($id,$data){
         return $this->update($this->table,$id ,$data);
     }

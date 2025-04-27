@@ -52,7 +52,7 @@ public function login(Request $request){
     } else if($user->getRole() == 1) {  
         $admin =  $this->adminRepository->getAdminById($user->getId());
         if ($admin->getStatus() == 0) {
-            return $this->render('auth/login', ['errors' => ['error' => 'Your account is not active.']]);
+            return $this->response->renderError('Your account is not active.');
         }
         Session::set('permissions',$admin->getPermissions()); 
         $this->response->redirect('admin');

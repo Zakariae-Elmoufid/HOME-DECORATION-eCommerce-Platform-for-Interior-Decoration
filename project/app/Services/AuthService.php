@@ -5,6 +5,7 @@ require_once __DIR__.'/../../vendor/autoload.php';
 
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Repositories\AdminRepository;
 use App\Core\Validator;
 use App\Core\Session;
 use App\Core\Response;
@@ -17,17 +18,17 @@ class AuthService {
    
     private $response;
     private $userRepository;
+    private $adminRepository;
 
     public function __construct(){
         $this->response = new Response();
-        $this->userRepository = new UserRepository();
-
+        $this->userRepository = new UserRepository(); 
+        $this->adminRepository  = new AdminRepository();
     }
 
   
 
     public function register($data,$role_id) {
-
         $errors = [];
         $validator = new Validator($data);
 
@@ -196,6 +197,7 @@ class AuthService {
         $validator->setRules([
             'username' => 'required|min:8|max:50',
             'email' => 'required|email',
+            'password' => 'required|min:8|max:100|confirmed:confirm_password'
         ]);
 
          
@@ -207,9 +209,9 @@ class AuthService {
             return  [
                 'errors' => $errors,
                 'old' => $oldData
-            ];
+            ]; 
         }
-        return $this->userRepository->updateUser($id,$data);
+        return $this->adminRepository->updateAdmin($id,$data);
    
     }
 
