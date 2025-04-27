@@ -4,32 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const product = window.ProductData || {};
     const product_id = product.id;
     const form = document.getElementById('productForm');
-    const addSizeBtn = document.getElementById('addSizeBtn');
-    const addColorBtn = document.getElementById('addColorBtn');
-    const sizesContainer = document.getElementById('sizesContainer');
-    const coloresContainer = document.getElementById('coloresContainer');
-    const imageInput = document.getElementById('imageInaput');
-    const imagePreviews = document.getElementById('imagePreviews');
-    
-    document.querySelectorAll('input[name="removed_images[]"]').forEach(el => el.remove());
+    const addVariantBtn = document.getElementById('addVariantBtn');
+    const variantsContainer = document.getElementById('variantsContainer');
 
-    imageInput?.addEventListener('change', function(e) {
-        [...e.target.files].forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = `
-                    <div class="relative">
-                        <img src="${e.target.result}" class="w-32 h-32 object-cover rounded-md">
-                        <button type="button" class="remove-image absolute top-1 right-1 bg-red-500 text-white rounded-full p-1">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `;
-                imagePreviews.insertAdjacentHTML('beforeend', preview);
-            };
-            reader.readAsDataURL(file);
-        });
-    });
+    
+
+
     
     if (product && product.id) {
         document.getElementById('title').value = product.title || '';
@@ -46,154 +26,89 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        if (product.sizes && Array.isArray(product.sizes) && product.sizes.length > 0) {
-            sizesContainer.innerHTML = '';
+        if (product.variants && Array.isArray(product.variants) && product.variants.length > 0) {
+            variantsContainer.innerHTML = '';
             
-            let sizesHTML = '';
-            product.sizes.forEach((size, index) => {
-                sizesHTML += `
-                    <div class="size-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50" data-size-id="${size.size_id || ''}">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Size Name</label>
-                                <input type="text" name="size_name[${index}]" class="size-name w-full border border-gray-300 rounded-md py-2 px-3" value="${size.size_name || ''}">
-                                <input type="hidden" name="size_id[${index}]" value="${size.size_id || ''}">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Price Adjustment ($)</label>
-                                <input type="number" step="0.01" name="size_price_adjustment[${index}]" class="size-price w-full border border-gray-300 rounded-md py-2 px-3" value="${size.price_adjustment || 0}">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
-                                <input type="number" name="stock_quantity_size[${index}]" class="size-stock w-full border border-gray-300 rounded-md py-2 px-3" value="${size.stock_quantity || 0}">
-                            </div>
-                        </div>
-                        <button type="button" class="remove-size mt-3 text-red-500 hover:text-red-700 text-sm">
-                            <i class="fas fa-trash-alt mr-1"></i> Remove
-                        </button>
+            let variantHTML = '';
+            product.variants.forEach((variant, index) => {
+                variantHTML += `
+                                     <div  data-size-id="{{variant.variant_id}}" class="variant-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                         <input type="hidden" name="size_id[${index}]" value="${variant.variant_id  || '' }">
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Size Name</label>
+                        <input type="text" name="size_name[${index}]"   class="size-name w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                      </div>
+                      
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
+                        <input type="text" name="color_name[${index}]"  class="color-name w-full border border-gray-300 rounded-md py-2 px-3">
+                      </div>
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Color Picker</label>
+                        <input type="color"  name="color_code[${index}]"  class="color-code w-full h-10 cursor-pointer border border-gray-300 rounded-md">
+                      </div>
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Price Adjustment ($)</label>
+                        <input type="number" step="0.01" name="price_adjustment[${index}]"  class="price-adjustment w-full border border-gray-300 rounded-md py-2 px-3">
+                      </div>
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
+                        <input type="number" name="stock_quantity[${index}]"  class="stock-quantity w-full border border-gray-300 rounded-md py-2 px-3">
+                      </div>
                     </div>
+                    <button type="button" class="remove-variant mt-3 text-red-500 hover:text-red-700 text-sm">
+                      <i class="fas fa-trash-alt mr-1"></i> Remove
+                    </button>
+                  </div>
                 `;
             });
             
-            sizesContainer.innerHTML = sizesHTML;
+            variantsContainer.innerHTML = variantHTML;
         }
         
-        if (product.colors && Array.isArray(product.colors) && product.colors.length > 0) {
-            coloresContainer.innerHTML = '';
-            
-            let colorsHTML = '';
-            product.colors.forEach((color, index) => {
-                colorsHTML += `
-                    <div class="color-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50" data-color-id="${color.color_id || ''}">
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Color Name</label>
-                                <input type="text" name="color_name[${index}]" class="color-name w-full border border-gray-300 rounded-md py-2 px-3" value="${color.color_name || ''}">
-                                <input type="hidden" name="color_id[${index}]" value="${color.color_id || ''}">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Color Picker</label>
-                                <input type="color" name="color_code[${index}]" class="color-code w-full h-10 cursor-pointer border border-gray-300 rounded-md" value="${color.color_code || '#000000'}">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Price Adjustment ($)</label>
-                                <input type="number" step="0.01" name="color_price_adjustment[${index}]" class="color-price w-full border border-gray-300 rounded-md py-2 px-3" value="${color.price_adjustment || 0}">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
-                                <input type="number" name="stock_quantity_color[${index}]" class="color-stock w-full border border-gray-300 rounded-md py-2 px-3" value="${color.stock_quantity || 0}">
-                            </div>
-                        </div>
-                        <button type="button" class="remove-color mt-3 text-red-500 hover:text-red-700 text-sm">
-                            <i class="fas fa-trash-alt mr-1"></i> Remove
-                        </button>
-                    </div>
-                `;
-            });
-            
-            coloresContainer.innerHTML = colorsHTML;
-        }
+      
         
-        // Gestion des images existantes
-        if (product.images && Array.isArray(product.images) && product.images.length > 0) {
-            imagePreviews.innerHTML = '';
-            
-            product.images.forEach(image => {
-                if (image.image_path) {
-                    const isPrimary = image.is_primary == 1 || image.is_primary === true;
-                    const preview = `
-                        <div class="relative" data-image-id="${image.id || ''}">
-                            <img src="/public/uploads/${image.image_path}" class="w-32 h-32 object-cover rounded-md">
-                            <button type="button" class="remove-image absolute top-1 right-1 bg-red-500 text-white rounded-full p-1">
-                                <i class="fas fa-times"></i>
-                            </button>
-                            ${isPrimary ? '<div class="absolute bottom-1 left-1 bg-blue text-white text-xs px-2 py-1 rounded-md">Primary</div>' : ''}
-                            <input type="hidden" name="existing_images[]" value="${image.id || ''}">
-                        </div>
-                    `;
-                    imagePreviews.insertAdjacentHTML('beforeend', preview);
-                }
-            });
-        }
+     
     }
 
-    addSizeBtn.addEventListener('click', function() {
-        const sizeIndex = document.querySelectorAll('.size-row').length;
-        const sizeHtml = `
-            <div class="size-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
+    addVariantBtn.addEventListener('click', function() {
+        const index = document.querySelectorAll('.variant-row').length;
+        variantHTML += `
+                    <div  data-size-id="{{variant.variant_id}}" class="variant-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                         <input type="hidden" name="size_id[${index}]" value="${variant.variant_id  || '' }">
+                      <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Size Name</label>
-                        <input type="text" name="size_name[${sizeIndex}]" class="size-name w-full border border-gray-300 rounded-md py-2 px-3">
-                        <input type="hidden" name="size_id[${sizeIndex}]" value="">
-                    </div>
-                    <div>
+                        <input type="text" name="size_name[${index}]"   class="size-name w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+                      </div>
+                      
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
+                        <input type="text" name="color_name[${index}]"  class="color-name w-full border border-gray-300 rounded-md py-2 px-3">
+                      </div>
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Color Picker</label>
+                        <input type="color"  name="color_code[${index}]"  class="color-code w-full h-10 cursor-pointer border border-gray-300 rounded-md">
+                      </div>
+                      <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Price Adjustment ($)</label>
-                        <input type="number" step="0.01" name="size_price_adjustment[${sizeIndex}]" class="size-price w-full border border-gray-300 rounded-md py-2 px-3">
-                    </div>
-                    <div>
+                        <input type="number" step="0.01" name="price_adjustment[${index}]"  class="price-adjustment w-full border border-gray-300 rounded-md py-2 px-3">
+                      </div>
+                      <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
-                        <input type="number" name="stock_quantity_size[${sizeIndex}]" class="size-stock w-full border border-gray-300 rounded-md py-2 px-3">
+                        <input type="number" name="stock_quantity[${index}]"  class="stock-quantity w-full border border-gray-300 rounded-md py-2 px-3">
+                      </div>
                     </div>
-                </div>
-                <button type="button" class="remove-size mt-3 text-red-500 hover:text-red-700 text-sm">
-                    <i class="fas fa-trash-alt mr-1"></i> Remove
-                </button>
-            </div>
-        `;
-        sizesContainer.insertAdjacentHTML('beforeend', sizeHtml);
+                    <button type="button" class="remove-variant mt-3 text-red-500 hover:text-red-700 text-sm">
+                      <i class="fas fa-trash-alt mr-1"></i> Remove
+                    </button>
+                  </div>
+                `;
+        variantsContainer.insertAdjacentHTML('beforeend', variantHTML);
     });
 
-    addColorBtn.addEventListener('click', function() {
-        const colorIndex = document.querySelectorAll('.color-row').length;
-        const colorHtml = `
-            <div class="color-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Color Name</label>
-                        <input type="text" name="color_name[${colorIndex}]" class="color-name w-full border border-gray-300 rounded-md py-2 px-3">
-                        <input type="hidden" name="color_id[${colorIndex}]" value="">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Color Picker</label>
-                        <input type="color" name="color_code[${colorIndex}]" class="color-code w-full h-10 cursor-pointer border border-gray-300 rounded-md">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Price Adjustment ($)</label>
-                        <input type="number" step="0.01" name="color_price_adjustment[${colorIndex}]" class="color-price w-full border border-gray-300 rounded-md py-2 px-3">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
-                        <input type="number" name="stock_quantity_color[${colorIndex}]" class="color-stock w-full border border-gray-300 rounded-md py-2 px-3">
-                    </div>
-                </div>
-                <button type="button" class="remove-color mt-3 text-red-500 hover:text-red-700 text-sm">
-                    <i class="fas fa-trash-alt mr-1"></i> Remove
-                </button>
-            </div>
-        `;
-        coloresContainer.insertAdjacentHTML('beforeend', colorHtml);
-    });
+
 
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('remove-size') || e.target.closest('.remove-size')) {

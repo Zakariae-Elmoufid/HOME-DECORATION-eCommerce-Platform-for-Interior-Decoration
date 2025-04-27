@@ -2,18 +2,6 @@ import {displayMessage} from "./alert.js"
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    const showNotification = (parent, message, isSuccess = true) => {
-        const notification = document.createElement('div');
-        notification.className = isSuccess 
-            ? 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 mt-4'
-            : 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 mt-4';
-        notification.textContent = message;
-        
-        parent.insertBefore(notification, parent.firstChild);
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        return notification ;
-    };
 
     const form = document.getElementById('productForm');
     const addVariantBtn = document.getElementById('addVariantBtn');
@@ -82,10 +70,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (totalStock !== parseInt(stockglobal.value)) {
         const message = totalStock < parseInt(stockglobal.value)
-            ? "Veuillez mettre à jour le stock : le stock global est supérieur au total des stocks variants."
-            : "Veuillez mettre à jour le stock : le stock global est inférieur au total des stocks variants.";
-            showNotification(form, message, false);
-        return;
+            ? "Please update the stock: the global stock is greater than the total variant stock."
+            : "Please update the stock: the global stock is less than the total variant stock.";
+            if (stockglobal.nextElementSibling && stockglobal.nextElementSibling.classList.contains('error-message')) {
+                stockglobal.nextElementSibling.textContent = message;
+            } else {
+                const errorSpan = document.createElement('small');
+                errorSpan.classList.add('error-message', 'text-red-500', 'text-sm');
+                errorSpan.textContent = message;
+                stockglobal.parentNode.appendChild(errorSpan);
+            }        return;
     }
         const formData = new FormData(form);
       
@@ -139,12 +133,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayErrors(errors) {
         const inputs = document.querySelectorAll("input ,textarea");
     
+        console.log(errors);
         inputs.forEach((input , index) => {
             const inputName = input.getAttribute('name'); 
           
-    
             if (inputName && errors[inputName]) { 
-                const errorMessage =  errors[inputName][index] ||  errors[inputName][0];
+                const errorMessage =  errors[inputName][0];
                 
                 if (input.nextElementSibling && input.nextElementSibling.classList.contains('error-message')) {
                     input.nextElementSibling.textContent = errorMessage;

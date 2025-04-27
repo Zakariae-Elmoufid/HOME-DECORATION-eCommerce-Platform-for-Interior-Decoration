@@ -196,28 +196,21 @@ class ProductRepository extends BaseRepository {
         $product->images = $stmt->fetchAll(PDO::FETCH_OBJ);
 
         $stmt = $this->query("SELECT 
-        id as color_id,
-        color_code,
+        id as variant_id,
+        size_name,
         color_name,
+        color_code,
         price_adjustment,
         stock_quantity
-        FROM Product_colors
+        FROM Product_variants
         WHERE product_id = $id");
-        $product->colors = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-        $stmt = $this->query("SELECT 
-        id as size_id,
-        size_name,
-        stock_quantity,
-        price_adjustment
-        FROM Product_sizes
-        WHERE product_id = $id");
-        $product->sizes = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $product->variants = $stmt->fetchAll(PDO::FETCH_OBJ);
         return $product;
 
     }
 
     public function updatProduct($id , $data){
+    
         $product = [
             "title" => $data["title"],
             "category_id" => $data["category_id"],
@@ -229,40 +222,25 @@ class ProductRepository extends BaseRepository {
          
          $this->update($this->table,$id, $product );
     
+         if (isset($data['size_name']) && is_array($data['size_name'])) {
         
-        if (!empty($data["size_name"])) {
             foreach ($data["size_name"] as $index => $sizeName) {
                 $size= [
                     "product_id" => $id,
-                    "size_name" => $sizeName,
-                    "price_adjustment" =>  $data["size_price_adjustment"][$index],
-                    "stock_quantity" => $data["stock_quantity_size"][$index],
+                    "size_name" => $sizeName ?? null,
+                    "color_name" =>  $data["color_name"][$index]  ?? null,
+                    "color_code" =>  $data["color_code"][$index]  ?? null,
+                    "price_adjustment" =>  $data["price_adjustment"][$index]  ?? null,
+                    "stock_quantity" => $data["stock_quantity"][$index]  ?? null,
                    ];
-                if (!empty($data["size_id"][$index])) {
-                    $this->update("Product_sizes", $data["size_id"][$index], $size);
+                if (!empty($data["variant_id"][$index])) {
+                    $this->update("Product_variants", $data["variant_id"][$index], $size);
                 } else {
-                    $this->insert("Product_sizes", $size);
+                    $this->insert("Product_variants", $size);
                 }
                 
-                }
             }
-            
-            if (!empty($data["color_name"])) {
-                foreach ($data["color_name"] as $index => $colorName) {
-                    $color= [
-                        "product_id" => $id,
-                        "color_name" => $colorName,
-                        "price_adjustment" =>  $data["color_price_adjustment"][$index],
-                        "stock_quantity" => $data["stock_quantity_color"][$index],
-                        "color_code" => $data["color_code"][$index],
-                    ];
-                    if(!empty($data["color_id"][$index])){
-                        $this->update("Product_colors",$data["color_id"][$index],$color);
-                    }else{
-                        $this->insert("Product_colors", $color);
-                    }
-           }
-        }
+         }    
         return true;
     }
 

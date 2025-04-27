@@ -61,7 +61,6 @@ class ProductController extends Controller {
 
     public function update(Request $request){
         $data = $request->getbody();
-       
         $this->ProductService->update($data);
     }
 
