@@ -78,9 +78,6 @@ class AccountController extends Controller {
      $validator = new Validator($data);
      
      $validator->setRules([
-         'email' => 'required|email',
-         'first_name' => 'required|min:4|max:20',
-         'last_name' => 'required|min:4|max:20',
          'postal_code' => 'required|min:4|numeric',
          'city' => 'required|min:4|max:50|string',
          'country' => 'required|min:2|max:50|string',
@@ -110,6 +107,8 @@ class AccountController extends Controller {
             $this->response->jsonEncode(['success' => "update success"]);
         
     }
+
+    
 
 }
 

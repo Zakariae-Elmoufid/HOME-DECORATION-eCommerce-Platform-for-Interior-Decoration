@@ -70,7 +70,7 @@ class OrderRepository  extends BaseRepository {
         }
         return new Order((array) $orderData);
     }
-
+    
 
     public function getOrderItems(int $orderId){
        $stmt = $this->query("SELECT 
@@ -79,15 +79,17 @@ class OrderRepository  extends BaseRepository {
           oi.product_id as productId ,
           oi.quantity,
           oi.price,
-          oi.selectedColor,
-          oi.selectedSize,
+          oi.variant_id,
           oi.total_item,
           p.title as productTitle,
-          pg.image_path as productImage 
-        from order_items oi
-       inner join Products p on  oi.product_id = p.id
-       inner join Product_images pg on  pg.product_id = p.id AND pg.is_primary = 1
-       where oi.order_id = ?
+          pg.image_path as productImage,
+          pv.size_name, 
+          pv.color_name
+          from order_items oi
+          inner join Products p on  oi.product_id = p.id
+          inner join Product_images pg on  pg.product_id = p.id AND pg.is_primary = 1
+          left join Product_variants pv on oi.variant_id = pv.id
+         where oi.order_id = ?
        ",[$orderId]) ;
        $orderItemsData = $stmt->fetchAll(PDO::FETCH_OBJ);
        if (!$orderItemsData) {
@@ -103,7 +105,20 @@ class OrderRepository  extends BaseRepository {
 
     public function getUserAddressById($userAdderessId){
         $userAddressData  = $this->findById('user_addresses' ,$userAdderessId);
-        $userAddress =   new UserAddress($userAddressData);
+        if (!$userAddressData) {
+            return null; 
+        }
+    
+        $user = $this->findById('users', $userAddressData->user_id);
+    
+        if ($user) {
+            $userAddressData->username = $user->username;
+            $userAddressData->email = $user->email;
+        }
+    
+        $userAddress = new UserAddress($userAddressData);
+    
+        $userAddressData=$user;
         return $userAddress;
     }
 
@@ -135,66 +150,7 @@ class OrderRepository  extends BaseRepository {
     }
 
 
-    public function getOrderStock($orderId)
-    {
-        try {
-            $this->conn->beginTransaction();
-    
-            $stmt = $this->query('SELECT 
-                oi.id,
-                oi.product_id,
-                oi.quantity,
-                oi.selectedColor as selected_color,
-                oi.selectedSize as selected_size,
-                p.stock,
-                ps.id as size_id,
-                ps.stock_quantity as stock_size,
-                ps.size_name,
-                pc.id as color_id,
-                pc.stock_quantity as stock_color,
-                pc.color_name
-                FROM orders o
-                INNER JOIN order_items oi ON o.id = oi.order_id
-                INNER JOIN Products p ON p.id = oi.product_id
-                INNER JOIN Product_sizes ps ON ps.product_id = p.id AND ps.size_name = oi.selectedSize
-                INNER JOIN Product_colors pc ON pc.product_id = p.id AND pc.color_name = oi.selectedColor
-                WHERE oi.order_id = ?', [$orderId]);
-    
-            $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-            foreach ($items as $item) {
-                $quantity = (int) $item['quantity'];
-    
-                if (
-                    $item['stock'] < $quantity ||
-                    $item['stock_size'] < $quantity ||
-                    $item['stock_color'] < $quantity
-                ) {
-                    throw new Exception("Stock insuffisant pour le produit ID: {$item['product_id']}");
-                }
-    
-                $this->update("Products", $item['product_id'], [
-                    "stock" => $item['stock'] - $quantity
-                ]);
-    
-                $this->update("Product_sizes", $item['size_id'], [
-                    "stock_quantity" => $item['stock_size'] - $quantity
-                ]);
-    
-                $this->update("Product_colors", $item['color_id'], [
-                    "stock_quantity" => $item['stock_color'] - $quantity
-                ]);
-            }
-    
-            $this->conn->commit();
-            return true;
-    
-        } catch (Exception $e) {
-            $this->conn->rollBack();
-            echo "Erreur : " . $e->getMessage();
-            return false;
-        }
-    }
+
 
     public function fetchAllOrderItems($orderId) {
         // 1. Get order info
@@ -225,8 +181,7 @@ class OrderRepository  extends BaseRepository {
             oi.product_id AS productId,
             oi.quantity,
             oi.price,
-            oi.selectedColor,
-            oi.selectedSize,
+            oi.variant_id,
             oi.total_item,
           
             p.title AS productTitle,
@@ -264,6 +219,172 @@ class OrderRepository  extends BaseRepository {
         $totalRevenue = $stmt->fetch(PDO::FETCH_OBJ); 
         return $totalRevenue->totalRevenue; 
     }
+
+    public function getMonthlyData($year){
+        $stmt = $this->query("SELECT  MONTH(created_at) as month, SUM(totalAmount) as total
+        FROM orders  WHERE YEAR(created_at) = ? AND status = 'completed'
+        GROUP BY MONTH(created_at) 
+        ORDER BY month" ,[$year]);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $monthlyData = array_fill(1, 12, 0);
+        foreach ($results as $row) {
+            $monthlyData[$row['month']] = (float) $row['total'];
+        }
+        return $monthlyData;
+    }
+
+    public function getAvailableYears(){
+        $stmt = $this->query("SELECT DISTINCT YEAR(created_at) as year 
+        FROM orders where status  ='completed'");
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public function getPopularProducts($period){
+        $startDate = ($period === 'current') ? date('Y-m-01') :  date('Y-m-01', strtotime('first day of last month'));
+       $endDate = ($period === 'current') ? date('Y-m-d') : date('Y-m-t', strtotime('last day of last month'));
+
+       $stmt = $this->query(
+        "SELECT 
+            p.id, 
+            p.title, 
+            p.base_price, 
+            (
+                SELECT pi.image_path 
+                FROM Product_images pi 
+                WHERE pi.product_id = p.id AND pi.is_primary = 1  
+                LIMIT 1
+            ) AS image_path,
+            COUNT(oi.id) AS units_sold,
+            SUM(oi.quantity) AS total_quantity,
+            ROUND(
+                SUM(oi.quantity) * 100.0 / (
+                    SELECT MAX(total) FROM (
+                        SELECT SUM(oi2.quantity) AS total
+                        FROM Products p2
+                        JOIN order_items oi2 ON p2.id = oi2.product_id
+                        JOIN orders o2 ON oi2.order_id = o2.id 
+                        WHERE o2.created_at BETWEEN :start_date AND :end_date
+                        AND o2.status = 'completed'
+                        GROUP BY p2.id
+                    ) AS sub
+                ), 2
+            ) AS percentage
+        FROM 
+            Products p
+        JOIN 
+            order_items oi ON p.id = oi.product_id
+        JOIN 
+            orders o ON oi.order_id = o.id
+        WHERE 
+            o.created_at BETWEEN :start_date AND :end_date
+            AND o.status = 'completed'
+        GROUP BY 
+            p.id, p.title, p.base_price
+        ORDER BY 
+            total_quantity DESC
+        LIMIT 4",
+        ['start_date' => $startDate, 'end_date' => $endDate]
+     );
+    
+        $products = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $products;
+    }
+
+    public function currentMonth(){
+        $stmt = $this->query("SELECT SUM(totalAmount) as month_total  FROM orders 
+                 WHERE status = 'completed' 
+                 AND MONTH(created_at) = MONTH(CURRENT_DATE())
+                 AND YEAR(created_at) = YEAR(CURRENT_DATE())
+                  AND  status = 'completed'"
+                 );
+        return $stmt->fetchColumn() ;        
+    }
+
+    public function prevMonth(){
+        $stmt = $this->query("SELECT SUM(totalAmount) as month_total  FROM orders 
+        WHERE status = 'completed' 
+        AND MONTH(created_at) = MONTH(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+        AND YEAR(created_at) = YEAR(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+         AND  status = 'completed'");
+        return $stmt->fetchColumn();        
+    }
+
+    public function currentMonthOrder(){
+        $stmt = $this->query("SELECT COUNT(*) as month_total FROM orders 
+            WHERE MONTH(created_at) = MONTH(CURRENT_DATE())
+            AND YEAR(created_at) = YEAR(CURRENT_DATE())
+             AND  status = 'completed'");
+        return $stmt->fetchColumn();     
+    }
+
+    public function prevMonthOrder(){
+        $stmt = $this->query("SELECT count(*)  as month_total FROM orders 
+             WHERE MONTH(created_at) = MONTH(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+             AND YEAR(created_at) = YEAR(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+             AND  status = 'completed'");
+        return $stmt->fetchColumn();     
+    }
+
+
+    public function getAvgOrder(){
+        $stmt = $this->query("SELECT AVG(totalAmount) as avg_total FROM orders 
+         where  status = 'completed' ");
+       return $stmt->fetchColumn();     
+    }
+
+    public function currentMonthAvg(){
+        $stmt = $this->query("SELECT AVG(totalAmount) as avg_total FROM orders 
+        WHERE MONTH(created_at) = MONTH(CURRENT_DATE())
+        AND YEAR(created_at) = YEAR(CURRENT_DATE())
+         AND  status = 'completed' ");
+        return $stmt->fetchColumn();   
+    }
+
+    public function prevMonthAvg(){
+        $stmt = $this->query("SELECT AVG(totalAmount)  as avg_total FROM orders 
+        WHERE MONTH(created_at) = MONTH(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+        AND YEAR(created_at) = YEAR(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+        AND  status = 'completed'");
+        return $stmt->fetchColumn();   
+
+    }
+
+
+
+    public function getOrderItemQuantity($order_id){
+      $stmt  = $this->query("SELECT quantity , product_id, variant_id from order_items where order_id = ?",[$order_id]);
+      return $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    }
+
+    public function currentStock($variant_id){
+        $stmt = $this->query("SELECT stock_quantity FROM Product_variants WHERE id = ?", [$variant_id]);
+        return   $stmt->fetchColumn();
+    }
+
+    public function updateQuantity($variant_id,$data){
+      return  $this->update('Product_variants',$variant_id,$data);
+    }
+
+    public function calculateTotalVariantStock($product_id){
+    $stmt = $this->query(
+        "SELECT SUM(stock_quantity) as total_stock 
+         FROM Product_variants 
+         WHERE product_id = ?", 
+        [$product_id]
+    );
+
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+    return $result ? (int) $result->total_stock: 0;
+    }
+
+    public function updateProductStock($id,$data){
+       return $this->update('Products',$id,$data);
+    }
+    
+
+
     
     
     }

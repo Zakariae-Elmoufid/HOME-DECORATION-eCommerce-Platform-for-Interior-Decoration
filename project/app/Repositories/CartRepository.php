@@ -46,22 +46,21 @@ class CartRepository  extends BaseRepository{
         ci.total_item,
         ci.id AS cart_item_id, 
         ci.quantity, 
+        ci.variant_id,
         p.id AS product_id, 
         p.title AS product_title, 
         ci.price AS product_price, 
         p.stock,
         pi.image_path AS product_image,
-        pc.color_name,
-        pc.stock_quantity as  color_stock,
-        ps.size_name ,
-        ps.stock_quantity As size_stock
+        pv.color_name,
+        pv.size_name ,
+        pv.stock_quantity 
 
          from carts c
          inner join cart_items  ci on ci.cart_id = c.id
          inner join Products  p on ci.product_id = p.id
-         left join Product_images  pi on pi.product_id  =  p.id AND pi.is_primary = 1 
-         left join Product_colors  pc on pc.id  =  ci.selected_color 
-         left join Product_sizes  ps on ps.id  =  ci.selected_size 
+         left join Product_images  pi on pi.product_id  =  p.id AND pi.is_primary = 1  
+         left join Product_variants  pv on pv.id  =  ci.variant_id 
         
          where user_id = ? or session_id = ? ',[$id,$id]);
          $data =  $stmt->fetchAll(PDO::FETCH_ASSOC); 

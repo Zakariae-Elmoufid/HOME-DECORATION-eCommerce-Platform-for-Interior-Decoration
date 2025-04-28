@@ -5,6 +5,8 @@ use App\Core\Request;
 use App\Core\Response;
 use App\Services\AuthService;
 use App\Core\Session;
+use App\Repositories\AdminRepository;
+
 use Exception;
 Session::start();
 
@@ -14,7 +16,7 @@ class AccessController  extends BaseControllerAdmin{
     private $response;
 
     public function __construct(){
-        parent::__construct();
+        $this->adminRepository = new AdminRepository();
         $this->response = new Response();
         $this->authService = new AuthService();
     }
@@ -90,8 +92,8 @@ class AccessController  extends BaseControllerAdmin{
             unset($data['id']);
             $permission = $data['permissions'];
             unset($data['permissions']);
+            
             $permissions = $this->adminRepository->fetchPermission();
-
             $admin = $this->authService->updateAdmin($id, $data);
 
             if (is_array($admin) && isset($admin['errors'])) {
@@ -101,7 +103,6 @@ class AccessController  extends BaseControllerAdmin{
                     'permissions' => $permissions
                 ]);
             }
-
                 $this->adminRepository->updateAdminPermession($id ,$permission);
                 $this->response->redirect('/admin/access');
              

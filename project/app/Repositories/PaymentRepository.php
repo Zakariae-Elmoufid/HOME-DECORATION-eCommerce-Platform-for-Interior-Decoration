@@ -1,11 +1,8 @@
 <?php
 
-namespace App\repositories;
-
-use App\Core\DatabaseConnection;
+namespace App\Repositories;
 use App\Models\Payment;
 use PDO;
-
 class PaymentRepository  extends BaseRepository{
     
     private $table = "payments";
@@ -19,15 +16,27 @@ class PaymentRepository  extends BaseRepository{
           return $payment;
     }
 
-    public function getById(int $paymentId): ?Payment {
-        $paymentData  = $this->findById($this->table ,$paymentId);
-
-        if (!$paymentData) {
-            return null;
-        }
-        
-        return new Payment($paymentData);
+    public function findByStripeSessionId($session_id){
+      $stmt = $this->query("SELECT * from payments where stripe_session_id = ?",[$session_id]);
+      $payment_data =  $stmt->fetch(PDO::FETCH_ASSOC);
+      $payment =  new Payment($payment_data);
+      return $payment;
     }
+
+    public function updatePayment($id,$data){
+      return  $this->update($this->table,$id,$data);
+    }
+    
+
+//     public function getById(int $paymentId): ?Payment {
+//         $paymentData  = $this->findById($this->table ,$paymentId);
+
+//         if (!$paymentData) {
+//             return null;
+//         }
+        
+//         return new Payment($paymentData);
+//     }
 
     public function getByOrderId(int $orderId) {
         $stmt = $this->query("SELECT * FROM payments WHERE order_id = ?" , [$orderId]);
@@ -43,42 +52,42 @@ class PaymentRepository  extends BaseRepository{
     
     
 
-    public function getByPaymentIntentId(string $paymentIntentId): ?Payment {
-        $paymentData  =  $this->findBy($this->table , ['payment_intent_id' => $paymentIntentId]);        
-        if (!$paymentData) {
-            return null;
-        }
+//     public function getByPaymentIntentId(string $paymentIntentId): ?Payment {
+//         $paymentData  =  $this->findBy($this->table , ['payment_intent_id' => $paymentIntentId]);        
+//         if (!$paymentData) {
+//             return null;
+//         }
         
-        return new Payment($paymentData);
-    }
+//         return new Payment($paymentData);
+//     }
 
-    // public function update(int $paymentId, array $data): bool {
-    //     try {
-    //         $this->db->beginTransaction();
+//     // public function update(int $paymentId, array $data): bool {
+//     //     try {
+//     //         $this->db->beginTransaction();
             
-    //         $updateFields = [];
-    //         $bindValues = [':id' => $paymentId];
+//     //         $updateFields = [];
+//     //         $bindValues = [':id' => $paymentId];
             
-    //         foreach ($data as $field => $value) {
-    //             $updateFields[] = "$field = :$field";
-    //             $bindValues[":$field"] = $value;
-    //         }
+//     //         foreach ($data as $field => $value) {
+//     //             $updateFields[] = "$field = :$field";
+//     //             $bindValues[":$field"] = $value;
+//     //         }
             
-    //         $sql = "UPDATE payments SET " . implode(', ', $updateFields) . " WHERE id = :id";
+//     //         $sql = "UPDATE payments SET " . implode(', ', $updateFields) . " WHERE id = :id";
             
-    //         $stmt = $this->db->prepare($sql);
+//     //         $stmt = $this->db->prepare($sql);
             
-    //         foreach ($bindValues as $param => $value) {
-    //             $stmt->bindValue($param, $value);
-    //         }
+//     //         foreach ($bindValues as $param => $value) {
+//     //             $stmt->bindValue($param, $value);
+//     //         }
             
-    //         $result = $stmt->execute();
-    //         $this->db->commit();
+//     //         $result = $stmt->execute();
+//     //         $this->db->commit();
             
-    //         return $result;
-    //     } catch (\Exception $e) {
-    //         $this->db->rollBack();
-    //         throw $e;
-    //     }
-    // }
+//     //         return $result;
+//     //     } catch (\Exception $e) {
+//     //         $this->db->rollBack();
+//     //         throw $e;
+//     //     }
+//     // }
 }

@@ -42,6 +42,7 @@ class ProductController extends Controller {
         $body = $request->getbody();
         $id = isset($body['id']) ? (int) $body['id'] : null;
         $data = $this->ProductService->show($id);
+        dump($data);
         $this->response->render('customer/pageProduct', [
         "product" => $data['product'] ,
         'reviews' => $data['reviews'] , 
@@ -61,7 +62,6 @@ class ProductController extends Controller {
 
     public function update(Request $request){
         $data = $request->getbody();
-       
         $this->ProductService->update($data);
     }
 
@@ -123,8 +123,12 @@ class ProductController extends Controller {
 
     public function delete(Request $request){
         $data = $request->getbody();
-        $id = $data['id'];
-        $this->ProductService->delete($id);
+        $id = $data['id'];        
+        $result = $this->productRepository->remove($id);
+        if($result){
+            $this->response->jsonEncode([ "success" => "product susscuful delete" ]);
+        }
+        $this->response->jsonEncode([ "error" => "delete product failed"]);
     }
 
 }

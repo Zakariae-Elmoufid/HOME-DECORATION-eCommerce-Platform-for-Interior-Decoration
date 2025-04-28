@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-class UserAddress {
+class UserAddress extends User{
     private $id;
-    private $user_id;
-    private $first_name;
-    private $last_name;
-    private $email;
     private $phone;
     private $address;
     private $city;
@@ -18,12 +14,8 @@ class UserAddress {
 
     public function __construct($data = []) {
         $dataArray = is_object($data) ? get_object_vars($data) : $data;
-
+        parent::__construct($dataArray['username'],$dataArray['email'],$dataArray['created_at'],2,null,$dataArray['user_id']);
         $this->id = $dataArray['id'] ?? null;
-        $this->user_id = $dataArray['user_id'] ?? null;
-        $this->first_name = $dataArray['first_name'] ?? null;
-        $this->last_name = $dataArray['last_name'] ?? null;
-        $this->email = $dataArray['email'] ?? null;
         $this->phone = $dataArray['phone'] ?? null;
         $this->address = $dataArray['address'] ?? null;
         $this->city = $dataArray['city'] ?? null;
@@ -33,43 +25,15 @@ class UserAddress {
         $this->updated_at = $dataArray['updated_at'] ?? date('Y-m-d H:i:s');
     }
 
-    public function toArray() {
-        return [
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'address' => $this->address,
-            'city' => $this->city,
-            'postal_code' => $this->postal_code,
-            'country' => $this->country,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
-        ];
-    }
-
+   
     public function getId() {
         return $this->id;
     }
 
-    public function getUserId() {
-        return $this->user_id;
-    }
+    
 
 
-    public function getFirstName() {
-        return $this->first_name;
-    }
 
-    public function getLastName() {
-        return $this->last_name;
-    }
-
-    public function getEmail() {
-        return $this->email;
-    }
 
     public function getPhone() {
         return $this->phone;

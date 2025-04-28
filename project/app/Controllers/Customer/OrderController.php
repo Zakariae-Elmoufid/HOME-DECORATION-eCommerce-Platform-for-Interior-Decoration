@@ -4,6 +4,7 @@ namespace App\Controllers\Customer;
 
 use App\repositories\OrderRepository;
 use App\repositories\CartRepository;
+use App\repositories\AccountRepository;
 use App\Services\OrderServise;
 use App\Services\CartService;
 use App\Core\controller;
@@ -17,12 +18,14 @@ class OrderController extends Controller {
     private $cartService ;
     private $orderRepository ;
     private $cartRepository ;
+    private $accountRepository;
     private $response ;
 
     public function __construct(){
-        $this->orderService = new OrderServise;
+        // $this->orderService = new OrderServise;
         $this->orderRepository = new OrderRepository;
         $this->cartRepository = new CartRepository();
+        $this->accountRepository = new AccountRepository();
         $this->cartService = new CartService();
         $this->response = new Response;
         
@@ -39,7 +42,8 @@ class OrderController extends Controller {
         }
 
         $items = $this->cartRepository->getcartItems($user_id, $guest_id);
-        $this->response->render('customer/order',["items" => $items]);
+        $user_addresse = $this->accountRepository->getUserAdress($user_id);
+        $this->response->render('customer/order',["items" => $items , "user_addresse" => $user_addresse]);
     }
 
 
@@ -58,9 +62,6 @@ class OrderController extends Controller {
 
         $user_addresse = $this->orderRepository->createUserAddresse([
             'user_id' => $user_id,
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
             'phone' => $data['phone'],
             'address' => $data['address'],
             'city' => $data['city'],
@@ -101,7 +102,7 @@ class OrderController extends Controller {
                     'product_id' => $cartItem->getProductId(),
                     'price' => $cartItem->getProductPrice(),
                     'quantity' => $cartItem->getQuantity(),
-                    'selectedColor' => $cartItem->getProductColor(),
+                    'selectedColor' => $cartItem->getVariantId(),
                     'selectedSize' => $cartItem->getProductSize(),
                     'total_item' => $cartItem->getTotalItems()
                 ]);

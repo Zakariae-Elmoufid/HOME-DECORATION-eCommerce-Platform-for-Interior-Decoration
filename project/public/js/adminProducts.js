@@ -151,14 +151,18 @@ const deleteButtons = document.querySelectorAll('.delete-product');
         data.id = productId;
         fetch(`/admin/products/delete`, {
           method: 'DELETE',
+          headers: {
+            "Content-Type": "application/json",
+            'X-Requested-With': 'XMLHttpRequest' 
+          },
           body: JSON.stringify(data),
         })
-        
         .then(response => {
+          console.log(response);
           if (response.ok) {
-            displayMessage(response.message,"/admin/products");
+            displayMessage(response.success,"/admin/products");
           } else {
-            displayMessage('Failed to delete the product.',"/admin/products");
+            displayMessage('Failed to delete the product.',"/admin/products",false);
           }
         })
       

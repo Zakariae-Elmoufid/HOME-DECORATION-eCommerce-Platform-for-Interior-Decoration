@@ -23,8 +23,8 @@ class OrderItem {
         $this->productId = $dataArray['productId'] ?? null;
         $this->quantity = $dataArray['quantity'] ?? 1;
         $this->price = $dataArray['price'] ?? 0;
-        $this->selectedColor = $dataArray['selectedColor'] ?? null;
-        $this->selectedSize = $dataArray['selectedSize'] ?? null;
+        $this->selectedColor = $dataArray['color_name'] ?? null;
+        $this->selectedSize = $dataArray['size_name'] ?? null;
         $this->productTitle = $dataArray['productTitle'] ?? null;
         $this->productImage = $dataArray['productImage'] ?? null;
         $this->total_item = $dataArray['total_item'] ?? null;

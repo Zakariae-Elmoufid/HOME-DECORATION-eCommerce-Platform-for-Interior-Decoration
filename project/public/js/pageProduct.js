@@ -1,5 +1,5 @@
 import updateCount from "./main.js "
-import displayMessage from "./alert.js"
+import {displayMessage} from "./alert.js"
 
 
 const mainImage = document.getElementById('main-product-image');
@@ -53,13 +53,13 @@ const decreaseBtn = document.getElementById('decrease-quantity');
     const remainingStock = maxStock - parseInt(quantityInput.value);
     stockInfo.textContent = `${remainingStock} units available`;
   }
-  const sizeOptions = document.querySelectorAll('input[name="size"]');
-  let selectedSize = null;
+  const variantOptions = document.querySelectorAll('input[name="variant"]');
+  let selected = null;
 
-  sizeOptions.forEach(option => {
+  variantOptions.forEach(option => {
     option.addEventListener('change', function() {
-        selectedSize = this.value;
-        document.querySelectorAll('.size-option span').forEach(span => {
+        selected = this.value;
+        document.querySelectorAll('.variant-option span').forEach(span => {
             span.classList.remove('border-gold', 'bg-gold-light');
             span.classList.add('border-gray-300');
           });
@@ -72,30 +72,7 @@ const decreaseBtn = document.getElementById('decrease-quantity');
   });
 
 
-   // Color options
-   const colorOptions = document.querySelectorAll('input[name="color"]');
-   let selectedColor = null;
-   
-     
-  colorOptions.forEach(option => {
-    option.addEventListener('change', function() {
-      selectedColor = this.value;
-      
-      // Update visual selection
-      document.querySelectorAll('.color-option span').forEach(span => {
-        span.classList.remove('border-gold');
-        span.classList.add('border-gray-300');
-        span.querySelector('.color-check')?.classList.add('hidden');
-      });
-      
-      this.parentElement.querySelector('span').classList.remove('border-gray-300');
-      this.parentElement.querySelector('span').classList.add('border-gold');
-      this.parentElement.querySelector('.color-check')?.classList.remove('hidden');
-      
-      updatePrice();
-      updateAvailableStock();
-    });
-  });
+  
 
   function updatePrice(){
     const basePrice = document.getElementById('current-price');
@@ -104,29 +81,21 @@ const decreaseBtn = document.getElementById('decrease-quantity');
 
     let totalPrice = price  * quantity;
 
-    if(selectedSize){
-        const selectedSizeElement = document.querySelector(`input[name="size"][value="${selectedSize}"]`);
-        if (selectedSizeElement) {
-            const priceAdjustment = parseFloat(selectedSizeElement.dataset.priceAdjustment);
+    if(selected){
+        const selectedElement = document.querySelector(`input[name="variant"][value="${selected}"]`);
+        if (selectedElement) {
+            const priceAdjustment = parseFloat(selectedElement.dataset.priceAdjustment);
             totalPrice += priceAdjustment * quantity;
         }
     }
 
-    if(selectedColor){
-      const selectedColorElement = document.querySelector(`input[name="color"][value="${selectedColor}"]`);
-      if(selectedColorElement){
-        const priceAdjustment = parseFloat(selectedColorElement.dataset.priceAdjustment);
-        totalPrice += priceAdjustment * quantity;
-      }
-    }
-
+   
 
 
     const currentPriceElement = document.getElementById('current-price');
     currentPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
     let base_perice = document.querySelector('[name="price"]');
     base_perice.value = totalPrice / quantity;
-    console.log(base_perice.value);
 
     const TotalInput = document.createElement('input');
     TotalInput.setAttribute("value",totalPrice.toFixed(2));
@@ -137,32 +106,20 @@ const decreaseBtn = document.getElementById('decrease-quantity');
 
 
 
-    // Update stock info based on selected options
     function updateAvailableStock() {
         let availableStock = maxStock;
-        
-        // Check stock for selected size
-        if (selectedSize) {
-          const selectedSizeElement = document.querySelector(`input[name="size"][value="${selectedSize}"]`);
-          if (selectedSizeElement) {
-            const sizeStock = parseInt(selectedSizeElement.dataset.stock);
-            if (sizeStock < availableStock) {
-              availableStock = sizeStock;
+               if (selected) {
+          const selectedElement = document.querySelector(`input[name="variant"][value="${selected}"]`);
+          if (selectedElement) {
+            const variantStock = parseInt(selectedElement.dataset.stock);
+            console.log(variantStock);
+            if (variantStock < availableStock) {
+              availableStock = variantStock;
             }
           }
         }
         
-        // Check stock for selected color
-        if (selectedColor) {
-          const selectedColorElement = document.querySelector(`input[name="color"][value="${selectedColor}"]`);
-          if (selectedColorElement) {
-            const colorStock = parseInt(selectedColorElement.dataset.stock);
-            if (colorStock < availableStock) {
-              availableStock = colorStock;
-            }
-          }
-        }
-            // Update max quantity and stock info
+      
     quantityInput.setAttribute('max', availableStock);
     if (parseInt(quantityInput.value) > availableStock) {
       quantityInput.value = availableStock;
@@ -171,7 +128,6 @@ const decreaseBtn = document.getElementById('decrease-quantity');
     const stockInfo = document.getElementById('stock-info');
     stockInfo.textContent = `${availableStock} units available`;
     
-    // Update add to cart button state
     const addToCartBtn = document.getElementById('add-to-cart-btn');
     if (availableStock <= 0) {
       addToCartBtn.disabled = true;
@@ -187,14 +143,14 @@ const decreaseBtn = document.getElementById('decrease-quantity');
   }
 
   const formCart = document.getElementById('product-options-form');
-
   formCart.addEventListener('submit' ,  async (e) => {
-      e.preventDefault();
-      const formData = new FormData(formCart);
-      const data = {};
-      formData.forEach((value, key) => {
-          data[key] = value;
-       });
+    e.preventDefault();
+    const formData = new FormData(formCart);
+    const data = {};
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
+    
        const response = await fetch('/cart/add', {
                           method: 'POST',
                           headers: {

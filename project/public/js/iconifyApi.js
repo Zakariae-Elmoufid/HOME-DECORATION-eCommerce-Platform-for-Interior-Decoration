@@ -1,78 +1,78 @@
-document.addEventListener('DOMContentLoaded', function() {
-
-    const iconContainer = document.getElementById('icon-container');
-    const searchInput = document.getElementById('icon-input');
-    const iconSearchResults = document.getElementById('icon-search-results');
-    
-    const currentPrefix = 'fa'; 
+document.addEventListener('DOMContentLoaded', function () {
+    const iconContainers = document.querySelectorAll('.icon-container');
+    const searchInputs = document.querySelectorAll('.icon-input');
+    const searchResultsLists = document.querySelectorAll('.icon-search-results');
+    const currentPrefix = 'fa';
     let searchTimeout;
-    
-  
-    
-    const statusMessage = document.createElement('div');
-    statusMessage.className = 'text-sm text-gray-500 text-center mt-2 mb-2';
-    statusMessage.textContent = 'searsh icon';
-    
-    iconContainer.appendChild(statusMessage);
-    
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.trim();
-        
-        clearTimeout(searchTimeout); 
-        
-        if (query.length > 0) {
-            statusMessage.textContent = 'Recherche en cours...';
-            iconSearchResults.classList.remove('hidden');
-            
-            searchTimeout = setTimeout(() => {
-                searchIcons(query);
-            }, 300);
-        } else {
-            iconSearchResults.innerHTML = '';
-            iconSearchResults.classList.add('hidden');
-            statusMessage.textContent = 'Recherchez une icône';
-        }
+
+    // For each input field
+    searchInputs.forEach((input, index) => {
+        const container = iconContainers[index];
+        const resultBox = searchResultsLists[index];
+
+        // Create and add status message
+        const statusMessage = document.createElement('div');
+        statusMessage.className = 'text-sm text-gray-500 text-center mt-2 mb-2';
+        statusMessage.textContent = 'Search for an icon';
+        container.appendChild(statusMessage);
+
+        input.addEventListener('input', () => {
+            const query = input.value.trim();
+
+            clearTimeout(searchTimeout);
+
+            if (query.length > 0) {
+                statusMessage.textContent = 'Searching...';
+                resultBox.classList.remove('hidden');
+
+                searchTimeout = setTimeout(() => {
+                    searchIcons(query, statusMessage, input, resultBox);
+                }, 300);
+            } else {
+                resultBox.innerHTML = '';
+                resultBox.classList.add('hidden');
+                statusMessage.textContent = 'Search for an icon';
+            }
+        });
     });
-    
-    async function searchIcons(query) {
+
+    async function searchIcons(query, statusMessage, input, resultBox) {
         try {
-            const url = `https://api.iconify.design/search?prefix=${currentPrefix}&query=${encodeURIComponent(query)}.svg`;
-            
+            const url = `https://api.iconify.design/search?query=${encodeURIComponent(query)}&limit=42&prefix=${currentPrefix}`;
             const response = await fetch(url);
             const data = await response.json();
-            
+
             if (data && data.icons && data.icons.length > 0) {
-                displayIcons(data.icons);
-                statusMessage.textContent = `${data.icons.length} icônes trouvées`;
+                displayIcons(data.icons, input, resultBox);
+                statusMessage.textContent = `${data.icons.length} icons found`;
             } else {
-                iconSearchResults.innerHTML = '';
-                statusMessage.textContent = 'Aucune icône trouvée';
+                resultBox.innerHTML = '';
+                statusMessage.textContent = 'No icons found';
             }
         } catch (error) {
-            console.error('Erreur lors de la recherche d\'icônes:', error);
-            statusMessage.textContent = 'Erreur lors de la recherche';
+            console.error('Error while searching for icons:', error);
+            statusMessage.textContent = 'Search error';
         }
     }
-    
- function displayIcons(icons) {
-        iconSearchResults.innerHTML = '';
-        iconSearchResults.className = 'mt-3 grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-64 overflow-y-auto p-3 border border-gray-200 rounded-lg';
-        
+
+    function displayIcons(icons, input, resultBox) {
+        resultBox.innerHTML = '';
+        resultBox.className = 'mt-3 grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-64 overflow-y-auto p-3 border border-gray-200 rounded-lg';
+
         icons.forEach(iconData => {
             const iconName = iconData.split(':')[1] || iconData;
             const iconItem = document.createElement('div');
-            
+
             iconItem.innerHTML = `
                 <div class="text-xl mb-1"><iconify-icon icon="${currentPrefix}:${iconName}"></iconify-icon></div>
                 <div class="text-xs text-gray-500 truncate w-full text-center">${iconName}</div>
             `;
-            
+
             iconItem.addEventListener('click', () => {
-                let iconCode = `${currentPrefix}:${iconName}`;
-                searchInput.value = iconCode;
+                input.value = `${currentPrefix}:${iconName}`;
             });
-            
-            iconSearchResults.appendChild(iconItem);
+
+            resultBox.appendChild(iconItem);
         });
     }
 });

@@ -29,7 +29,7 @@ CREATE TABLE permissions (
 );
 
 
-CREATE TABLE user_permissions (
+CREATE TABLE admin_permissions (
     user_id INT,
     permission_id INT,
     PRIMARY KEY (user_id, permission_id),
@@ -107,8 +107,6 @@ CREATE TABLE `cart_items` (
   `cart_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL DEFAULT '1',
-  `selected_color` varchar(50) DEFAULT NULL,
-  `selected_size` varchar(50) DEFAULT NULL,
   `price` decimal(10,2) NOT NULL, 
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -137,8 +135,7 @@ CREATE TABLE `orders` (
   `product_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `selectedColor` varchar(50) DEFAULT NULL,
-  `selectedSize` varchar(50) DEFAULT NULL,
+   variant_id int DEFAULT NULL
   FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
  FOREIGN KEY (`product_id`) REFERENCES `Products` (`id`)
 )
@@ -212,3 +209,16 @@ CREATE TABLE wishlists (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES Products(id) ON DELETE CASCADE
 );
+
+
+CREATE TABLE Product_variants (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    size_name VARCHAR(50) DEFAULT NULL,  -- Peut être NULL si pas de taille
+    color_name VARCHAR(50) DEFAULT NULL, -- Peut être NULL si pas de couleur
+    color_code VARCHAR(50) DEFAULT NULL, -- Code couleur, utilisé si color_name est défini
+    stock_quantity INT NOT NULL DEFAULT 0,
+    price_adjustment DECIMAL(10, 2) DEFAULT 0.00,  -- Ajustement du prix si nécessaire
+    FOREIGN KEY (product_id) REFERENCES Products(id) ON DELETE CASCADE
+    variant_id int  DEFAULT NULL
+);   

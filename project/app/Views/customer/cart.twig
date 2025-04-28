@@ -60,7 +60,6 @@
         <!-- Cart Items -->
         <div   data-id-cart="{{items[0].getCartId}}"  class="space-y-6 pt-4">
         {% for item in items %}
-          <!-- Item 1 -->
           <div data-product-price="{{item.getProductPrice}}" data-product-total="{{ item.getTotalItems }}" 
            data-item-id="{{item.getCartItemId}}" data-cart-id="{{item.getCartId}}"
             class="item grid grid-cols-1 md:grid-cols-12 gap-4 py-4 border-b border-gray-200" >
@@ -71,8 +70,9 @@
                 </div>
                 <div class="ml-4 flex-1">
                   <h3 class="font-medium text-charcoal">{{ item.getProductTitle }}</h3>
-                  <div class="text-sm text-gray-500 mt-1">Color: <span class="text-charcoal">{{ item.getProductColor }}</span> Stock: <span class="color text-charcoal"> {{ item.getStockColor }}</span></div>
-                  <div class="text-sm text-gray-500">Size: <span class="text-charcoal">{{ item.getProductSize }}</span> Stock:  <span class="size text-charcoal">{{ item.getStockSize }}</span></div>
+                  <div class="text-sm text-gray-500 mt-1">Color: <span class="text-charcoal">{{ item.getColor }}</div>
+                  <div class="text-sm text-gray-500">Size: <span class="text-charcoal">{{ item.getProductSize }}</span></div>
+                  <div class="text-sm text-gray-500"> Stock:  <span class="size text-charcoal">{{ item.getStockQuantity }}</span></div>
                   <button data-item-id="{{item.getCartItemId}}" class="remove text-sm text-red-500 mt-2 hover:text-red-700 flex items-center">
                     <i class="fas fa-trash-alt text-xs mr-1"></i> Remove
                   </button>
@@ -89,7 +89,7 @@
                 <button class="decrease bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-l-md">
                   <i class="fas fa-minus text-xs"></i>
                 </button>
-                <input type="number"  data-stock-color="{{ item.getStockColor}}" data-stock-size="{{item.getStockSize}}"
+                <input type="number" data-stock="{{item.getStockQuantity}}"
                   value="{{ item.getQuantity }}" min="1" class="w-12 text-center border-y border-gray-300 py-1 focus:outline-none focus:ring-1 focus:ring-gold">
                 <button class="increase bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-r-md">
                   <i class="fas fa-plus text-xs"></i>

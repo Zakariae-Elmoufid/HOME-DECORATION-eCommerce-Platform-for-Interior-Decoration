@@ -91,12 +91,10 @@
             <div id="address-display">
                 {% if userAddress %}
                     <div class="bg-gray-50 rounded p-4">
-                        <p class="font-medium">{{ userAddress.getFirstName }} {{ userAddress.getLastName }}</p>
                         <p>{{ userAddress.address }}</p>
                         <p>{{ userAddress.city }} {{ userAddress.postalCode }}</p>
                         <p>{{ userAddress.country }}</p>
                         <p>{{ userAddress.phone }}</p>
-                        <p>{{ userAddress.email }}</p>
                     </div>
                 {% else %}
                     <div class="bg-gray-50 rounded p-4 text-gray-500">
@@ -122,18 +120,7 @@
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label for="edit-firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                        <input type="text" value="{{ userAddress ? userAddress.getFirstName : '' }}" id="edit-firstName" name="first_name" 
-                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
-                    </div>
-                    
-                    <div>
-                        <label for="edit-lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                        <input type="text" value="{{ userAddress ? userAddress.getLastName : '' }}" id="edit-lastName" name="last_name" 
-                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
-                    </div>
-                    
+                   
                     <div class="md:col-span-2">
                         <label for="edit-address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
                         <input type="text" value="{{ userAddress ? userAddress.address : '' }}" id="edit-address" name="address" 
@@ -175,11 +162,7 @@
                                class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
                     </div>
                     
-                    <div>
-                        <label for="edit-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                        <input type="email" value="{{ userAddress ? userAddress.email : '' }}" id="edit-email" name="email" 
-                               class="w-full p-2 border border-gray-300 rounded focus:ring-gold focus:border-gold" required>
-                    </div>
+                   
                 </div>
                 
                 <div class="flex justify-end space-x-4 mt-6">

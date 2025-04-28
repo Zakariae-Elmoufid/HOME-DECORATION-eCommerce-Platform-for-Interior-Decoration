@@ -70,12 +70,12 @@
         {% for item in orderItems %}
         <div class="flex items-center">
           <div class="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-md overflow-hidden">
-            <img src="/public/uploads/{{ item.getProductImage }}" alt="{{ item.getTitle }}" class="w-full h-full object-cover">
+            <img src="/public/uploads/{{ item.getProductImage }}" alt="{{ item.getProductTitle }}" class="w-full h-full object-cover">
           </div>
           <div class="ml-4 flex-1">
-            <h3 class="text-sm font-medium text-charcoal">{{ item.getTitle }}</h3>
+            <h3 class="text-sm font-medium text-charcoal">{{ item.getProductTitle }}</h3>
             <div class="text-xs text-gray-500">
-              <span>{{ item.getSelectedColor }}, {{ item.getSelectedSize }}</span>
+              <span>{{ item.getSelectedSize }}, {{ item.getColortSize }}</span>
               <span class="mx-1">·</span>
               <span>Qty: {{ item.getQuantity }}</span>
             </div>
@@ -90,7 +90,7 @@
       <div>
         <h3 class="text-lg font-medium text-charcoal mb-2">Shipping Address</h3>
         <address class="not-italic text-sm text-gray-600">
-          {{ shippingAddress.getFirstName }} {{ shippingAddress.getLastName }}<br>
+          {{ shippingAddress.getUserName }} <br>
           {{ shippingAddress.getAddress }}<br>
           {{ shippingAddress.getCity }}, {{ shippingAddress.getPostalCode }}<br>
           {{ shippingAddress.getCountry }}
@@ -137,7 +137,7 @@
         <a href="/" class="inline-block bg-gold hover:bg-gold-dark text-white py-2 px-6 rounded-md transition duration-300">
           Continue Shopping
         </a>
-        <a href="/account/orders" class="inline-block bg-white border border-gold hover:bg-gray-50 text-gold py-2 px-6 rounded-md transition duration-300">
+        <a href="/account/order" class="inline-block bg-white border border-gold hover:bg-gray-50 text-gold py-2 px-6 rounded-md transition duration-300">
           View My Orders
         </a>
       </div>

@@ -13,8 +13,7 @@ class Product {
     private $total_reviews;
     private $average_rating;
     private $primaryImage ;
-    private $sizes = [];
-    private $colors = [];
+    private $variants = [];
     private $images = [];
     private $reviews ;
 
@@ -34,15 +33,12 @@ class Product {
         $this->average_rating = $dataArray['average_rating'] ?? null;
         $this->primaryImage = $dataArray['primary_image'] ?? null;
         
-        if (isset($dataArray['sizes'])) {
-            $this->sizes = is_string($dataArray['sizes']) ? json_decode($dataArray['sizes'], true) : $dataArray['sizes'];
-            $this->sizes = $this->sizes ?: [];
+        if (isset($dataArray['variants'])) {
+            $this->variants = is_string($dataArray['variants']) ? json_decode($dataArray['variants'], true) : $dataArray['variants'];
+            $this->variants = $this->variants ?: [];
         }
         
-        if (isset($dataArray['colors'])) {
-            $this->colors = is_string($dataArray['colors']) ? json_decode($dataArray['colors'], true) : $dataArray['colors'];
-            $this->colors = $this->colors ?: [];
-        }
+    
         
         if (isset($dataArray['images'])) {
             $this->images = is_string($dataArray['images']) ? json_decode($dataArray['images'], true) : $dataArray['images'];
@@ -55,19 +51,19 @@ class Product {
         $this->reviews = $review;
     }
 
-    public function toArray() {
-        return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'category_id' => $this->category_id,
-            'base_price' => $this->base_price,
-            'stock' => $this->stock,
-            'sizes' => $this->sizes,
-            'colors' => $this->colors,
-            'images' => $this->images
-            ];
-    }
+    // public function toArray() {
+    //     return [
+    //         'id' => $this->id,
+    //         'title' => $this->title,
+    //         'description' => $this->description,
+    //         'category_id' => $this->category_id,
+    //         'base_price' => $this->base_price,
+    //         'stock' => $this->stock,
+    //         'sizes' => $this->sizes,
+    //         'colors' => $this->colors,
+    //         'images' => $this->images
+    //         ];
+    // }
 
      public function getId() {
         return $this->id;
@@ -105,13 +101,11 @@ class Product {
         return $this->average_rating;
     }
 
-    public function getSizes() {
+    public function getVariants() {
         return $this->sizes;
     }
 
-    public function getColors() {
-        return $this->colors;
-    }
+  
 
     public function getImages() {
         return $this->images;

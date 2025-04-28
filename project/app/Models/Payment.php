@@ -7,6 +7,8 @@ class Payment {
     private $order_id;
     private $payment_method;
     private $payment_intent_id;
+    public $stripe_session_id; // 👈 ajoute cette ligne !
+
     private $amount;
     private $currency;
     private $status;
@@ -19,6 +21,7 @@ class Payment {
         $this->order_id = $data['order_id'] ?? null;
         $this->payment_method = $data['payment_method'] ?? 'credit_card';
         $this->payment_intent_id = $data['payment_intent_id'] ?? null;
+        $this->stripe_session_id = $data['stripe_session_id'] ?? null;
         $this->amount = $data['amount'] ?? 0;
         $this->currency = $data['currency'] ?? 'usd';
         $this->status = $data['status'] ?? 'pending';
@@ -41,6 +44,9 @@ class Payment {
 
     public function getPaymentIntentId(): ?string {
         return $this->payment_intent_id;
+    }
+    public function getPaymentSessionId(): ?string {
+        return $this->stripe_session_id;
     }
 
     public function getAmount(): float {

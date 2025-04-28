@@ -49,54 +49,36 @@
       <div class="bg-white rounded-lg shadow-sm p-6">
         <h2 class="text-xl font-medium text-charcoal mb-6">Shipping Information</h2>
         
-        <form id="checkout-form" >
-          <!-- Personal Information -->
-          <div class="mb-6">
-            <h3 class="text-lg font-medium text-charcoal mb-4">Personal Details</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name*</label>
-                <input type="text" id="first_name" name="first_name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
-                 <small class="text-red-500 error-message" id="error_first_name"></small>
-              </div>
-              <div>
-                <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name*</label>
-                <input type="text" id="last_name" name="last_name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
-                <small class="text-red-500 error-message" id="error_last_name"></small>
-              </div>
-              <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address*</label>
-                <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
-                 <small class="text-red-500 error-message" id="error_email"></small>
-
-              </div>
-              <div>
-                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number*</label>
-                <input type="tel" id="phone" name="phone" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
-                <small class="text-red-500 error-message" id="error_phone"></small>
-              </div>
-            </div>
-          </div>
+        <form id="checkout-form"  >
+      
           
           <!-- Shipping Address -->
           <div class="mb-6">
             <h3 class="text-lg font-medium text-charcoal mb-4">Shipping Address</h3>
             <div class="grid grid-cols-1 gap-4">
+              <input type="hidden" name="id" value="{{user_addresse.getId ?? '' }}">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Street Address*</label>
-                <input type="text" id="address" name="address" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
-                <small class="text-red-500 error-message" id="error_address"></small>
+                <input type="text" id="address" name="address" value="{{user_addresse.getAddress ?? ''}}" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                <small class="text-red-500 error-message" id="error_address">{{errors.address[0] ?? ''}}</small>
               </div>
+               <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number*</label>
+                <input type="tel" id="phone" name="phone" value="{{user_addresse.getPhone ?? ''}}" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                <small class="text-red-500 error-message" id="error_phone">{{errors.phone[0] ?? ''}}</small>
+              </div>
+            </div>  
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City*</label>
-                  <input type="text" id="city" name="city" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
-                  <small class="text-red-500 error-message" id="error_city"></small>
+                  <input type="text" id="city" name="city" value="{{user_addresse.getCity ?? ''}}" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                  <small class="text-red-500 error-message" id="error_city">{{errors.city[0] ?? ''}}</small>
                 </div>
                 <div>
                   <label for="postal_code" class="block text-sm font-medium text-gray-700 mb-1">Postal Code*</label>
-                  <input type="text" id="postal_code" name="postal_code" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
-                  <small class="text-red-500 error-message" id="error_postal"></small>
+                  <input type="text" id="postal_code" name="postal_code" value="{{user_addresse.getPostalCode ?? ''}}" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                  <small class="text-red-500 error-message" id="error_postal">{{errors.postal_code[0] ?? ''}}</small>
                 </div>
               </div>
               <div>
@@ -140,7 +122,7 @@
           </div>
 
 
-                    <!-- Payment Method -->
+                    {# <!-- Payment Method -->
           <div class="mb-6">
             <h3 class="text-lg font-medium text-charcoal mb-4">Payment Method</h3>
             <div class="space-y-3">
@@ -167,9 +149,9 @@
                 </div>
               </label>
             </div>
-          </div>
+          </div> #}
           
-          <!-- Credit Card Information (shown only if credit card is selected) -->
+          {# <!-- Credit Card Information (shown only if credit card is selected) -->
           <div id="credit-card-info" class="mb-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="md:col-span-2">
@@ -189,10 +171,9 @@
                 <input type="text" id="card_name" name="card_name" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
               </div>
             </div>
-          </div>
+          </div> #}
           
-          
-
+        
           
           <!-- Order Comments -->
           <div class="mb-6">
@@ -289,8 +270,8 @@
   </div>
 </div>
 
-<script src="https://js.stripe.com/v3/"></script>
-<script src="../../../public/js/order.js"> </script>
+{# <script src="https://js.stripe.com/v3/"></script> #}
+// <script src="../../../public/js/order.js"> </script>
 
 
 {% endblock %}
