@@ -50,44 +50,25 @@
         <h2 class="text-xl font-medium text-charcoal mb-6">Shipping Information</h2>
         
         <form id="checkout-form"  >
-          <!-- Personal Information -->
-          <div class="mb-6">
-            <h3 class="text-lg font-medium text-charcoal mb-4">Personal Details</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name*</label>
-                <input type="text" id="first_name" name="first_name" value="{{user_addresse.getFirstName ?? ''}}" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
-                 <small class="text-red-500 error-message" id="error_first_name">{{errors.first_name[0] ?? ''}}</small>
-              </div>
-              <div>
-                <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name*</label>
-                <input type="text" id="last_name" name="last_name" value="{{user_addresse.getLastName ?? ''}}" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
-                <small class="text-red-500 error-message" id="error_last_name">{{errors.last_name[0] ?? ''}}</small>
-              </div>
-              <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address*</label>
-                <input type="email" id="email" name="email" value="{{user_addresse.getEmail ?? ''}}" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
-                 <small class="text-red-500 error-message" id="error_email">{{errors.email[0] ?? ''}}</small>
-
-              </div>
-              <div>
-                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number*</label>
-                <input type="tel" id="phone" name="phone" value="{{user_addresse.getPhone ?? ''}}" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
-                <small class="text-red-500 error-message" id="error_phone">{{errors.phone[0] ?? ''}}</small>
-              </div>
-            </div>
-          </div>
+      
           
           <!-- Shipping Address -->
           <div class="mb-6">
             <h3 class="text-lg font-medium text-charcoal mb-4">Shipping Address</h3>
             <div class="grid grid-cols-1 gap-4">
               <input type="hidden" name="id" value="{{user_addresse.getId ?? '' }}">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Street Address*</label>
                 <input type="text" id="address" name="address" value="{{user_addresse.getAddress ?? ''}}" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
                 <small class="text-red-500 error-message" id="error_address">{{errors.address[0] ?? ''}}</small>
               </div>
+               <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number*</label>
+                <input type="tel" id="phone" name="phone" value="{{user_addresse.getPhone ?? ''}}" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold">
+                <small class="text-red-500 error-message" id="error_phone">{{errors.phone[0] ?? ''}}</small>
+              </div>
+            </div>  
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City*</label>

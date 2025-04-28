@@ -10,7 +10,10 @@ class AccountRepository  extends BaseRepository{
     
 
     public function getUserAdress($user_id){
-        $stmt = $this->query('SELECT * FROM user_addresses where user_id = ?   ORDER BY id DESC LIMIT 1',[$user_id]);
+        $stmt = $this->query('SELECT ua.id , ua.address ,ua.city , ua.postal_code ,ua.country , ua.user_id , ua.phone ,u.username , u.email , u.created_at FROM user_addresses ua 
+        inner join users u on u.id = ua.user_id
+         where ua.user_id = ? 
+         ORDER BY id DESC LIMIT 1',[$user_id]);
         $addressUser = $stmt->fetch(PDO::FETCH_OBJ);
         return new UserAddress($addressUser); 
     }

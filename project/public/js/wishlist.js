@@ -1,4 +1,4 @@
-import displayMessage from "./alert.js"
+import {displayMessage} from "./alert.js"
 
 const wishlistBtn = document.getElementById('add-to-wishlist-btn');
 

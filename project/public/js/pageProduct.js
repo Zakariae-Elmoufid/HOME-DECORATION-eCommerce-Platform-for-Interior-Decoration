@@ -106,12 +106,9 @@ const decreaseBtn = document.getElementById('decrease-quantity');
 
 
 
-    // Update stock info based on selected options
     function updateAvailableStock() {
         let availableStock = maxStock;
-        
-        // Check stock for selected size
-        if (selected) {
+               if (selected) {
           const selectedElement = document.querySelector(`input[name="variant"][value="${selected}"]`);
           if (selectedElement) {
             const variantStock = parseInt(selectedElement.dataset.stock);
@@ -123,7 +120,6 @@ const decreaseBtn = document.getElementById('decrease-quantity');
         }
         
       
-            // Update max quantity and stock info
     quantityInput.setAttribute('max', availableStock);
     if (parseInt(quantityInput.value) > availableStock) {
       quantityInput.value = availableStock;
@@ -132,7 +128,6 @@ const decreaseBtn = document.getElementById('decrease-quantity');
     const stockInfo = document.getElementById('stock-info');
     stockInfo.textContent = `${availableStock} units available`;
     
-    // Update add to cart button state
     const addToCartBtn = document.getElementById('add-to-cart-btn');
     if (availableStock <= 0) {
       addToCartBtn.disabled = true;

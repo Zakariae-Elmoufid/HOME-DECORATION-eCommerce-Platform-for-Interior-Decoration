@@ -62,9 +62,6 @@ class OrderController extends Controller {
 
         $user_addresse = $this->orderRepository->createUserAddresse([
             'user_id' => $user_id,
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
             'phone' => $data['phone'],
             'address' => $data['address'],
             'city' => $data['city'],

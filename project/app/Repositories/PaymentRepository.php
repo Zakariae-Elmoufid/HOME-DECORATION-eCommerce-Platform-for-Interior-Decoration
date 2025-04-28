@@ -38,14 +38,14 @@ class PaymentRepository  extends BaseRepository{
 //         return new Payment($paymentData);
 //     }
 
-//     public function getByOrderId(int $orderId) {
-//         $stmt = $this->query("SELECT * FROM payments WHERE order_id = ?" , [$orderId]);
-//         $paymentData  = $stmt->fetch(PDO::FETCH_ASSOC);
-//         if (!$paymentData) {
-//             return null;
-//         }
+    public function getByOrderId(int $orderId) {
+        $stmt = $this->query("SELECT * FROM payments WHERE order_id = ?" , [$orderId]);
+        $paymentData  = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$paymentData) {
+            return null;
+        }
         
-//         return new Payment($paymentData);
+        return new Payment($paymentData);
     }
 
 
@@ -90,4 +90,4 @@ class PaymentRepository  extends BaseRepository{
 //     //         throw $e;
 //     //     }
 //     // }
-// }
+}

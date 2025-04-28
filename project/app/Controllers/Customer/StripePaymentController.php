@@ -4,6 +4,7 @@ namespace App\Controllers\Customer;
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use App\Repositories\PaymentRepository;
+use App\Repositories\OrderRepository;
 use App\Services\OrderService;
 use App\Services\StripeService;
 use App\Core\Request;
@@ -15,6 +16,7 @@ use Stripe\Stripe;
 class StripePaymentController
 {
     private $paymentRepository;
+    private $orderRepository;
     private $orderService;
     private $stripeService;
     private $response;
@@ -22,6 +24,7 @@ class StripePaymentController
     public function __construct()
     {
         $this->stripeService = new StripeService();
+        $this->orderRepository = new OrderRepository();
         $this->response = new Response();
         $this->paymentRepository = new PaymentRepository();
         $this->orderService = new OrderService;
@@ -30,6 +33,7 @@ class StripePaymentController
     public function checkout(Request $request){
         $data =$request->getbody();
         $order = $this->orderService->createOrder($data);
+
         if(isset($order["errors"])){
             $this->response->jsonEncode( $order);
             return;
@@ -96,83 +100,65 @@ class StripePaymentController
 
 
 
-public function webhook()
-{
-    $payload = @file_get_contents('php://input');
-    $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? null;
-    $endpoint_secret = 'whsec_vrUElqs57kvEltW7UxoNgrXBBTIA1uWM'; 
 
-    if (!$sig_header) {
-        http_response_code(400);
-        exit('Missing Stripe signature.');
-    }
-
-    try {
-        $event = \Stripe\Webhook::constructEvent(
-            $payload, $sig_header, $endpoint_secret
-        );
-    } catch (\UnexpectedValueException $e) {
-        http_response_code(400);
-        exit('Invalid payload.');
-    } catch (\Stripe\Exception\SignatureVerificationException $e) {
-        http_response_code(400);
-        exit('Invalid signature.');
-    }
-
-    if ($event->type === 'checkout.session.completed') {
-    }
-
-    http_response_code(200);
-}
 
 
 
     public function success(Request $request)
     {
-// Récupérer l'id de la session Stripe passé dans l'URL
    $data = $request->getbody();
     $session_id = $data['session_id'];
     
-if ($session_id) {
+    if ($session_id) {
     \Stripe\Stripe::setApiKey('sk_test_51RAgELH2nPPbXqXkVPvJUTDRyYguZujueuEi1dbXrR6NA7IrOyKldiiEKdnBpKMA7SrVFElluLNiZOpmsnh8o6F800mpbbJnDJ'); // Remplace par ta clé API privée
 
     try {
-        // Récupérer la session Stripe avec l'ID de la session
         $session = \Stripe\Checkout\Session::retrieve($session_id);
         
-        // Vérifier si le paiement est effectué
         if ($session->payment_status === 'paid') {
             
-            // Récupérer l'ID du paiement dans ta base de données
             $payment = $this->paymentRepository->findByStripeSessionId($session->id);
             
             if ($payment) {
-                // Mettre à jour le statut du paiement à "paid"
                 $this->paymentRepository->updatePayment($payment->getId(), [
                     'status' => 'paid',
                 ]);
                 
-                // Décrémenter le stock associé à la commande
                 $this->orderService->decrementStockAfterOrder($payment->getOrderId());
             }
-           $this->response->redirect("payment/confirmation");
+            $this->confirmation($payment->getOrderId());
         } else {
             echo "Payment Failed.";
         }
     } catch (\Stripe\Exception\ApiErrorException $e) {
-        // Gestion des erreurs Stripe
         echo "Error retrieving session: " . $e->getMessage();
     }
-} else {
-    echo "Session ID is missing.";
-}    }
+    } else {
+         echo "Session ID is missing.";
+    }    }
 
     public function cancel()
     {
         echo "Payment canceled!";
     }
-    public function confirmation(){
-        $this->response->render('customer/payment-confirmation');
+
+
+    public function confirmation($orderId ){
+        $order = $this->orderRepository->getOrderById($orderId);
+        if (!$order) {
+            return $this->response->redirect('/checkout');
+        }
+        $shippingAddress = $this->orderRepository->getUserAddressById($order->getShippingAddress());
+        $payment = $this->paymentRepository->getByOrderId($orderId);
+ 
+        $orderItems = $this->orderRepository->getOrderItems($orderId);
+        $this->response->render('customer/payment-confirmation', [
+            'order' => $order,
+            'orderItems' => $orderItems,
+            'shippingAddress' => $shippingAddress,
+            'payment' => $payment,
+        ]);
+      
     }
 }
 

@@ -70,7 +70,7 @@ class OrderRepository  extends BaseRepository {
         }
         return new Order((array) $orderData);
     }
-
+    
 
     public function getOrderItems(int $orderId){
        $stmt = $this->query("SELECT 
@@ -82,11 +82,14 @@ class OrderRepository  extends BaseRepository {
           oi.variant_id,
           oi.total_item,
           p.title as productTitle,
-          pg.image_path as productImage 
-        from order_items oi
-       inner join Products p on  oi.product_id = p.id
-       inner join Product_images pg on  pg.product_id = p.id AND pg.is_primary = 1
-       where oi.order_id = ?
+          pg.image_path as productImage,
+          pv.size_name, 
+          pv.color_name
+          from order_items oi
+          inner join Products p on  oi.product_id = p.id
+          inner join Product_images pg on  pg.product_id = p.id AND pg.is_primary = 1
+          left join Product_variants pv on oi.variant_id = pv.id
+         where oi.order_id = ?
        ",[$orderId]) ;
        $orderItemsData = $stmt->fetchAll(PDO::FETCH_OBJ);
        if (!$orderItemsData) {
@@ -102,7 +105,20 @@ class OrderRepository  extends BaseRepository {
 
     public function getUserAddressById($userAdderessId){
         $userAddressData  = $this->findById('user_addresses' ,$userAdderessId);
-        $userAddress =   new UserAddress($userAddressData);
+        if (!$userAddressData) {
+            return null; 
+        }
+    
+        $user = $this->findById('users', $userAddressData->user_id);
+    
+        if ($user) {
+            $userAddressData->username = $user->username;
+            $userAddressData->email = $user->email;
+        }
+    
+        $userAddress = new UserAddress($userAddressData);
+    
+        $userAddressData=$user;
         return $userAddress;
     }
 
@@ -343,7 +359,7 @@ class OrderRepository  extends BaseRepository {
 
     public function currentStock($variant_id){
         $stmt = $this->query("SELECT stock_quantity FROM Product_variants WHERE id = ?", [$variant_id]);
-        $currentStock = $stmt->fetchColumn();
+        return   $stmt->fetchColumn();
     }
 
     public function updateQuantity($variant_id,$data){

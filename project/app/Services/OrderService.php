@@ -38,9 +38,6 @@ class OrderService {
     if(!$checkUserAddress){
         $user_address = $this->accountRepository->createUserAddresse([
             'user_id' => $user_id,
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
             'phone' => $data['phone'],
             'address' => $data['address'],
             'city' => $data['city'],
@@ -49,9 +46,7 @@ class OrderService {
         ]);
     }else{
        $this->accountRepository->updateAddress($data['id'],[
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
+
             'phone' => $data['phone'],
             'address' => $data['address'],
             'city' => $data['city'],
@@ -112,15 +107,11 @@ class OrderService {
   public function validetOrder($data){
        $validator  = new Validator($data);
        $validator->setRules([
-        'first_name' => 'required|min:4|max:60|string',
-        'last_name' => 'required|min:4|max:60|string',
-        'email' => 'required|email',
         'phone' => 'required|string|min:9|max:20',
         'address' => 'required|min:5|max:100',
         'city' => 'required|min:8|max:50',
         'country' => 'required|min:2|max:50',
         'shipping_method' => 'required',
-        'comments' => 'min:8|max:100',
     ]);
 
     $oldData = $data;
@@ -137,23 +128,21 @@ class OrderService {
 
   public function decrementStockAfterOrder($order_id){
     $quantities = $this->orderRepository->getOrderItemQuantity($order_id);
+
     foreach($quantities as $item) {
 
         $currentStock = $this->orderRepository->currentStock($item->variant_id);
 
                 if ($currentStock === false) {
-            throw new Exception("Variant not found");
-        }
+                throw new Exception("Variant not found");
+                 }
 
         $newStock = $currentStock - $item->quantity;
 
-        // if ($newStock < 0) {
-        //     throw new Exception("Not enough stock for variant ID {$item->variant_id}");
-        // }
-
+     
        $updateQauntity =  $this->orderRepository->updateQuantity($item->variant_id,['stock_quantity'=>$newStock]);
     }
-
+   dump($quantities);
     $totalStock = $this->orderRepository->calculateTotalVariantStock($quantities[0]->product_id);
 
     if ( $totalStock !== null) {
