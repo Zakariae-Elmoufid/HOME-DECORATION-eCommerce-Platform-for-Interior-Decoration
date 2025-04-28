@@ -41,7 +41,6 @@ class CartController extends Controller {
   
     
        $cart_id =  $this->cartService->cartId();
-    
        $items = $this->addItems($cart_id,$data);
        
     }
@@ -54,8 +53,7 @@ class CartController extends Controller {
         'quantity' => $data['quantity'],
         'price' => $data["price"],
         'total_item' => $data['totalPrice'],
-        'selected_color' => $data['color'] ?? null,
-        'selected_size' => $data['size'] ?? null,
+        'variant_id' => $data['variant'] ?? null,
       ];
      $item_id =$this->cartRepository->addCartItem($item);
  

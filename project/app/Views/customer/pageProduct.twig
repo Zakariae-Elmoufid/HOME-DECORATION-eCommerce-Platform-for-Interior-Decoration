@@ -109,57 +109,53 @@
             <input type="hidden" id="product-id" value="{{ product.id }}" name="product_id">
             <input type="hidden"  value="{{ product.base_price }}" name="price">
             
-            <!-- Size Option -->
-            {% if product.sizes|length > 0 %}
-              <div>
-                <h3 class="text-sm font-medium text-charcoal mb-2">Size</h3>
-                <div class="flex flex-wrap gap-2">
-                  {% for size in product.sizes %}
-                    <label class="size-option cursor-pointer">
-                      <input type="radio" name="size" value="{{ size.size_id }}" 
-                             data-price-adjustment="{{ size.price_adjustment }}"
-                             data-stock="{{ size.stock_quantity }}"
-                             class="sr-only">
-                      <span class="px-4 py-2 border border-gray-300 rounded-md text-sm 
-                                {% if size.stock_quantity <= 0 %}bg-gray-100 text-gray-400 cursor-not-allowed{% endif %}">
-                        {{ size.size_name }}
-                        {% if size.price_adjustment != '0.00' %}
-                          {% if size.price_adjustment starts with '-' %}
-                            <span class="text-green-600">-${{ size.price_adjustment|abs }}</span>
-                          {% else %}
-                            <span class="text-red-600">+${{ size.price_adjustment }}</span>
-                          {% endif %}
-                        {% endif %}
-                      </span>
-                    </label>
-                  {% endfor %}
-                </div>
-              </div>
-            {% endif %}
+            <!-- variants Option -->
+         {% if product.variants|length > 0 %}
+          <div>
+            <h3 class="text-sm font-medium text-charcoal mb-2">Size and Color</h3>
+            <div class="flex flex-wrap gap-2">
+              {% for variant in product.variants %}
+                <label class="variant-option cursor-pointer">
+                  <input 
+                    type="radio" 
+                    name="variant" 
+                    value="{{ variant.variant_id }}" 
+                    data-price-adjustment="{{ variant.price_adjustment }}"
+                    data-stock="{{ variant.stock_quantity }}"
+                    class="sr-only"
+                    {% if variant.stock_quantity <= 0 %} disabled {% endif %}
+                  >
+                  <span class="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-sm 
+                              {% if variant.stock_quantity <= 0 %} bg-gray-100 text-gray-400 cursor-not-allowed {% endif %}">
+                    
+                    {{ variant.size_name }}
 
-            <!-- Color Option -->
-            {% if product.colors|length > 0 %}
-              <div>
-                <h3 class="text-sm font-medium text-charcoal mb-2">Color</h3>
-                <div class="flex flex-wrap gap-3">
-                  {% for color in product.colors %}
-                    <label class="color-option cursor-pointer" title="{{ color.color_name }}">
-                      <input type="radio" name="color" value="{{ color.color_id }}"
-                             data-price-adjustment="{{ color.price_adjustment }}"
-                             data-stock="{{ color.stock_quantity }}"
-                             class="sr-only">
-                      <span class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center
-                                {% if color.stock_quantity <= 0 %}opacity-50 cursor-not-allowed{% endif %}"
-                            style="background-color: {{ color.color_code }}">
-                        <span class="color-check hidden text-white">
-                          <i class="fas fa-check"></i>
-                        </span>
+                    {# Cercle de couleur #}
+                    {% if variant.color_code %}
+                      <span 
+                        class="w-5 h-5 rounded-full border border-gray-300"
+                        style="background-color: {{ variant.color_code }};">
                       </span>
-                    </label>
-                  {% endfor %}
-                </div>
-              </div>
-            {% endif %}
+                    {% endif %}
+
+                    {# Prix d'ajustement #}
+                    {% if variant.price_adjustment != '0.00' %}
+                      {% if variant.price_adjustment starts with '-' %}
+                        <span class="text-green-600">-${{ variant.price_adjustment|abs }}</span>
+                      {% else %}
+                        <span class="text-red-600">+${{ variant.price_adjustment }}</span>
+                      {% endif %}
+                    {% endif %}
+
+                  </span>
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+{% endif %}
+
+
+        
 
             <!-- Quantity -->
             <div>

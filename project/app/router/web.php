@@ -154,7 +154,7 @@ $app->router->post('/stripe/webhook', [StripePaymentController::class, 'webhook'
 
 $app->router->post('/payment/create-intent',[PaymentController::class , 'createIntent']);
 $app->router->post('/payment/update-status',[PaymentController::class , 'updateStatus']);
-$app->router->get('/payment/confirmation',[PaymentController::class , 'confirmation']);
+$app->router->get('/payment/confirmation',[StripePaymentController::class , 'confirmation']);
 
 
 $app->router->get('/customer/account', 'Customer\AccountController@index');

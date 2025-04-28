@@ -58,7 +58,7 @@ class OrderService {
             'postal_code' => $data['postal_code'],
             'country' => $data['country'],
         ]);
-        $user_address = $this->accountRepository->getUserAdress($user_id); // <--- récupérer ici
+        $user_address = $this->accountRepository->getUserAdress($user_id); 
 
     }
     
@@ -76,7 +76,6 @@ class OrderService {
     
     
     foreach($data['items'] as $itemId) {
-
         $cartItem = null;
         foreach($items as $item) {
             if($item->getCartItemId() == $itemId) {
@@ -87,18 +86,16 @@ class OrderService {
 
         
         if($cartItem) {
-
         $order_item =   $this->orderRepository->createOrderItem([
                 'order_id' => $order->getId(),
                 'product_id' => $cartItem->getProductId(),
                 'price' => $cartItem->getProductPrice(),
                 'quantity' => $cartItem->getQuantity(),
-                'selectedColor' => $cartItem->getProductColor(),
-                'selectedSize' => $cartItem->getProductSize(),
+                'variant_id' => $cartItem->getVariantId(),
                 'total_item' => $cartItem->getTotalItems()
             ]);
         }
-        // $this->cartRepository->deleteCartItem($item->getCartItemId()) ;
+        $this->cartRepository->deleteCartItem($item->getCartItemId()) ;
         
     }
     return ['success' => true,'order_id' => $order->getId(),'total' => $data['totalAmount']];
@@ -139,7 +136,32 @@ class OrderService {
 
 
   public function decrementStockAfterOrder($order_id){
-    return  $this->orderRepository->getOrderStock($order_id);
+    $quantities = $this->orderRepository->getOrderItemQuantity($order_id);
+    foreach($quantities as $item) {
+
+        $currentStock = $this->orderRepository->currentStock($item->variant_id);
+
+                if ($currentStock === false) {
+            throw new Exception("Variant not found");
+        }
+
+        $newStock = $currentStock - $item->quantity;
+
+        // if ($newStock < 0) {
+        //     throw new Exception("Not enough stock for variant ID {$item->variant_id}");
+        // }
+
+       $updateQauntity =  $this->orderRepository->updateQuantity($item->variant_id,['stock_quantity'=>$newStock]);
+    }
+
+    $totalStock = $this->orderRepository->calculateTotalVariantStock($quantities[0]->product_id);
+
+    if ( $totalStock !== null) {
+        $this->orderRepository->updateProductStock($quantities[0]->product_id, ['stock' => $totalStock]);
+    }
+
+    return true;
+      
   }
 
     

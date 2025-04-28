@@ -112,21 +112,17 @@ public function webhook()
             $payload, $sig_header, $endpoint_secret
         );
     } catch (\UnexpectedValueException $e) {
-        // Mauvais payload
         http_response_code(400);
         exit('Invalid payload.');
     } catch (\Stripe\Exception\SignatureVerificationException $e) {
-        // Signature non vérifiée
         http_response_code(400);
         exit('Invalid signature.');
     }
 
     if ($event->type === 'checkout.session.completed') {
-        // Tu peux loguer l'événement ou effectuer des actions légères ici si nécessaire
-        dump($event);
     }
 
-    http_response_code(200); // Important de répondre 200 à Stripe
+    http_response_code(200);
 }
 
 
@@ -159,9 +155,7 @@ if ($session_id) {
                 // Décrémenter le stock associé à la commande
                 $this->orderService->decrementStockAfterOrder($payment->getOrderId());
             }
-
-            // Afficher un message de succès
-            echo "Payment Successful!";
+           $this->response->redirect("payment/confirmation");
         } else {
             echo "Payment Failed.";
         }
@@ -177,4 +171,8 @@ if ($session_id) {
     {
         echo "Payment canceled!";
     }
+    public function confirmation(){
+        $this->response->render('customer/payment-confirmation');
+    }
 }
+

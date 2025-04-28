@@ -23,30 +23,20 @@ class ProductRepository extends BaseRepository {
         c.icon AS category_icon,
         AVG(r.rating) AS average_rating,
         COUNT(DISTINCT r.id) AS review_count,
-        (
-            SELECT JSON_ARRAYAGG(
-                JSON_OBJECT(
-                    'id', ps.id,
-                    'size_name', ps.size_name,
-                    'price_adjustment', ps.price_adjustment,
-                    'stock_quantity', ps.stock_quantity
-                )
-            )
-            FROM Product_sizes ps 
-            WHERE ps.product_id = p.id
-         ) AS sizes,
          (
             SELECT JSON_ARRAYAGG(
                 JSON_OBJECT(
-                    'id', pc.id,
-                    'color_name', pc.color_name,
-                    'price_adjustment', pc.price_adjustment,
-                    'stock_quantity', pc.stock_quantity
+                    'id', pv.id,
+                    'size_name', pv.size_name,
+                    'color_name', pv.color_name,
+                    'color_code', pv.color_code,
+                    'price_adjustment', pv.price_adjustment,
+                    'stock_quantity', pv.stock_quantity
                 )
             )
-            FROM Product_colors pc 
-            WHERE pc.product_id = p.id
-         ) AS colors,
+            FROM Product_variants pv 
+            WHERE pv.product_id = p.id
+         ) AS variants,
          (
             SELECT JSON_ARRAYAGG(
                 JSON_OBJECT(
@@ -221,26 +211,42 @@ class ProductRepository extends BaseRepository {
          ] ;
          
          $this->update($this->table,$id, $product );
-    
-         if (isset($data['size_name']) && is_array($data['size_name'])) {
-        
-            foreach ($data["size_name"] as $index => $sizeName) {
-                $size= [
-                    "product_id" => $id,
-                    "size_name" => $sizeName ?? null,
-                    "color_name" =>  $data["color_name"][$index]  ?? null,
-                    "color_code" =>  $data["color_code"][$index]  ?? null,
-                    "price_adjustment" =>  $data["price_adjustment"][$index]  ?? null,
-                    "stock_quantity" => $data["stock_quantity"][$index]  ?? null,
-                   ];
-                if (!empty($data["variant_id"][$index])) {
-                    $this->update("Product_variants", $data["variant_id"][$index], $size);
-                } else {
-                    $this->insert("Product_variants", $size);
-                }
-                
+         foreach ($data as $key => $value) {
+            if (preg_match('/^size_name\[(\d+)\]$/', $key, $matches)) {
+                $sizeNames[$matches[1]] = $value;
             }
-         }    
+            if (preg_match('/^color_name\[\s*(\d+)\s*\]$/', $key, $matches)) {
+                $colorNames[$matches[1]] = $value;
+            }
+            if (preg_match('/^color_code\[(\d+)\]$/', $key, $matches)) {
+                $colorCodes[$matches[1]] = $value;
+            }
+            if (preg_match('/^price_adjustment\[(\d+)\]$/', $key, $matches)) {
+                $priceAdjustments[$matches[1]] = $value;
+            }
+            if (preg_match('/^stock_quantity\[(\d+)\]$/', $key, $matches)) {
+                $stockQuantities[$matches[1]] = $value;
+            }
+            if (preg_match('/^variant_id\[(\d+)\]$/', $key, $matches)) {
+                $variantIds[$matches[1]] = $value;
+            }
+        }
+        foreach ($sizeNames as $index => $sizeName) {
+            $variant = [
+                "product_id" => $data["id"],
+                "size_name" => $sizeName ?? null,
+                "color_name" => $colorNames[$index] ?? null,
+                "color_code" => $colorCodes[$index] ?? null,
+                "price_adjustment" => $priceAdjustments[$index] ?? null,
+                "stock_quantity" => $stockQuantities[$index] ?? null,
+            ];
+        
+            if (!empty($variantIds[$index])) {
+                $this->update("Product_variants", $variantIds[$index], $variant);
+            } else {
+                $this->insert("Product_variants", $variant);
+            }
+        }
         return true;
     }
 

@@ -117,6 +117,7 @@ class ProductService {
     }
 
     public function update($data){
+
         $errors = [];
         $validator = new Validator($data);
         $validator->setRules([
@@ -133,7 +134,6 @@ class ProductService {
              $this->response->jsonEncode(["errors" => $errors ]);
 
         }   
-            
             $id = $data["id"];
             
             $result =$this->productRepository->updatProduct($id ,$data);

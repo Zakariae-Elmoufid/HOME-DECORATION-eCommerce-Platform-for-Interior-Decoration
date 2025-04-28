@@ -9,18 +9,19 @@ import updateCount from "./main.js "
 
 const increaseBtn = document.querySelectorAll('.increase');
 const decreaseBtn = document.querySelectorAll('.decrease');
+
+
 const items = document.querySelectorAll('.item');
-increaseBtn.forEach(button => {
+Array.from(increaseBtn).forEach(button => {
     
     button.addEventListener('click', function(e) {
         const input = this.parentElement.querySelector('input');
         const currentQuantity = parseInt(input.value);
         
-        const stockSize  = input.dataset.stockSize;
-        const stockColor  = input.dataset.stockColor;
+        const stockQuantity  = input.dataset.stock;
         
-        const maxStock = Math.min(stockSize, stockColor);
-        if (currentQuantity < maxStock) {
+        ;
+        if (currentQuantity < stockQuantity) {
             input.value = currentQuantity + 1;
             updateTotals();
             updateCount();

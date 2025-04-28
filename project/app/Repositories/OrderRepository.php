@@ -79,8 +79,7 @@ class OrderRepository  extends BaseRepository {
           oi.product_id as productId ,
           oi.quantity,
           oi.price,
-          oi.selectedColor,
-          oi.selectedSize,
+          oi.variant_id,
           oi.total_item,
           p.title as productTitle,
           pg.image_path as productImage 
@@ -135,66 +134,7 @@ class OrderRepository  extends BaseRepository {
     }
 
 
-    public function getOrderStock($orderId)
-    {
-        try {
-            $this->conn->beginTransaction();
-    
-            $stmt = $this->query('SELECT 
-                oi.id,
-                oi.product_id,
-                oi.quantity,
-                oi.selectedColor as selected_color,
-                oi.selectedSize as selected_size,
-                p.stock,
-                ps.id as size_id,
-                ps.stock_quantity as stock_size,
-                ps.size_name,
-                pc.id as color_id,
-                pc.stock_quantity as stock_color,
-                pc.color_name
-                FROM orders o
-                INNER JOIN order_items oi ON o.id = oi.order_id
-                INNER JOIN Products p ON p.id = oi.product_id
-                INNER JOIN Product_sizes ps ON ps.product_id = p.id AND ps.size_name = oi.selectedSize
-                INNER JOIN Product_colors pc ON pc.product_id = p.id AND pc.color_name = oi.selectedColor
-                WHERE oi.order_id = ?', [$orderId]);
-    
-            $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-            foreach ($items as $item) {
-                $quantity = (int) $item['quantity'];
-    
-                if (
-                    $item['stock'] < $quantity ||
-                    $item['stock_size'] < $quantity ||
-                    $item['stock_color'] < $quantity
-                ) {
-                    throw new Exception("Stock insuffisant pour le produit ID: {$item['product_id']}");
-                }
-    
-                $this->update("Products", $item['product_id'], [
-                    "stock" => $item['stock'] - $quantity
-                ]);
-    
-                $this->update("Product_sizes", $item['size_id'], [
-                    "stock_quantity" => $item['stock_size'] - $quantity
-                ]);
-    
-                $this->update("Product_colors", $item['color_id'], [
-                    "stock_quantity" => $item['stock_color'] - $quantity
-                ]);
-            }
-    
-            $this->conn->commit();
-            return true;
-    
-        } catch (Exception $e) {
-            $this->conn->rollBack();
-            echo "Erreur : " . $e->getMessage();
-            return false;
-        }
-    }
+
 
     public function fetchAllOrderItems($orderId) {
         // 1. Get order info
@@ -225,8 +165,7 @@ class OrderRepository  extends BaseRepository {
             oi.product_id AS productId,
             oi.quantity,
             oi.price,
-            oi.selectedColor,
-            oi.selectedSize,
+            oi.variant_id,
             oi.total_item,
           
             p.title AS productTitle,
@@ -393,6 +332,41 @@ class OrderRepository  extends BaseRepository {
         return $stmt->fetchColumn();   
 
     }
+
+
+
+    public function getOrderItemQuantity($order_id){
+      $stmt  = $this->query("SELECT quantity , product_id, variant_id from order_items where order_id = ?",[$order_id]);
+      return $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    }
+
+    public function currentStock($variant_id){
+        $stmt = $this->query("SELECT stock_quantity FROM Product_variants WHERE id = ?", [$variant_id]);
+        $currentStock = $stmt->fetchColumn();
+    }
+
+    public function updateQuantity($variant_id,$data){
+      return  $this->update('Product_variants',$variant_id,$data);
+    }
+
+    public function calculateTotalVariantStock($product_id){
+    $stmt = $this->query(
+        "SELECT SUM(stock_quantity) as total_stock 
+         FROM Product_variants 
+         WHERE product_id = ?", 
+        [$product_id]
+    );
+
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+    return $result ? (int) $result->total_stock: 0;
+    }
+
+    public function updateProductStock($id,$data){
+       return $this->update('Products',$id,$data);
+    }
+    
 
 
     

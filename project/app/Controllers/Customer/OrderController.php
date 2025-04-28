@@ -105,7 +105,7 @@ class OrderController extends Controller {
                     'product_id' => $cartItem->getProductId(),
                     'price' => $cartItem->getProductPrice(),
                     'quantity' => $cartItem->getQuantity(),
-                    'selectedColor' => $cartItem->getProductColor(),
+                    'selectedColor' => $cartItem->getVariantId(),
                     'selectedSize' => $cartItem->getProductSize(),
                     'total_item' => $cartItem->getTotalItems()
                 ]);

@@ -13,10 +13,10 @@ class CartItem {
     private float $product_price;
     private int $stock;
     private ?string $product_image; 
-    private ?string $product_color; 
     private ?string $product_size; 
-    private ?int $color_stock;
-    private ?int $size_stock;
+    private ?string $product_color; 
+    private ?int $variant_id;
+    private ?int $stock_quantity;
 
     public function __construct(array $data = []) {
         $this->cart_id = $data['cart_id'];
@@ -29,15 +29,18 @@ class CartItem {
         $this->product_price = $data['product_price'];
         $this->stock = $data['stock'];
         $this->product_image = $data['product_image'] ?? null;
+        $this->variant_id = $data['variant_id'] ?? null;
         $this->product_color = $data['color_name'] ?? null;
         $this->product_size = $data['size_name'] ?? null;
-        $this->color_stock = $data['color_stock'] ?? null;
-        $this->size_stock = $data['size_stock'] ?? null;
+        $this->stock_quantity = $data['stock_quantity'] ?? null;
 
     }
 
     public function getCartId(): int {
         return $this->cart_id;
+    }
+    public function getVariantId() {
+        return $this->variant_id;
     }
 
     public function getTotal(): float {
@@ -84,13 +87,11 @@ class CartItem {
         return $this->product_size;
     }
 
-    public function getStockColor(){
-        return $this->color_stock ;
+    public function getStockQuantity(){
+        return $this->stock_quantity ;
     }
 
-    public function getStockSize(){
-        return $this->size_stock ;
-    }
+    
 
     
 
