@@ -44,7 +44,7 @@ class RegisterController extends Controller  {
             Session::set("role" , $user->getRole());
             Session::set('id',$user->getId());
             $this->cartServise->associateCartAfterLogin($user->getId());
-            $this->response->redirect('customer/account');
+            $this->response->redirect('/customer/account');
         }
           $this->redirect('/login');
 

@@ -79,11 +79,12 @@
                 {% set primary_image = image %}
               {% endif %}
             {% endfor %}
-            
+          <div class="w-full h-96">
             <img 
               src="/public/uploads/{{ primary_image.image_path }}" 
-              class="w-full h-72 object-cover transition-transform duration-700 group-hover:scale-105"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               alt="{{ product.title }}">
+          </div>    
             
             <!-- Product Badge -->
             {% if product.stock <= 5 and product.stock > 0 %}

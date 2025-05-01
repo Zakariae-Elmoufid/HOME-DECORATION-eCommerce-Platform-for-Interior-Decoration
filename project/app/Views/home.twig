@@ -11,13 +11,13 @@
       <h1 class="font-serif text-5xl font-bold mb-4">Create your dream interior</h1>
       <p class="text-xl mb-8">Discover our new collection and transform your space with elegance and style.</p>
       <div class="flex space-x-4">
-        <a href="#"
-          class="bg-gold hover:bg-gold-dark text-black font-medium px-6 py-3 rounded-lg transition duration-300">
+        <a href="/producs"
+          class="bg-gold hover:bg-gold-dark text-white font-medium px-6 py-3 rounded-lg transition duration-300">
           Explore the collection
         </a>
-        <a href="#"
-          class="bg-transparent border-2 border-white hover:bg-white hover:text-charcoal text-white font-medium px-6 py-3 rounded-lg transition duration-300">
-          Our bestsellers
+        <a href="/contact_us"
+          class="bg-transparent border-2 border-white hover:bg-gold hover:text-charcoal text-white font-medium px-6 py-3 rounded-lg transition duration-300">
+          Contact Us
         </a>
       </div>
     </div>
@@ -73,11 +73,12 @@
                 {% set primary_image = image %}
               {% endif %}
             {% endfor %}
+        <div class="w-full h-72">
           <img
             src="/public/uploads/{{ primary_image.image_path }}"
-            class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             alt="Scandinavian armchair">
-
+        </div>
           
 
 

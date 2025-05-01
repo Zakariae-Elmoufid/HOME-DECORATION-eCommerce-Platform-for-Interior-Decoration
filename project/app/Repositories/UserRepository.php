@@ -23,7 +23,7 @@ class UserRepository extends BaseRepository {
         $create_user = $this->insert($this->table,$userdata );
         $createdAt = new DateTime();
         if($create_user){
-            $user = new User($data['username'],$data['email'],$createdAt,$data['password'],$roleId,$create_user);
+            $user = new User($data['username'],$data['email'],$createdAt,$roleId ,$data['password'],$create_user);
             return $user;
         }
 

@@ -34,8 +34,10 @@
 
           <div class="mb-4 border border-gray-200 rounded-lg overflow-hidden">
             {% if primaryImage %}
+              <div class="w-full h-96">
               <img id="main-product-image" src="/public/uploads/{{ primaryImage.image_path }}"
-                class="w-full h-96 object-cover" alt="{{ product.title }}">
+                class="w-full h-full object-contain" alt="{{ product.title }}">
+                </div>  
             {% else %}
               <div class="w-full h-96 bg-gray-100 flex items-center justify-center">
                 <span class="text-gray-400">No image available</span>

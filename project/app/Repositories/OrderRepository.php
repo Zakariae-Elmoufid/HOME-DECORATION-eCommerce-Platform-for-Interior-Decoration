@@ -23,7 +23,7 @@ class OrderRepository  extends BaseRepository {
         o.shipping,
         u.username,
         u.email,
-        us.phone,
+        us.phone
          FROM orders o
         inner join user_addresses us on us.id = o.shipping_address_id 
         inner join users u on us.id = u.id
@@ -161,16 +161,15 @@ class OrderRepository  extends BaseRepository {
             o.created_at,
             o.subTotal,
             o.shipping,
-            us.first_name,
-            us.last_name,
-            us.email,
+            u.username,
+            u.email,
             us.phone
             FROM orders o
             INNER JOIN user_addresses us ON us.id = o.shipping_address_id
+            INNER JOIN users u ON u.id = us.user_id 
             WHERE o.id = ?", [$orderId]);
     
-        $order = $orderStmt->fetch(PDO::FETCH_OBJ);
-    
+           $order = $orderStmt->fetch(PDO::FETCH_OBJ);
         if (!$order) {
             return null; 
         }
@@ -187,7 +186,7 @@ class OrderRepository  extends BaseRepository {
             p.title AS productTitle,
             pg.image_path AS productImage
             FROM order_items oi
-            INNER JOIN Products p ON oi.product_id = p.id
+            INNER JOIN products p ON oi.product_id = p.id
             INNER JOIN product_images pg ON pg.product_id = p.id AND pg.is_primary = 1
             WHERE oi.order_id = ?", [$orderId]);
     

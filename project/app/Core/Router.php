@@ -57,9 +57,9 @@ class Router {
             if (isset($this->middlewares[$url])) {
                 foreach ($this->middlewares[$url] as $middleware) {
                     if (is_string($middleware)) {
-                        $middlewareInstance = new $middleware(); // pour middleware classique
+                        $middlewareInstance = new $middleware(); 
                     } else {
-                        $middlewareInstance = $middleware; // instance déjà fournie
+                        $middlewareInstance = $middleware; 
                     }
                     $middlewareInstance->handle($this->request);
                 }
