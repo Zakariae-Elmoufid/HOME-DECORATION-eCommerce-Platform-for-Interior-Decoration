@@ -8,7 +8,7 @@ use PDO;
 
 class ProductRepository extends BaseRepository {
 
-    private $table = "Products";
+    private $table = "products";
 
  
     public function selectAll(){
@@ -34,7 +34,7 @@ class ProductRepository extends BaseRepository {
                     'stock_quantity', pv.stock_quantity
                 )
             )
-            FROM Product_variants pv 
+            FROM product_variants pv 
             WHERE pv.product_id = p.id
          ) AS variants,
          (
@@ -45,13 +45,13 @@ class ProductRepository extends BaseRepository {
                     'is_primary', pi.is_primary
                 )
             )
-            FROM Product_images pi 
+            FROM product_images pi 
             WHERE pi.product_id = p.id
          ) AS images
             FROM 
-                Products p
+                products p
             LEFT JOIN 
-                categorys c ON p.category_id = c.id
+                categories c ON p.category_id = c.id
             LEFT JOIN 
                 reviews r ON r.product_id = p.id
             WHERE 
@@ -68,7 +68,7 @@ class ProductRepository extends BaseRepository {
             }
 
     public function selectCategories(){
-                $categories =  $this->getAll("categorys");
+                $categories =  $this->getAll("categories");
                 $data = [];
                 foreach( $categories as $category ){
                 $data = new Category($category);
@@ -89,7 +89,7 @@ class ProductRepository extends BaseRepository {
     }
 
     public function countCategories(){
-                $stmt = $this->query(" SELECT COUNT(id) as total_categories FROM categorys ");
+                $stmt = $this->query(" SELECT COUNT(id) as total_categories FROM categories ");
                 $result = $stmt->fetch(PDO::FETCH_OBJ);
                 return $result->total_categories;
     }
@@ -127,7 +127,7 @@ class ProductRepository extends BaseRepository {
                     "stock_quantity" => $data["stock_quantity"][$index],
                 ];
                 
-                $this->insert("Product_variants", $variant);
+                $this->insert("product_variants", $variant);
                 
                 $variants[] = $variant;
             }
@@ -142,7 +142,7 @@ class ProductRepository extends BaseRepository {
                     "image_path" => $image["path"],
                 ];
                 
-                $this->insert("Product_images", $imageData);
+                $this->insert("product_images", $imageData);
                 
                 $images[] = $imageData;
             }
@@ -172,8 +172,8 @@ class ProductRepository extends BaseRepository {
         p.isAvailable,
         p.category_id,
         c.title AS category_name
-        FROM Products p
-        inner join categorys c on c.id = p.category_id 
+        FROM products p
+        inner join categories c on c.id = p.category_id 
         WHERE p.id = $id");
         $product = $stmt->fetch(PDO::FETCH_OBJ);
 
@@ -181,7 +181,7 @@ class ProductRepository extends BaseRepository {
         id as image_id,
         image_path,
         is_primary
-        FROM Product_images
+        FROM product_images
         WHERE product_id = $id");
         $product->images = $stmt->fetchAll(PDO::FETCH_OBJ);
 
@@ -192,7 +192,7 @@ class ProductRepository extends BaseRepository {
         color_code,
         price_adjustment,
         stock_quantity
-        FROM Product_variants
+        FROM product_variants
         WHERE product_id = $id");
         $product->variants = $stmt->fetchAll(PDO::FETCH_OBJ);
         return $product;
@@ -242,9 +242,9 @@ class ProductRepository extends BaseRepository {
             ];
         
             if (!empty($variantIds[$index])) {
-                $this->update("Product_variants", $variantIds[$index], $variant);
+                $this->update("product_variants", $variantIds[$index], $variant);
             } else {
-                $this->insert("Product_variants", $variant);
+                $this->insert("product_variants", $variant);
             }
         }
         return true;
@@ -260,9 +260,9 @@ class ProductRepository extends BaseRepository {
     public function productId($id){
       $stmt = $this->query("SELECT  p.id  , p.title, p.description,
        c.title as category_name , pi.image_path as primary_image
-      from Products p
-       inner join Product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
-       inner join categorys c on c.id = p.category_id
+      from products p
+       inner join product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
+       inner join categories c on c.id = p.category_id
        
        where p.id = ? ",[$id]);
       $product =  $stmt->fetch(PDO::FETCH_OBJ);
@@ -281,12 +281,11 @@ class ProductRepository extends BaseRepository {
             c.title AS category_name,
             AVG(r.rating) AS average_rating,
             COUNT(DISTINCT r.id) AS review_count
-            FROM Products p
-            INNER JOIN categorys c ON c.id = p.category_id 
+            FROM products p
+            INNER JOIN categories c ON c.id = p.category_id 
             LEFT JOIN  reviews r ON r.product_id = p.id
              GROUP BY 
-        p.id, p.title, p.description, p.stock, p.base_price, p.isAvailable, c.title, p.created_at
-
+            p.id, p.title, p.description, p.stock, p.base_price, p.isAvailable, c.title, p.created_at
             ORDER BY p.created_at DESC
             LIMIT 5");
         $products = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -298,7 +297,7 @@ class ProductRepository extends BaseRepository {
                 id as image_id,
                 image_path,
                 is_primary
-                FROM Product_images
+                FROM product_images
                 WHERE product_id = ?", [$product->id]);
             $product->images = $stmt->fetchAll(PDO::FETCH_OBJ);
             $articles[] = new Product($product);
@@ -308,12 +307,12 @@ class ProductRepository extends BaseRepository {
     }
 
     public function getProductsByCategory($idCategories){
-        $stmt = $this->query("SELECT  p.id  , p.title, p.description,p.stock,p.base_price,p.isAvailable, ROUND(AVG(r.rating),2) AS average_rating,
+        $stmt = $this->query("SELECT  p.id  , p.title, p.description ,p.stock,p.base_price, p.isAvailable, ROUND(AVG(r.rating),2) AS average_rating,
         COUNT(DISTINCT r.id) AS review_count,
         c.title as category_name , pi.image_path as primary_image
-       from Products p
-        inner join Product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
-        inner join categorys c on c.id = p.category_id
+       from products p
+        inner join product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
+        inner join categories c on c.id = p.category_id
         LEFT JOIN  reviews r ON r.product_id = p.id
         where c.id = ?
         GROUP BY 
@@ -327,9 +326,9 @@ class ProductRepository extends BaseRepository {
         $stmt = $this->query("SELECT  p.id  , p.title, p.description,p.stock,p.base_price,p.isAvailable, ROUND(AVG(r.rating),2) AS average_rating,
         COUNT(DISTINCT r.id) AS review_count,
         c.title as category_name , pi.image_path as primary_image
-       from Products p
-        inner join Product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
-        inner join categorys c on c.id = p.category_id
+       from products p
+        inner join product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
+        inner join categories c on c.id = p.category_id
         LEFT JOIN  reviews r ON r.product_id = p.id
         where p.title LIKE  ?
         GROUP BY 
@@ -349,9 +348,9 @@ class ProductRepository extends BaseRepository {
         $stmt = $this->query("SELECT  p.id  , p.title, p.description,p.stock,p.base_price,p.isAvailable, ROUND(AVG(r.rating),2) AS average_rating,
         COUNT(DISTINCT r.id) AS review_count,
         c.title as category_name , pi.image_path as primary_image
-       from Products p
-        inner join Product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
-        inner join categorys c on c.id = p.category_id
+       from products p
+        inner join product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
+        inner join categories c on c.id = p.category_id
         LEFT JOIN  reviews r ON r.product_id = p.id
         where p.isAvailable = 1 
         GROUP BY 
@@ -362,7 +361,7 @@ class ProductRepository extends BaseRepository {
     }
 
     public function getImages($product_id){
-         $stmt = $this->query("SELECT * from  Product_images where product_id = ?",[$product_id]);
+         $stmt = $this->query("SELECT * from  product_images where product_id = ?",[$product_id]);
          $images = $stmt->fetchAll(PDO::FETCH_OBJ);
          return $images;
     }
@@ -372,7 +371,6 @@ class ProductRepository extends BaseRepository {
             'success' => [],
             'errors' => []
         ];
-    
         if (!empty($data["images"])) {
             foreach ($data["images"] as $index => $image) {
                 $imageData = [
@@ -381,7 +379,7 @@ class ProductRepository extends BaseRepository {
                     "image_path" => $image["path"],
                 ];
                 try {
-                    $this->insert("Product_images", $imageData);
+                    $this->insert("product_images", $imageData);
                     $results['success'][] = "Image at index $index added successfully.";
                 } catch (Exception $e) {
                     $results['errors'][] = "Error at index $index: " . $e->getMessage();
@@ -394,11 +392,11 @@ class ProductRepository extends BaseRepository {
     
 
     public function deleteImage($id){
-      return  $this->delete("Product_images",$id);
+      return  $this->delete("product_images",$id);
     }
 
     public function setPrimaryImage($id) {
-        $image = $this->findById("Product_images", $id);
+        $image = $this->findById("product_images", $id);
     
         if (!$image) {
             throw new Exception("Image not found.");
@@ -406,7 +404,7 @@ class ProductRepository extends BaseRepository {
     
         $newPriority = ($image->is_primary == 1) ? 0 : 1;
     
-        $updateSuccess = $this->update("Product_images", $id, ["is_primary" => $newPriority]);
+        $updateSuccess = $this->update("product_images", $id, ["is_primary" => $newPriority]);
     
         if (!$updateSuccess) {
             throw new Exception("Failed to update status.");

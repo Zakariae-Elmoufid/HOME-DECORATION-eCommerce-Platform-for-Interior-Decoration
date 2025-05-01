@@ -4,6 +4,7 @@ import {displayMessage} from "./alert.js"
 
 const mainImage = document.getElementById('main-product-image');
 const thumbnails = document.querySelectorAll('.image-thumbnail');
+
 thumbnails.forEach(thumbnail => {
   thumbnail.addEventListener('click', function() {
     mainImage.src = this.dataset.image;
@@ -144,13 +145,15 @@ const decreaseBtn = document.getElementById('decrease-quantity');
 
   const formCart = document.getElementById('product-options-form');
   formCart.addEventListener('submit' ,  async (e) => {
+
+    
     e.preventDefault();
     const formData = new FormData(formCart);
     const data = {};
     formData.forEach((value, key) => {
       data[key] = value;
     });
-    
+    console.log(data);
        const response = await fetch('/cart/add', {
                           method: 'POST',
                           headers: {
@@ -183,4 +186,4 @@ const decreaseBtn = document.getElementById('decrease-quantity');
       document.getElementById(target).classList.remove('hidden');
     });
   });
- 
+  updatePrice();

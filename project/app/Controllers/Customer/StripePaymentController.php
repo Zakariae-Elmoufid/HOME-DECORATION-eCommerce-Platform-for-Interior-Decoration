@@ -83,8 +83,7 @@ class StripePaymentController
             'payment_intent_id' => $session->payment_intent,
             'stripe_session_id' => $session->id,
             'currency' => 'usd',
-             'status' => 'unpaid',
-
+            'status' => 'unpaid',
         ]);
             
 

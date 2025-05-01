@@ -31,8 +31,15 @@
           </div>
 
      
-          {% block SearchDesktop %}{% endblock %}
-
+          {# {% block SearchDesktop %}{% endblock %} #}
+   <div class="hidden md:flex flex-grow max-w-lg mx-6">
+            <div class="w-full">
+              <form class="flex" id="search-bar">
+                <input type="text" placeholder="Search for products..." class="w-full border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold" />
+                <button type="submit"  class="bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-r-lg transition duration-300"><i class="fas fa-search"></i></button>
+              </form>
+            </div>
+          </div>
           <!-- Navigation Icons -->
           <div class="flex items-center space-x-6">
             <a href="/customer/wishlist" class="text-charcoal hover:text-gold transition duration-300"><i class="far fa-heart text-xl"></i></a>
@@ -49,32 +56,19 @@
         <nav class="hidden md:flex justify-center py-3">
           <ul class="flex space-x-8">
             <li>
-              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-gold">Home</a>
-            </li>
-            <li class="group relative">
-              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-transparent hover:border-gold flex items-center">Furniture <i class="fas fa-chevron-down ml-1 text-xs"></i></a>
-              <div class="absolute hidden group-hover:block bg-white shadow-lg w-48 rounded-md p-3 z-50">
-                <a href="#" class="block py-2 px-3 text-charcoal hover:text-gold hover:bg-gray-50">Living Room</a>
-                <a href="#" class="block py-2 px-3 text-charcoal hover:text-gold hover:bg-gray-50">Bedroom</a>
-                <a href="#" class="block py-2 px-3 text-charcoal hover:text-gold hover:bg-gray-50">Kitchen</a>
-                <a href="#" class="block py-2 px-3 text-charcoal hover:text-gold hover:bg-gray-50">Office</a>
-              </div>
+              <a href="/" class="text-charcoal hover:text-gold pb-1  border-gold">Home</a>
             </li>
             <li>
-              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-transparent hover:border-gold">Lighting</a>
+              <a href="/about_us" class="text-charcoal hover:text-gold pb-1   border-gold">About Us</a>
             </li>
             <li>
-              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-transparent hover:border-gold">Accessories</a>
+              <a href="/products" class="text-charcoal hover:text-gold pb-1   border-gold">Products</a>
             </li>
+          
             <li>
-              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-transparent hover:border-gold">Art & Decor</a>
+              <a href="/contact_us" class="text-charcoal hover:text-gold pb-1  border-gold">Contact Us </a>
             </li>
-            <li>
-              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-transparent hover:border-gold">Sale</a>
-            </li>
-            <li>
-              <a href="#" class="text-charcoal hover:text-gold pb-1 border-b-2 border-transparent hover:border-gold">Inspiration</a>
-            </li>
+           
           </ul>
         </nav>
 
@@ -84,28 +78,14 @@
       </div>
 
     <!-- Menu Mobile  -->
-{# <div id="mobile-menu" class="hidden md:hidden bg-white mt-4 rounded-lg shadow-lg">
+<div id="mobile-menu" class="hidden md:hidden bg-white mt-4 rounded-lg shadow-lg">
   <ul class="py-2">
-    <li><a href="#" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Home</a></li>
-    <li class="relative" id="mobile-furniture-dropdown">
-      <div class="flex justify-between items-center px-4 py-3 text-charcoal hover:bg-cream hover:text-gold cursor-pointer">
-        <span>Furniture</span>
-        <i class="fas fa-chevron-down text-xs"></i>
-      </div>
-      <div id="furniture-submenu" class="hidden bg-cream px-4 py-2">
-        <a href="#" class="block py-2 text-charcoal hover:text-gold">Living Room</a>
-        <a href="#" class="block py-2 text-charcoal hover:text-gold">Bedroom</a>
-        <a href="#" class="block py-2 text-charcoal hover:text-gold">Kitchen</a>
-        <a href="#" class="block py-2 text-charcoal hover:text-gold">Office</a>
-      </div>
-    </li>
-    <li><a href="#" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Lighting</a></li>
-    <li><a href="#" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Accessories</a></li>
-    <li><a href="#" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Art & Decor</a></li>
-    <li><a href="#" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Sale</a></li>
-    <li><a href="#" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Inspiration</a></li>
+    <li><a href="/" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Home</a></li>
+    <li><a href="/about_us" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">About Us</a></li>
+    <li><a href="/products" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Products</a></li>
+    <li><a href="/contact_us" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Contact Us</a></li>
   </ul>
-</div> #}
+</div>
 
     </header>
        {% include "components/alert.twig" %}
@@ -214,12 +194,8 @@
     </footer>
 
     <script src="../../../public/js/main.js" type="module"></script>
-    <script src="../../public/js/products.js" type="module"></script>
-    <script>  
-        document.addEventListener("DOMContentLoaded", () => {
-            updateCount();
-        });
-    </script>
+     <script src="../../public/js/products.js" type="module"></script>
+
   </body>
 
 </html>

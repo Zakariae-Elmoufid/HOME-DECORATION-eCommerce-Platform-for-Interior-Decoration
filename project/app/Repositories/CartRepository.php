@@ -24,7 +24,7 @@ class CartRepository  extends BaseRepository{
     }
 
     public function getProductPrice($id){
-        $stmt = $this->query("SELECT base_price FROM Products Where id = ?",[$id]);
+        $stmt = $this->query("SELECT base_price FROM products Where id = ?",[$id]);
        return  $stmt->fetchColumn();
     }
 
@@ -58,9 +58,9 @@ class CartRepository  extends BaseRepository{
 
          from carts c
          inner join cart_items  ci on ci.cart_id = c.id
-         inner join Products  p on ci.product_id = p.id
-         left join Product_images  pi on pi.product_id  =  p.id AND pi.is_primary = 1  
-         left join Product_variants  pv on pv.id  =  ci.variant_id 
+         inner join products  p on ci.product_id = p.id
+         left join product_images  pi on pi.product_id  =  p.id AND pi.is_primary = 1  
+         left join product_variants  pv on pv.id  =  ci.variant_id 
         
          where user_id = ? or session_id = ? ',[$id,$id]);
          $data =  $stmt->fetchAll(PDO::FETCH_ASSOC); 

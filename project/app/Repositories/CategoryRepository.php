@@ -7,7 +7,7 @@ use PDO;
 
 class CategoryRepository extends BaseRepository {
 
-    private $table = "categorys";
+    private $table = "categories";
 
 
     public  function fechAll(){

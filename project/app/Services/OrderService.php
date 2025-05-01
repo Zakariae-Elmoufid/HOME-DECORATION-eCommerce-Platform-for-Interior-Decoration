@@ -34,8 +34,8 @@ class OrderService {
     $items = $this->cartRepository->getcartItems($user_id,null);
     
     $checkUserAddress = $this->accountRepository->getUserAdress($user_id);
-    
-    if(!$checkUserAddress){
+
+    if($checkUserAddress->getId() == null ){
         $user_address = $this->accountRepository->createUserAddresse([
             'user_id' => $user_id,
             'phone' => $data['phone'],
@@ -65,7 +65,6 @@ class OrderService {
         'subTotal' =>  $data['subTotal'],
         'totalAmount' =>  $data['totalAmount'],
         'orderDate' => date('Y-m-d'),
-        'comment' => $data['comments'] ?? null,
     ]);
     
     
@@ -131,27 +130,26 @@ class OrderService {
 
     foreach($quantities as $item) {
 
-        $currentStock = $this->orderRepository->currentStock($item->variant_id);
 
-                if ($currentStock === false) {
-                throw new Exception("Variant not found");
-                 }
-
-        $newStock = $currentStock - $item->quantity;
-
+        if ($item->variant_id) {
+            $currentStock = $this->orderRepository->currentStock($item->variant_id);
+            $newStock = $currentStock - $item->quantity;
+            $this->orderRepository->updateQuantity($item->variant_id, ['stock_quantity' => $newStock]);
+        } 
      
-       $updateQauntity =  $this->orderRepository->updateQuantity($item->variant_id,['stock_quantity'=>$newStock]);
     }
-   dump($quantities);
     $totalStock = $this->orderRepository->calculateTotalVariantStock($quantities[0]->product_id);
-
     if ( $totalStock !== null) {
         $this->orderRepository->updateProductStock($quantities[0]->product_id, ['stock' => $totalStock]);
     }
 
-    return true;
-      
+    $this->orderRepository->updateOrderStatus($order_id,['status'=>'shipped']);
+
+    return true;   
   }
+
+      
+  
 
     
 

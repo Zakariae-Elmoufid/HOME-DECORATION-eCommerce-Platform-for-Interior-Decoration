@@ -42,7 +42,6 @@ class ProductController extends Controller {
         $body = $request->getbody();
         $id = isset($body['id']) ? (int) $body['id'] : null;
         $data = $this->ProductService->show($id);
-        dump($data);
         $this->response->render('customer/pageProduct', [
         "product" => $data['product'] ,
         'reviews' => $data['reviews'] , 
@@ -69,7 +68,7 @@ class ProductController extends Controller {
         $body = $request->getbody();
         $id = isset($body['id']) ? (int) $body['id'] : null;
         $images  = $this->productRepository->getImages($id);
-        $this->response->render("admin/products/editImages",['images'=>$images]);
+        $this->response->render("admin/products/editImages",['images'=>$images ,"product_id" => $id]);
 
     }
 
@@ -88,7 +87,7 @@ class ProductController extends Controller {
             }
         }
         $data["images"] = $uploadedImages;
-        
+      
         $result = $this->productRepository->addImages($data,$data['product_id']);
         if (!empty($results['errors'])) {
             foreach ($results['errors'] as $error) {

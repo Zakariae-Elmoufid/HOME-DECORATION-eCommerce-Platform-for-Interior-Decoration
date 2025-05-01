@@ -28,6 +28,9 @@ use App\Middlewares\PermissionMiddleware;
 
 $app = new Application(dirname(__DIR__));
 $app->router->get('/','HomeController@index');
+$app->router->get('/about_us','HomeController@about');
+$app->router->get('/contact_us','HomeController@contact');
+
 $app->router->get('/register','Auth\RegisterController@index');
 $app->router->get('/login','Auth\LoginController@index');
 $app->router->post('/store_user',[RegisterController::class, 'store']);

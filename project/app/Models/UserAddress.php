@@ -14,7 +14,7 @@ class UserAddress extends User{
 
     public function __construct($data = []) {
         $dataArray = is_object($data) ? get_object_vars($data) : $data;
-        parent::__construct($dataArray['username'],$dataArray['email'],$dataArray['created_at'],2,null,$dataArray['user_id']);
+        parent::__construct($dataArray['username'] ?? null,$dataArray['email'] ?? null ,$dataArray['created_at'] ?? null ,2,null,$dataArray['user_id']?? null );
         $this->id = $dataArray['id'] ?? null;
         $this->phone = $dataArray['phone'] ?? null;
         $this->address = $dataArray['address'] ?? null;

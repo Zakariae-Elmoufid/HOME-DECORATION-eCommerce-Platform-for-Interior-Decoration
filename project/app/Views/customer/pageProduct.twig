@@ -152,7 +152,9 @@
               {% endfor %}
             </div>
           </div>
-{% endif %}
+          {% else %}
+           <input type="hidden" name="variant" value="0">
+         {% endif %}
 
 
         
@@ -388,5 +390,7 @@
 
 <script src="/public/js/pageProduct.js" type="module"></script>
 <script src="/public/js/wishlist.js" type="module"></script>
+
+
 
 {% endblock %}

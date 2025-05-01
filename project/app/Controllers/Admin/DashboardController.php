@@ -66,7 +66,7 @@ class DashboardController {
         $total = $this->orderRepository->completedOrders();
         $currentMonth = $this->orderRepository->currentMonthOrder();
         $previousMonth = $this->orderRepository->prevMonthOrder();
-        $percentChange = $previousMonth > 0 ? (($currentMonth - $previousMonth) / $prevMonth) * 100 : 0;
+        $percentChange = $previousMonth > 0 ? (($currentMonth - $previousMonth) / $previousMonth) * 100 : 0;
         return [
             'total' => $total,
             'percentChange' => round($percentChange, 1),

@@ -89,7 +89,7 @@
                 <button class="decrease bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-l-md">
                   <i class="fas fa-minus text-xs"></i>
                 </button>
-                <input type="number" data-stock="{{item.getStockQuantity}}"
+                <input type="number" data-stock="{{ item.getStockQuantity is not null ? item.getStockQuantity : item.getStock }}"
                   value="{{ item.getQuantity }}" min="1" class="w-12 text-center border-y border-gray-300 py-1 focus:outline-none focus:ring-1 focus:ring-gold">
                 <button class="increase bg-gray-200 hover:bg-gray-300 text-charcoal px-2 py-1 rounded-r-md">
                   <i class="fas fa-plus text-xs"></i>
@@ -101,7 +101,6 @@
               <span class="sub-total-item font-medium text-charcoal">${{ item.getTotalItems }}</span>
             </div>
           </div>
-
         {% endfor %}
 
           <!-- Actions -->
@@ -182,80 +181,8 @@
   </div>
   {% endif %}
 
-  <!-- You May Also Like -->
-  <div class="mt-16">
-    <h2 class="text-2xl font-serif font-bold text-charcoal mb-8">You May Also Like</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <!-- Recommendation 1 -->
-      <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300">
-        <div class="relative">
-          <img src="https://via.placeholder.com/300x300" alt="Halo Floor Lamp" class="w-full h-48 object-cover">
-          <div class="absolute top-3 right-3">
-            <button class="bg-white p-2 rounded-full shadow hover:bg-cream">
-              <i class="far fa-heart text-charcoal"></i>
-            </button>
-          </div>
-        </div>
-        <div class="p-4">
-          <h3 class="font-medium text-charcoal mb-1">Halo Floor Lamp</h3>
-          <div class="text-gold mb-2">$229.00</div>
-          <button class="w-full bg-white border border-gold text-gold hover:bg-gold hover:text-white py-2 rounded transition duration-300">Add to Cart</button>
-        </div>
-      </div>
 
-      <!-- Recommendation 2 -->
-      <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300">
-        <div class="relative">
-          <img src="https://via.placeholder.com/300x300" alt="Nordic Rug" class="w-full h-48 object-cover">
-          <div class="absolute top-3 right-3">
-            <button class="bg-white p-2 rounded-full shadow hover:bg-cream">
-              <i class="far fa-heart text-charcoal"></i>
-            </button>
-          </div>
-        </div>
-        <div class="p-4">
-          <h3 class="font-medium text-charcoal mb-1">Nordic Rug</h3>
-          <div class="text-gold mb-2">$189.00</div>
-          <button class="w-full bg-white border border-gold text-gold hover:bg-gold hover:text-white py-2 rounded transition duration-300">Add to Cart</button>
-        </div>
-      </div>
-
-      <!-- Recommendation 3 -->
-      <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300">
-        <div class="relative">
-          <img src="https://via.placeholder.com/300x300" alt="Decorative Pillow" class="w-full h-48 object-cover">
-          <div class="absolute top-3 right-3">
-            <button class="bg-white p-2 rounded-full shadow hover:bg-cream">
-              <i class="far fa-heart text-charcoal"></i>
-            </button>
-          </div>
-        </div>
-        <div class="p-4">
-          <h3 class="font-medium text-charcoal mb-1">Decorative Pillow</h3>
-          <div class="text-gold mb-2">$45.00</div>
-          <button class="w-full bg-white border border-gold text-gold hover:bg-gold hover:text-white py-2 rounded transition duration-300">Add to Cart</button>
-        </div>
-      </div>
-
-      <!-- Recommendation 4 -->
-      <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300">
-        <div class="relative">
-          <img src="https://via.placeholder.com/300x300" alt="Ceramic Vase" class="w-full h-48 object-cover">
-          <div class="absolute top-3 right-3">
-            <button class="bg-white p-2 rounded-full shadow hover:bg-cream">
-              <i class="far fa-heart text-charcoal"></i>
-            </button>
-          </div>
-        </div>
-        <div class="p-4">
-          <h3 class="font-medium text-charcoal mb-1">Ceramic Vase</h3>
-          <div class="text-gold mb-2">$79.00</div>
-          <button class="w-full bg-white border border-gold text-gold hover:bg-gold hover:text-white py-2 rounded transition duration-300">Add to Cart</button>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
-<script src="../../../public/js/cart.js" type="module" defer></script>
+<script src="../../../public/js/cart.js" type="module" ></script>
 
 {% endblock %}

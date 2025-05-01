@@ -1,5 +1,5 @@
 import {displayMessage} from "./alert.js"
-import updateCount from "./main.js "
+import updateCount from "./main.js"
 
     const cartElement = document.querySelector('[data-id-cart]');
     
@@ -17,8 +17,10 @@ Array.from(increaseBtn).forEach(button => {
     button.addEventListener('click', function(e) {
         const input = this.parentElement.querySelector('input');
         const currentQuantity = parseInt(input.value);
+
         
         const stockQuantity  = input.dataset.stock;
+        console.log(input.dataset.stock);
         
         ;
         if (currentQuantity < stockQuantity) {
@@ -33,6 +35,7 @@ decreaseBtn.forEach(button => {
     button.addEventListener('click', function(e) {
         const input = this.parentElement.querySelector('input');
         const currentQuantity = parseInt(input.value);
+
         if (currentQuantity > 1) {
           input.value = currentQuantity - 1;
           updateTotals();
@@ -134,8 +137,6 @@ removes.forEach(button => {
               })
               const result = await response.json();
               if(result.success) {
-                  console.log("f");
-                  console.log(updateCount());
                   updateCount();
                 displayMessage(result.success,'/cart');
                }

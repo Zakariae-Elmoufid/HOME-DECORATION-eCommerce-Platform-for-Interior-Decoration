@@ -178,8 +178,7 @@ class AuthService {
     
 
 
-            
-            $user = $this->userRepository->createUser($data);
+            $user = $this->userRepository->createUser($data,2);
             return $user;
             
         } else {

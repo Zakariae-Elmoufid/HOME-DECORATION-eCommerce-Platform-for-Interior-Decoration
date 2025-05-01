@@ -1,7 +1,7 @@
 {% extends "layouts/main.twig" %}
 {% block title %}Products{% endblock %}
 
-{% block SearchDesktop %}
+{# {% block SearchDesktop %}
      <!-- Search Bar (visible on desktop) -->
           <div class="hidden md:flex flex-grow max-w-lg mx-6">
             <div class="w-full">
@@ -11,7 +11,7 @@
               </form>
             </div>
           </div>
-{% endblock %}
+{% endblock %} #}
 
 {% block SearchMobile %}
   <!-- Mobile Search (visible on mobile) -->
@@ -82,7 +82,7 @@
             
             <img 
               src="/public/uploads/{{ primary_image.image_path }}" 
-              class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
+              class="w-full h-72 object-cover transition-transform duration-700 group-hover:scale-105"
               alt="{{ product.title }}">
             
             <!-- Product Badge -->

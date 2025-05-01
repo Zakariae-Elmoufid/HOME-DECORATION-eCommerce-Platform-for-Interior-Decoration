@@ -19,14 +19,13 @@ class BaseRepository implements RepositoryInterface {
 
     public function query($sql, $params = [])
     {
-        try {
+        // try {
             $stmt = $this->conn->prepare($sql);
             $stmt->execute($params);
             return $stmt;
-        } catch (Exception $e) {
-            // Capture et affichage des erreurs SQL
-            die("Query failed: " . $e->getMessage());
-        }
+        // } catch (Exception $e) {
+        //     die("Query failed: " . $e->getMessage());
+        // }
     }
 
     public function insert($table, $data)

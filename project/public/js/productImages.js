@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const imageGallery = document.getElementById('imageGallery');
     
     const productId = imageGallery.dataset.productId;
-
+    console.log(productId);
     imageInput.addEventListener('change', function(e) {
         uploadPreview.innerHTML = '';
         Array.from(this.files).forEach(file => {
@@ -36,10 +36,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     uploadForm.addEventListener('submit', async function(e) {
         e.preventDefault();
+
+      
         if (!imageInput.files || imageInput.files.length === 0) {
             displayMessage("Please select at least one image to upload", null, "error");
             return;
         }
+         
         const formData = new FormData();
         formData.append('product_id', productId);
         
@@ -55,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers : {
                     'X-Requested-With': 'XMLHttpRequest' 
                 },
-                body: formData
+                body: formData,
             });
             
             const result = await response.json();

@@ -7,7 +7,6 @@ categoryFilter.addEventListener('change', function() {
     const category = this.value;
     productsCard.forEach(product => {
         const cardCategory = product.querySelector('.category-value').textContent;
-        console.log(cardCategory);
         product.classList.add('hidden'); 
 
         if(category === 'All Categories' || category === cardCategory) {
