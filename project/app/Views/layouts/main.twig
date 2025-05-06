@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}
+        Title
+      {% endblock %}
+    </title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="../../../public/css/main.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-cream-light font-sans">
+    <!-- Promotional Announcement -->
+    <div class="bg-gold text-white text-center py-2 text-sm">
+      <p>Free shipping on all orders over $150 | Promo code: ELEGANCE25</p>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex justify-between items-center">
+          <!-- Logo -->
+          <div class="flex-shrink-0">
+            <a href="/" class="flex items-center"><span class="text-2xl font-serif font-bold text-charcoal">Elegant<span class="text-gold">Home</span></span></a>
+          </div>
+
+  
+        
+                <nav class="hidden md:flex justify-center py-3">
+          <ul class="flex space-x-8">
+            <li>
+              <a href="/" class="text-charcoal hover:text-gold pb-1 border-gold">Home</a>
+            </li>
+            <li>
+              <a href="/about_us" class="text-charcoal hover:text-gold pb-1 border-gold">About Us</a>
+            </li>
+            <li>
+              <a href="/products" class="text-charcoal hover:text-gold pb-1 border-gold">Products</a>
+            </li>
+
+            <li>
+              <a href="/contact_us" class="text-charcoal hover:text-gold pb-1 border-gold">Contact Us</a>
+            </li>
+          </ul>
+        </nav>
+          
+          <!-- Navigation Icons -->
+          <div class="flex items-center space-x-6">
+            <a href="/customer/wishlist" class="text-charcoal hover:text-gold transition duration-300"><i class="far fa-heart text-xl"></i></a>
+            <a href="/cart" class="text-charcoal hover:text-gold transition duration-300 relative">
+              <i class="fas fa-shopping-bag text-xl"></i>
+              <span id="count-cart-item" class="absolute -top-2 -right-2 bg-gold text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"></span>
+            </a>
+            <a href="{{ session.id ? '/customer/account' : '/login' }}" class="text-charcoal hover:text-gold transition duration-300"><i class="far fa-user text-xl"></i></a>
+            <button id="bars" class="md:hidden text-charcoal hover:text-gold transition duration-300"><i class="fas fa-bars text-xl"></i></button>
+          </div>
+        </div>
+
+          {% block SearchDesktop %}
+          {% endblock %}
+        {# <!-- Main Navigation -->
+        <nav class="hidden md:flex justify-center py-3">
+          <ul class="flex space-x-8">
+            <li>
+              <a href="/" class="text-charcoal hover:text-gold pb-1 border-gold">Home</a>
+            </li>
+            <li>
+              <a href="/about_us" class="text-charcoal hover:text-gold pb-1 border-gold">About Us</a>
+            </li>
+            <li>
+              <a href="/products" class="text-charcoal hover:text-gold pb-1 border-gold">Products</a>
+            </li>
+
+            <li>
+              <a href="/contact_us" class="text-charcoal hover:text-gold pb-1 border-gold">Contact Us</a>
+            </li>
+          </ul>
+        </nav> #}
+
+        {% block SearchMobile %}
+        {% endblock %}
+      </div>
+
+      <!-- Menu Mobile -->
+      <div id="mobile-menu" class="hidden md:hidden bg-white mt-4 rounded-lg shadow-lg">
+        <ul class="py-2">
+          <li>
+            <a href="/" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Home</a>
+          </li>
+          <li>
+            <a href="/about_us" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">About Us</a>
+          </li>
+          <li>
+            <a href="/products" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Products</a>
+          </li>
+          <li>
+            <a href="/contact_us" class="block px-4 py-3 text-charcoal hover:bg-cream hover:text-gold">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+    </header>
+    {% include 'components/alert.twig' %}
+
+    {% block content %}
+
+    {% endblock %}
+
+    <footer class="bg-charcoal-dark text-white pt-16 pb-6">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          <div>
+            <h3 class="text-xl font-serif font-bold mb-6">Elegant<span class="text-gold">Home</span></h3>
+            <p class="text-gray-400 mb-6">Your destination for elegant and refined interiors that reflect your personality.</p>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-gold transition duration-300"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="text-gray-400 hover:text-gold transition duration-300"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="text-gray-400 hover:text-gold transition duration-300"><i class="fab fa-pinterest-p"></i></a>
+              <a href="#" class="text-gray-400 hover:text-gold transition duration-300"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-medium mb-6">Quick Links</h4>
+            <ul class="space-y-3">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Home</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Shop</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">New Arrivals</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Sale</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Blog</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Contact</a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-medium mb-6">Categories</h4>
+            <ul class="space-y-3">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Furniture</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Lighting</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Accessories</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Art & Decor</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Textiles</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Kitchen</a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-medium mb-6">Information</h4>
+            <ul class="space-y-3">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">About Us</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Terms & Conditions</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">Shipping & Returns</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-gold transition duration-300">FAQ</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-8 border-t border-gray-700 text-center text-gray-400 text-sm">
+          <div class="mb-4">
+            <span class="px-2">Secure payment</span>
+            <div class="flex justify-center space-x-4 mt-2">
+              <i class="fab fa-cc-visa text-2xl"></i>
+              <i class="fab fa-cc-mastercard text-2xl"></i>
+              <i class="fab fa-cc-paypal text-2xl"></i>
+              <i class="fab fa-cc-apple-pay text-2xl"></i>
+            </div>
+          </div>
+          <p>&copy; 2025 ElegantHome. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../../../public/js/main.js" type="module"></script>
+    <script src="../../public/js/products.js" type="module"></script>
+  </body>
+</html>

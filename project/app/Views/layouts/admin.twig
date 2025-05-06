@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      {% block title %}
+        Title
+      {% endblock %}
+    </title>
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../public/css/admin.css">
+    {% block head %}
+        
+      {% endblock %}
+</head>
+
+<body >
+
+
+  <div class="lg:flex h-screen bg-gray-light ">
+    <!-- Sidebar -->
+    <div id="sidebar" class="hidden lg:flex">
+      <div  class="side flex flex-col grow    bg-navy">
+        
+        <div class="flex flex-col flex-grow px-4 mt-5">
+          <nav class="flex-1 space-y-1">
+            <a href="/admin" class="flex items-center px-4 py-3 text-sm font-medium text-gray-300 bg-blue rounded-lg group">
+              <i class="fas fa-tachometer-alt mr-3 text-white"></i>
+              <span>Dashboard</span>
+            </a>
+            <a href="/admin/categorys" class="flex items-center px-4 py-3 text-sm font-medium text-gray-300  rounded-lg group">
+              <i class="fa-solid fa-icons mr-3   text-blue-light"></i>
+              <span>Categorys</span>
+            </a>
+            <a href="/admin/products" class="flex items-center px-4 py-3 mt-1 text-sm font-medium text-gray-300  rounded-lg group">
+              <i class="fas fa-box-open mr-3 text-blue-light"></i>
+              <span>Products</span>
+            </a>
+            <a href="/admin/orders" class="flex items-center px-4 py-3 mt-1 text-sm font-medium text-gray-300  rounded-lg group">
+              <i class="fas fa-shopping-cart mr-3 text-blue-light"></i>
+              <span>Orders</span>
+            </a>
+            <a href="/admin/customer" class="flex items-center px-4 py-3 mt-1 text-sm font-medium text-gray-300  rounded-lg group">
+              <i class="fas fa-users mr-3 text-blue-light"></i>
+              <span>Customers</span>
+            </a>
+            <a href="/admin/access" class="flex items-center px-4 py-3 mt-1 text-sm font-medium text-gray-300  rounded-lg group">
+              <i class="fas fa-chart-line mr-3 text-blue-light"></i>
+              <span>Admin</span>
+            </a>
+           
+          </nav>
+          
+          <div class="mt-auto pb-5">
+            <a href="#" class="flex items-center px-4 py-3 mt-1 text-sm font-medium text-gray-300  rounded-lg group">
+              <i class="fas fa-question-circle mr-3 text-blue-light"></i>
+              <span>Help</span>
+            </a>
+            <a href="/logout" class="flex items-center px-4 py-3 mt-1 text-sm font-medium text-gray-300  rounded-lg group">
+              <i class="fas fa-sign-out-alt mr-3 text-blue-light"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Content -->
+    <div class="flex flex-col  flex-1 overflow-y-auto">
+      <!-- Navbar -->
+      <header class="w-full shadow-sm bg-white">
+        <div class="flex justify-between items-center py-4 px-6">
+          <button class="lg:hidden text-navy hover:text-blue" id="menu">
+            <i class="fas fa-bars text-lg"></i>
+          </button>
+
+        <div class="flex items-center justify-center h-10 ">
+          <h2 class="text-xl font-bold  text-navy-dark  font-serif">HomeElagant</h2>
+        </div>
+          
+          <div class="flex items-center space-x-6">
+            <div class="flex items-center">
+              <span class="ml-2 text-sm font-medium text-navy">{{session.username }}</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+    
+      {% block content %}
+
+      {% endblock %}
+        
+      <script src="../../../public/js/mainAdmin.js"></script>
+    </body>
+    </html>
+    

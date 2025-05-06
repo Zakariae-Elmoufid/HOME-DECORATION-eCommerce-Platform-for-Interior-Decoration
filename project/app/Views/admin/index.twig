@@ -1,0 +1,147 @@
+{% extends "layouts/admin.twig" %}
+{% block title %}Dashboard{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+{% block content %}
+
+      <!-- Main Content -->
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-light p-6">
+        <!-- Page Heading -->
+        <div class="flex items-center justify-between mb-6">
+          <h1 class="text-2xl font-semibold text-navy font-serif">Dashboard</h1>
+          <div>
+         
+          </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-blue">
+            <div class="flex items-center">
+              <div class="bg-blue-light p-3 rounded-full">
+                <i class="fas fa-shopping-bag text-white"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-sm font-medium text-navy-light">Total Sales</h3>
+                <p class="text-2xl font-semibold text-navy">${{ sales.total }}</p>
+                <p class="text-xs {% if sales.direction == 'up' %}text-green-500{% else %}text-red-500{% endif %} flex items-center mt-1">
+                  <i class="fas fa-arrow-{{ sales.direction }} mr-1"></i>
+                  <span>{{ sales.percentChange }}% this month</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-blue-light">
+            <div class="flex items-center">
+              <div class="bg-blue-100 p-3 rounded-full">
+                <i class="fas fa-box text-blue"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-sm font-medium text-navy-light">Orders</h3>
+                <p class="text-2xl font-semibold text-navy">{{ orders.total }}</p>
+                <p class="text-xs {% if orders.direction == 'up' %}text-green-500{% else %}text-red-500{% endif %} flex items-center mt-1">
+                  <i class="fas fa-arrow-{{ orders.direction }} mr-1"></i>
+                  <span>{{ orders.percentChange }}% this month</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-blue">
+            <div class="flex items-center">
+              <div class="bg-blue-100 p-3 rounded-full">
+                <i class="fas fa-users text-blue"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-sm font-medium text-navy-light">Customers</h3>
+                <p class="text-2xl font-semibold text-navy">{{ customers.total }}</p>
+                <p class="text-xs {% if customers.direction == 'up' %}text-green-500{% else %}text-red-500{% endif %} flex items-center mt-1">
+                  <i class="fas fa-arrow-{{ customers.direction }} mr-1"></i>
+                  <span>{{ customers.percentChange }}% this month</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-blue-dark">
+            <div class="flex items-center">
+              <div class="bg-blue-100 p-3 rounded-full">
+                <i class="fas fa-cart-arrow-down text-blue-dark"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-sm font-medium text-navy-light">Avg. Cart</h3>
+                <p class="text-2xl font-semibold text-navy">${{ avgCart.total }}</p>
+                <p class="text-xs {% if avgCart.direction == 'up' %}text-green-500{% else %}text-red-500{% endif %} flex items-center mt-1">
+                  <i class="fas fa-arrow-{{ avgCart.direction }} mr-1"></i>
+                  <span>{{ avgCart.percentChange }}% this month</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium text-navy">Monthly Sales</h3>
+                    <select id="yearSelector" class="text-sm border-gray-200 rounded-md focus:outline-none focus:border-blue px-2 py-1">
+                        {# Years will be populated by JavaScript #}
+                    </select>
+                </div>
+                <div class="chart-container" style="position: relative; height:300px;">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+          
+<div class="bg-white rounded-lg shadow-sm p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-lg font-medium text-navy">Popular Products</h3>
+    <select id="popularProductsPeriod" class="text-sm border-gray-200 rounded-md focus:outline-none focus:border-blue px-2 py-1">
+      <option value="current">This Month</option>
+      <option value="previous">Previous Month</option>
+    </select>
+  </div>
+  <div id="popularProductsList" class="space-y-4">
+    {% if popularProducts and popularProducts|length > 0 %}
+      {% for product in popularProducts %}
+        <div class="flex items-center">
+          <img src="/public/uploads/{{ product.image_path }}" alt="{{ product.title }}" class="w-12 h-12 object-cover rounded-md">
+          <div class="ml-4 flex-1">
+            <div class="flex justify-between">
+              <h4 class="text-sm font-medium text-navy">{{ product.title }}</h4>
+              <span class="text-sm font-semibold text-navy">${{ product.base_price }}</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+              <div class="bg-blue h-2 rounded-full" style="width: {{ product.percentage }}%"></div>
+            </div>
+            <div class="flex justify-between mt-1">
+              <span class="text-xs text-gray-500">{{ product.units_sold }} sold</span>
+              <span class="text-xs text-gray-500">{{ product.percentage }}%</span>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="text-center py-4 text-gray-500">
+        No product sales data available
+      </div>
+    {% endif %}
+  </div>
+</div>
+        </div>
+        
+        <!-- Latest Orders & Top Customers -->
+      
+          
+         
+     </main>    
+
+
+     <script src="../../../public/js/chart.js"></script>
+    {% endblock  %}
+ 

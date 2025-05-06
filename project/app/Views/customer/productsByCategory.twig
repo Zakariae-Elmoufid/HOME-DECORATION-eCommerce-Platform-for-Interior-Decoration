@@ -1,0 +1,106 @@
+{% extends "layouts/main.twig" %}
+{% block title %}Products{% endblock %}
+{% block content %}
+
+<section class="py-16 bg-cream">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Breadcrumb navigation -->
+    <nav class="mb-8">
+      <ol class="flex flex-wrap items-center text-sm">
+        <li class="text-gray-500">
+          <a href="/" class="hover:text-gold transition">Home</a>
+          <span class="mx-2">/</span>
+        </li>
+        <li class="text-gold font-medium">{{ products[0].category_name }}</li>
+      </ol>
+    </nav>
+  
+    
+
+
+    <div id="product-container" class=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {% for product in products %}
+        <!-- Product Card -->
+        <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+          <div class="relative group">
+           
+            
+            <img 
+              src="/public/uploads/{{ product.primary_image }}" 
+              class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
+              alt="{{ product.title }}">
+            
+            <!-- Product Badge -->
+            {% if product.stock <= 5 and product.stock > 0 %}
+              <div class="absolute top-2 left-2">
+                <span class="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">Limited Stock</span>
+              </div>
+            {% elseif product.stock == 0 %}
+              <div class="absolute top-2 left-2">
+                <span class="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">Out of Stock</span>
+              </div>
+            {% else %}
+              <div class="absolute top-2 left-2">
+                <span class=" bg-gold text-white text-xs font-bold px-3 py-1 rounded-full">Available</span>
+              </div>
+            {% endif %}
+          </div>
+          
+          <div class="p-4">
+            <!-- Product Title -->
+            <h3 class="title text-lg font-medium text-charcoal">{{ product.title }}</h3>
+            <p class="category-value text-sm text-gray-500 mb-2">{{ product.category_name }}</p>
+            
+            <!-- Star Rating -->
+
+            <div class="flex items-center mb-3">
+              <div class="flex text-gold">
+             {% for i in 1..5 %}
+              {% if product.average_rating >= i %}
+              <i class="fas fa-star"></i>
+              {% elseif product.average_rating  >= i - 0.5 %}
+              <i class="fas fa-star-half-alt"></i>
+              {% else %}
+              <i class="far fa-star"></i>
+              {% endif %}
+            {% endfor %}
+              <span class="text-xs text-gray-500 ml-1">({{product.average_rating}} reviews)</span>
+              </div>
+            </div>
+
+
+            
+            <!-- Price and Add to Cart -->
+            <div class="flex justify-between items-center">
+              <span class="price text-xl font-bold text-charcoal">${{ product.base_price }}</span>
+              <div class="flex space-x-2">
+               
+                {% if product.isAvailable and product.stock > 0 %}
+                  <a href="/product?id={{product.id}}" 
+                    class="add-cart bg-gold hover:bg-gold-dark text-white px-3 py-2 rounded-lg transition duration-300 flex items-center"
+                    data-product-id="{{ product.id }}">
+                    <i class="fas fa-eye mr-1"></i> See Product 
+                  </a>
+                {% else %}
+                  <button
+                    class=" bg-gray-300 text-gray-600 px-3 py-2 rounded-lg cursor-not-allowed flex items-center"
+                    disabled>
+                    <i class="fas fa-eye mr-1"></i> Unavailable
+                  </button>
+                {% endif %}
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+   <div id="search-results" class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg hidden overflow-hidden max-h-96 overflow-y-auto">
+    <!-- Les résultats de recherche seront injectés ici par JavaScript -->
+  </div>
+</section>
+<script src="../../public/js/products.js"></script>
+  {# // <script src="../../public/js/cart.js" ></script> #}
+
+{% endblock %}

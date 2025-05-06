@@ -1,0 +1,48 @@
+:root {
+    --blue-light: #4a94e8;
+    --blue: #1e62b3;
+    --blue-dark: #0a4281;
+    --navy: #112b4a;
+    --navy-light: #1d3c61;
+    --navy-dark: #081c33;
+    --gray-light: #f8fafc;
+    --gray: #f1f5f9;
+    --gray-dark: #e2e8f0;
+  }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--gray);
+  }
+  .font-serif {
+    font-family: 'Playfair Display', serif;
+  }
+  .bg-blue { background-color: var(--blue); }
+  .bg-blue-light { background-color: var(--blue-light); }
+  .bg-blue-dark { background-color: var(--blue-dark); }
+  .bg-navy { background-color: var(--navy); }
+  .bg-navy-light { background-color: var(--navy-light); }
+  .bg-navy-dark { background-color: var(--navy-dark); }
+  .bg-gray { background-color: var(--gray); }
+  .bg-gray-light { background-color: var(--gray-light); }
+  .bg-gray-dark { background-color: var(--gray-dark); }
+  .text-blue { color: var(--blue); }
+  .text-blue-light { color: var(--blue-light); }
+  .text-blue-dark { color: var(--blue-dark); }
+  .text-navy { color: var(--navy); }
+  .text-navy-light { color: var(--navy-light); }
+  .text-navy-dark { color: var(--navy-dark); }
+  .border-blue { border-color: var(--blue); }
+  .chart-container {
+    height: 240px;
+  }
+
+
+  @media (min-width: 1024px) {
+    .side {    
+      min-width: 270px;
+    }
+  }
+  
+
+
+  

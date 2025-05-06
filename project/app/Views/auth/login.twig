@@ -1,0 +1,111 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+   
+     <!-- Login Section with Image -->
+    <section class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+          <div class="flex flex-col md:flex-row">
+
+            <!-- Image Left Side -->
+            <div class="login-image w-full md:w-1/2 h-64 md:h-auto animate-slide-in-left">
+              <div class="h-full w-full flex items-center justify-center bg-black bg-opacity-30 p-10">
+                <div class="text-center text-white">
+                  <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4">Welcome Back</h2>
+                  <p class="text-lg mb-6">Access your account to discover our latest collections and exclusive offers.</p>
+                  <div class="w-24 h-1 bg-gold mx-auto"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Form Right Side -->
+            <div class="w-full md:w-1/2 p-8 md:p-12 animate-slide-in-right">
+              <h3 class="text-2xl font-serif font-bold text-charcoal mb-6">Sign In</h3>
+              
+              <form action="find_user" method="post">
+                <div class="mb-6">
+                  <label for="email" class="block text-charcoal text-sm font-medium mb-2">Email Address</label>
+                  <input type="email" id="email" name="email" required 
+                         class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input-focus transition duration-300"
+                         placeholder="your@email.com"  value="{{ old.email ?? '' }}">
+                    {% if errors.email %}
+                      <small class="text-red-700 pl-2">{{ errors.email[0] }}</small>
+                    {% endif %}   
+                    {% if errors.errorEmail %}
+                      <small class="text-red-700 pl-2">{{ errors.errorEmail }}</small>
+                    {% endif %}      
+                    
+                </div>
+                
+                <div class="mb-6">
+                  <label for="password" class="block text-charcoal text-sm font-medium mb-2">Password</label>
+                  <input type="password" id="password" name="password" required 
+                         class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input-focus transition duration-300"
+                         placeholder="••••••••">
+                   {% if errors.password %}
+                    <small class="text-red-700 pl-2">{{ errors.password[0] }}</small>
+                  {% endif %}       
+                   {% if errors.errorPassword %}
+                    <small class="text-red-700 pl-2">{{ errors.errorPassword }}</small>
+                  {% endif %}       
+                  <div class="flex justify-end mt-2">
+                    <a href="#" class="text-sm text-gold hover:underline transition duration-300">Forgot password?</a>
+                  </div>
+                </div>
+                
+                <div class="mb-6">
+                  <label class="flex items-center">
+                    <input type="checkbox" class="h-4 w-4 text-gold focus:ring-gold border-gray-300 rounded transition duration-300">
+                    <span class="ml-2 text-sm text-charcoal">Remember me</span>
+                  </label>
+                </div>
+                
+                <button type="submit" 
+                        class="w-full bg-gold hover:bg-gold-dark text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105">
+                  Sign In
+                </button>
+              </form>
+
+              <div class="mt-8 text-center">
+                <p class="text-charcoal text-sm">Or sign in with</p>
+                <div class="text-center space-x-4 mt-4">
+                
+                  <div id="g_id_onload"
+                      data-client_id="4542774844-43fkmsis3a9m16u9l1jes9htn0cb2gc6.apps.googleusercontent.com"
+                      data-context="signin"
+                      data-ux_mode="popup"
+                      data-login_uri="http://localhost:8080/login_google"
+                      data-auto_prompt="false">
+                  </div>
+
+                  <div class="g_id_signin"
+                      data-type="standard"
+                      data-shape="pill"
+                      data-theme="outline"
+                      data-text="signin_with"
+                      data-size="large"
+                      data-logo_alignment="left">
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 text-center">
+                <p class="text-charcoal text-sm">
+                  Don't have an account? 
+                  <a href="/register" class="text-gold font-medium hover:underline transition duration-300">Sign up</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+<script src="https://accounts.google.com/gsi/client" async></script>
+
+{% endblock %}

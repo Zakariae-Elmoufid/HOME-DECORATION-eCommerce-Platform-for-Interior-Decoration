@@ -1,0 +1,248 @@
+{% extends 'layouts/admin.twig' %} 
+ 
+{% block title %} 
+  Order Management - Admin Dashboard 
+{% endblock %} 
+ 
+{% block content %}
+  <div class="p-6 bg-gray-light flex-1">
+    <!-- Page Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-semibold text-navy">Order Management</h1>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <div class="bg-white rounded-lg shadow-sm p-5">
+        <div class="flex justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">Total Orders</p>
+            <h3 class="text-3xl font-semibold text-navy mt-1">{{ countOrders }}</h3>
+          </div>
+          <div class="h-12 w-12 rounded-full bg-blue-light bg-opacity-20 flex items-center justify-center">
+            <i class="fas fa-shopping-cart text-blue-dark text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-5">
+        <div class="flex justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">Completed Orders</p>
+            <h3 class="text-3xl font-semibold text-navy mt-1">{{ countCompleted }}</h3>
+          </div>
+          <div class="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
+            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-5">
+        <div class="flex justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">Pending Orders</p>
+            <h3 class="text-3xl font-semibold text-navy mt-1">{{ countPending }}</h3>
+          </div>
+          <div class="h-12 w-12 rounded-full bg-yellow-100 flex items-center justify-center">
+            <i class="fas fa-clock text-yellow-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-5">
+        <div class="flex justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">Total Revenue</p>
+            <h3 class="text-3xl font-semibold text-navy mt-1">${{ totalRevenue }}</h3>
+          </div>
+          <div class="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
+            <i class="fas fa-dollar-sign text-purple-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm p-5 mb-6">
+      <div class="flex flex-col md:flex-row justify-between space-y-4 md:space-y-0">
+        <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+          <div>
+            <label for="status-filter" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <select id="status-filter" class="w-full md:w-48 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+              <option value="All">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="Processing">Processing</option>
+              <option value="Shipped">Shipped</option>
+              <option value="completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div>
+            <label for="date-filter" class="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+            <select id="date-filter" class="w-full md:w-48 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+              <option value="all-time">All Time</option>
+              <option value="today">Today</option>
+              <option value="this-week">This Week</option>
+              <option value="this-month">This Month</option>
+              <option value="last-month">Last Month</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="sort-by" class="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+          <select id="sort-by" class="w-full md:w-48 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue focus:border-blue">
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="amount-asc">Amount (Low to High)</option>
+            <option value="amount-desc">Amount (High to Low)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {% for order in orders %}
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">#{{ order.id }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div>
+                      <div class="text-sm font-medium text-navy">{{ order.username }}</div>
+                      <div class="text-xs text-gray-500">{{ order.email }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">{{ order.created_at|date("M d, Y") }}</div>
+                  <div class="text-xs text-gray-500">{{ order.created_at|date("h:i A") }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">${{ order.totalAmount }}</div>
+                  <div class="text-xs text-gray-500">{{ order.itemsCount }} items</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="status-value px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                    {% if order.status == 'Delivered' %}bg-green-100 text-green-800
+                    {% elseif order.status == 'Shipped' %}bg-blue-100 text-blue-800
+                    {% elseif order.status == 'Processing' %}bg-yellow-100 text-yellow-800
+                    {% elseif order.status == 'Cancelled' %}bg-red-100 text-red-800
+                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                    {{ order.status }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <div class="flex space-x-3">
+                    <button  data-order-id="{{order.id}}" 
+                     class="text-blue hover:text-blue-dark" title="View Details">
+                     <i class="fas fa-eye"></i>
+                     </button>
+
+                    <button data-order-id="{{ order.id }}"  class=" text-green-600 hover:text-green-800" title="Print Invoice">
+                    <i class="fas fa-print"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+
+      <!-- Modal pour les détails de commande -->
+<div id="order-details-modal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden z-50 overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl">
+      <!-- En-tête de modal -->
+      <div class="flex justify-between items-center px-6 py-4 border-b">
+        <h3 class="text-lg font-medium text-navy">Order Details <span id="modal-order-id" class="font-bold"></span></h3>
+        <button id="close-order-details-modal" class="text-gray-400 hover:text-gray-500">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <h4 class="font-medium text-gray-700 mb-2">Customer Information</h4>
+            <p><span class="font-medium">Name:</span> <span id="modal-customer-name"></span></p>
+            <p><span class="font-medium">Email: </span> <span id="modal-customer-email"></span></p>
+          </div>
+          <div>
+            <h4 class="font-medium text-gray-700 mb-2">Order Information</h4>
+            <p><span class="font-medium">Date:</span> <span id="modal-order-date"></span></p>
+            <p><span class="font-medium">Status:</span> <span id="modal-order-status"></span></p>
+            <p><span class="font-medium">Total:</span> <span id="modal-order-total"></span></p>
+          </div>
+        </div>
+        
+        <h4 class="font-medium text-gray-700 mb-4">Order Items</h4>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+              </tr>
+            </thead>
+            <tbody id="modal-order-items" class="bg-white divide-y divide-gray-200">
+
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="mt-6 text-right">
+          <p class="text-sm text-gray-700"><span class="font-medium">Subtotal:</span> <span id="modal-subtotal"></span></p>
+          <p class="text-sm text-gray-700"><span class="font-medium">Shipping:</span> <span id="modal-shipping"></span></p>
+          <p class="text-lg text-gray-900 font-bold mt-2"><span>Total:</span> <span id="modal-grand-total"></span></p>
+        </div>
+      </div>
+      
+      <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t">
+        <button id="print-order-btn" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+          <i class="fas fa-print mr-2"></i> Print Invoice
+        </button>
+        <button id="close-modal-btn" class="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-100">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <!-- Pagination -->
+      <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+        <div class="flex items-center justify-between">
+          <div id="pagination-info" class="text-sm text-gray-700">
+            Showing <span class="font-medium">1</span> to <span class="font-medium">{{ orders|length < 10 ? orders|length : 10 }}</span> of <span class="font-medium">{{ orders|length }}</span> orders
+          </div>
+          <div id="pagination-container" class="flex-1 flex justify-center sm:justify-end">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <script src="../../../../public/js/adminOrders.js" type="module"></script>
+
+{% endblock %}

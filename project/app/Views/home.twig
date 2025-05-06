@@ -1,0 +1,195 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section relative flex items-center">
+  <div class="absolute inset-0  bg-opacity-40"></div>
+  <div class="container mx-auto px-4 relative z-10 text-white">
+    <div class="max-w-xl">
+      <h1 class="font-serif text-5xl font-bold mb-4">Create your dream interior</h1>
+      <p class="text-xl mb-8">Discover our new collection and transform your space with elegance and style.</p>
+      <div class="flex space-x-4">
+        <a href="/producs"
+          class="bg-gold hover:bg-gold-dark text-white font-medium px-6 py-3 rounded-lg transition duration-300">
+          Explore the collection
+        </a>
+        <a href="/contact_us"
+          class="bg-transparent border-2 border-white hover:bg-gold hover:text-charcoal text-white font-medium px-6 py-3 rounded-lg transition duration-300">
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories Section -->
+<section class="py-12 bg-white">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-serif font-bold text-center mb-8">Our Categories</h2>
+
+
+
+    <div class="overflow-x-auto  " id="categorySlider">
+      <div class="flex space-x-6 py-4 px-2">
+
+        {% for category in categories %}
+        <div class="flex-shrink-0  w-36 md:w-44 text-center transition duration-300 transform hover:-translate-y-1">
+          <a href="/products/bycategory?category={{category.id}}" data-category-id="{{category.getId}}"
+            class="bg-white rounded-full h-24 w-24 mx-auto flex items-center justify-center shadow-md mb-4 transition duration-300 hover:bg-amber-600 group">
+            <span class="iconify" data-icon="{{ category.icon }}" data-width="24"></span>
+          </a>
+          
+          <h3 class="font-medium text-gray-900">{{ category.title }}</h3>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+
+
+
+  </div>
+</section>
+
+<!-- New Arrivals Section -->
+<section class="py-16 bg-cream ">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center mb-10">
+      <h2 class="text-3xl font-serif font-bold">New Arrivals</h2>
+      <a href="/products" class="text-gold hover:text-gold-dark font-medium transition duration-300">View all <i
+          class="fas fa-arrow-right ml-1"></i></a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- new Products  -->
+        {% for product in newProducts %}
+      <div
+        class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+        <div class="relative group">
+          {% set primary_image = null %}
+            {% for image in product.images %}
+              {% if image.is_primary == 1 %}
+                {% set primary_image = image %}
+              {% endif %}
+            {% endfor %}
+        <div class="w-full h-72">
+          <img
+            src="/public/uploads/{{ primary_image.image_path }}"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            alt="Scandinavian armchair">
+        </div>
+          
+
+
+
+          <!-- Product Badge -->
+          <div class="absolute top-2 left-2">
+            <span class="bg-gold text-white text-xs font-bold px-3 py-1 rounded-full">New</span>
+          </div>
+        </div>
+
+        <div class="p-4">
+          <!-- Product Title -->
+          <h3 class="text-lg font-medium text-charcoal">{{ product.title}}</h3>
+          <p class="text-sm text-gray-500 mb-2">{{product.categoryName}}</p>
+
+          <!-- Star Rating -->
+          <div class="flex items-center mb-3">
+            <div class="flex text-gold">
+
+
+
+               {% for i in 1..5 %}
+              {% if product.getAverageRating >= i %}
+              <i class="fas fa-star"></i>
+              {% elseif product.getAverageRating  >= i - 0.5 %}
+              <i class="fas fa-star-half-alt"></i>
+              {% else %}
+              <i class="far fa-star"></i>
+              {% endif %}
+            {% endfor %}
+            </div>
+            <span class="text-xs text-gray-500 ml-1"> ({{product.totalReviews}}  reviews)</span>
+          </div>
+
+          <!-- Price and Add to Cart -->
+          <div class="flex justify-between items-center">
+            <span class="text-xl font-bold text-charcoal">${{product.basePrice}}</span>
+            <div class="flex space-x-2">
+              <a href="/product?id={{product.id}}"
+                class="bg-gold hover:bg-gold-dark text-white px-5 py-3 rounded-lg  transition duration-300 flex items-center ">
+                <i class="fas fa-eye"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+
+<section class="py-10 bg-gold">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col md:flex-row items-center justify-between">
+      <div class="text-white mb-6 md:mb-0">
+        <h2 class="text-3xl font-serif font-bold mb-2">SUMMER SALE</h2>
+        <p class="text-xl">Up to 50% off on selected items</p>
+      </div>
+      <a href="#"
+        class="bg-white text-gold hover:bg-cream hover:text-gold-dark font-medium px-6 py-3 rounded-lg transition duration-300">
+        View offers
+      </a>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- Features Section -->
+<section class="py-12 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+      <div class="p-5">
+        <div class="text-gold text-3xl mb-4">
+          <i class="fas fa-shipping-fast"></i>
+        </div>
+        <h3 class="font-medium text-lg mb-2">Fast Delivery</h3>
+        <p class="text-gray-600">Free shipping on all orders over €150</p>
+      </div>
+      <div class="p-5">
+        <div class="text-gold text-3xl mb-4">
+          <i class="fas fa-undo"></i>
+        </div>
+        <h3 class="font-medium text-lg mb-2">Easy Returns</h3>
+        <p class="text-gray-600">30 days to change your mind and return items</p>
+      </div>
+      <div class="p-5">
+        <div class="text-gold text-3xl mb-4">
+          <i class="fas fa-lock"></i>
+        </div>
+        <h3 class="font-medium text-lg mb-2">Secure Payment</h3>
+        <p class="text-gray-600">Your transactions are protected with SSL encryption</p>
+      </div>
+      <div class="p-5">
+        <div class="text-gold text-3xl mb-4">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h3 class="font-medium text-lg mb-2">Customer Support</h3>
+        <p class="text-gray-600">A dedicated team at your service 7 days a week</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="../../public/js/main.js"></script>
+<script src="../../../public/js/cart.js" ></script>
+<script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+
+{% endblock %}
