@@ -1,11 +1,12 @@
 const sidebar = document.getElementById('sidebar');
 const menu = document.getElementById('menu');
+
+document.addEventListener('DOMContentLoaded', function() {
 menu.addEventListener('click' , function(){
     sidebar.classList.toggle('hidden');
 })
 
 
-document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('nav a');
     navLinks.forEach(link => {
       link.addEventListener('click', function(e) {
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
           navLink.classList.add('hover:bg-navy-light', 'text-white');
           
           const icon = navLink.querySelector('i');
-          if (icon) {
+          if (icon) { 
             icon.classList.remove('text-white');
             icon.classList.add('text-blue-light');
           }
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     const currentPath = window.location.pathname;
+    console.log(currentPath);
     navLinks.forEach(link => {
       const href = link.getAttribute('href');
       if (href !== '#' && currentPath.includes(href)) {

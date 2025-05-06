@@ -22,8 +22,7 @@ class OrderController {
         $completedOrders = $this->orderRepository->completedOrders();
         $pendingOrders = $this->orderRepository->pendingOrders();
         $totalRevenue= $this->orderRepository->totalRevenue();
-        $quantiteis = $this->orderRepository->getOrderItemQuantity(164);         
-           dump($quantiteis[0]->product_id);
+        $quantiteis = $this->orderRepository->getOrderItemQuantity(164);  
         $this->response->render('admin/order/index',  ['orders' => $orders ,
         'countOrders' => $totalOrder ,
         "countCompleted" => $completedOrders,

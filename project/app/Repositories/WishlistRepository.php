@@ -23,11 +23,11 @@ class WishlistRepository extends BaseRepository {
             pg.image_path as productImage,
             AVG(r.rating) AS average_rating,
             COUNT(DISTINCT r.id) AS review_count
-        FROM Products p
+        FROM products p
         INNER JOIN wishlists w ON w.product_id = p.id
         LEFT JOIN reviews r ON r.product_id = p.id
-        INNER JOIN categorys c ON c.id = p.category_id
-        INNER JOIN Product_images pg ON pg.product_id = p.id AND pg.is_primary = 1
+        INNER JOIN categories c ON c.id = p.category_id
+        INNER JOIN product_images pg ON pg.product_id = p.id AND pg.is_primary = 1
         WHERE w.user_id = ?
         GROUP BY 
             p.id, p.title, p.description, p.stock, p.base_price, p.isAvailable, c.title, pg.image_path , w.id ,w.added_at ", [$user_id]);

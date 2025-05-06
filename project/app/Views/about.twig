@@ -1,0 +1,206 @@
+
+{% extends "layouts/main.twig" %}
+
+{% block title %}
+  About Us | ElegantHome
+{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <div class="relative">
+    <div class="h-96 w-full bg-cover bg-center" style="background-image: url('/public/images/hero_about.jpeg')">
+      <div class="absolute inset-0 bg-charcoal-dark opacity-40"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="text-center">
+          <h1 class="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Our Story</h1>
+          <p class="text-xl text-white max-w-2xl mx-auto px-4">Bringing elegance and sophistication to homes since 2015</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Our Mission -->
+  <section class="py-16 bg-cream">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl font-serif font-bold text-charcoal mb-6">Our Mission</h2>
+        <div class="w-24 h-1 bg-gold mx-auto mb-8"></div>
+        <p class="text-lg text-charcoal-light mb-8">
+          At ElegantHome, we believe that your living space should be a reflection of your unique personality and style. Our mission is to provide high-quality, sophisticated home décor and furniture that transforms houses into elegant, comfortable homes where memories are made.
+        </p>
+        <p class="text-lg text-charcoal-light">
+          We carefully curate each piece in our collection, partnering with skilled artisans and responsible manufacturers who share our commitment to quality, sustainability, and timeless design.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Story -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-serif font-bold text-charcoal mb-6">Our Journey</h2>
+          <div class="w-24 h-1 bg-gold mb-8"></div>
+          <p class="text-lg text-charcoal-light mb-6">
+            ElegantHome was founded in 2015 by interior design enthusiasts Maria and John Pearson, who recognized a gap in the market for affordable yet sophisticated home décor that didn't compromise on quality or style.
+          </p>
+          <p class="text-lg text-charcoal-light mb-6">
+            What began as a small online boutique has grown into a beloved destination for homeowners and interior designers seeking to create spaces that are both functional and beautiful.
+          </p>
+          <p class="text-lg text-charcoal-light">
+            Today, we've expanded our collection to include furniture, lighting, textiles, and décor from around the world, all united by our commitment to timeless elegance and exceptional craftsmanship.
+          </p>
+        </div>
+        <div class="relative">
+          <img src="/public/images/about-story.jpg" alt="ElegantHome founders" class="rounded-lg shadow-xl w-full">
+          <div class="absolute -bottom-6 -left-6 w-64 h-64 bg-gold-light -z-10 rounded-lg"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Values -->
+  <section class="py-16 bg-cream">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-serif font-bold text-charcoal text-center mb-6">Our Values</h2>
+      <div class="w-24 h-1 bg-gold mx-auto mb-12"></div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-8 rounded-lg shadow-md text-center">
+          <div class="w-16 h-16 bg-gold-light rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-leaf text-gold-dark text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-medium text-charcoal mb-4">Sustainability</h3>
+          <p class="text-charcoal-light">
+            We prioritize sustainable materials and ethical manufacturing practices to minimize our environmental footprint.
+          </p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-lg shadow-md text-center">
+          <div class="w-16 h-16 bg-gold-light rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-gem text-gold-dark text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-medium text-charcoal mb-4">Quality Craftsmanship</h3>
+          <p class="text-charcoal-light">
+            Each piece is carefully selected for its superior craftsmanship and durability to ensure lasting beauty in your home.
+          </p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-lg shadow-md text-center">
+          <div class="w-16 h-16 bg-gold-light rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-heart text-gold-dark text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-medium text-charcoal mb-4">Customer Satisfaction</h3>
+          <p class="text-charcoal-light">
+            We're dedicated to providing exceptional service and ensuring each customer finds pieces they'll treasure for years.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-serif font-bold text-charcoal text-center mb-6">Meet Our Team</h2>
+      <div class="w-24 h-1 bg-gold mx-auto mb-12"></div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="text-center">
+          <div class="relative mb-6 mx-auto w-48 h-48 overflow-hidden rounded-full">
+            <img src="/public/images/team-1.webp" alt="Maria Pearson" class="w-full h-full object-cover">
+          </div>
+          <h3 class="text-xl font-medium text-charcoal">Maria Pearson</h3>
+          <p class="text-gold mb-2">Co-Founder & Creative Director</p>
+          <p class="text-charcoal-light">
+            Interior design expert with a passion for blending classic elegance with modern comfort.
+          </p>
+        </div>
+        
+        <div class="text-center">
+          <div class="relative mb-6 mx-auto w-48 h-48 overflow-hidden rounded-full">
+            <img src="/public/images/team-2.webp" alt="John Pearson" class="w-full h-full object-cover">
+          </div>
+          <h3 class="text-xl font-medium text-charcoal">John Pearson</h3>
+          <p class="text-gold mb-2">Co-Founder & CEO</p>
+          <p class="text-charcoal-light">
+            Business strategist with an eye for quality and craftsmanship in home furnishings.
+          </p>
+        </div>
+        
+        <div class="text-center">
+          <div class="relative mb-6 mx-auto w-48 h-48 overflow-hidden rounded-full">
+            <img src="/public/images/team-3.webp" alt="Sophia Chen" class="w-full h-full object-cover">
+          </div>
+          <h3 class="text-xl font-medium text-charcoal">Sophia Chen</h3>
+          <p class="text-gold mb-2">Head of Product Curation</p>
+          <p class="text-charcoal-light">
+            Trendsetter with a talent for discovering unique pieces from around the world.
+          </p>
+        </div>
+        
+        <div class="text-center">
+          <div class="relative mb-6 mx-auto w-48 h-48 overflow-hidden rounded-full">
+            <img src="/public/images/team-4.jpg" alt="Zakariae Elmoufid" class="w-full h-full object-cover">
+          </div>
+          <h3 class="text-xl font-medium text-charcoal">Zakariae Elmoufid</h3>
+          <p class="text-gold mb-2">Customer Experience Manager</p>
+          <p class="text-charcoal-light">
+            Dedicated to ensuring every ElegantHome customer has an exceptional shopping experience.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-16 bg-cream">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-serif font-bold text-charcoal text-center mb-6">What Our Customers Say</h2>
+      <div class="w-24 h-1 bg-gold mx-auto mb-12"></div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {% for review in reviews %}
+        <div class="bg-white p-8 rounded-lg shadow-md">
+          <div class="flex justify-center mb-4">
+            <i class="fas fa-star text-gold"></i>
+            <i class="fas fa-star text-gold"></i>
+            <i class="fas fa-star text-gold"></i>
+            <i class="fas fa-star text-gold"></i>
+            <i class="fas fa-star text-gold"></i>
+          </div>
+          <p class="text-charcoal-light italic mb-6">
+            "{{ review.content}}"
+          </p>
+          <div class="flex items-center">
+            
+            <div>
+              <h4 class="font-medium text-charcoal">{{ review.username}}</h4>
+              <p class="text-sm text-gold">{{ review.city}}, {{ review.country}}</p>
+            </div>
+          </div>
+        </div>
+       {% endfor %} 
+      
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="py-16 bg-charcoal text-white text-center">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-serif font-bold mb-6">Join the ElegantHome Family</h2>
+      <p class="text-lg max-w-2xl mx-auto mb-8">
+        Subscribe to our newsletter for exclusive offers, design inspiration, and first access to new collections.
+      </p>
+      <form class="max-w-md mx-auto flex">
+        <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-l-lg focus:outline-none text-charcoal" required>
+        <button type="submit" class="bg-gold hover:bg-gold-dark px-6 py-3 rounded-r-lg transition duration-300">Subscribe</button>
+      </form>
+    </div>
+  </section>
+      <script src="../../../public/js/main.js" type="module"></script>
+
+{% endblock %}

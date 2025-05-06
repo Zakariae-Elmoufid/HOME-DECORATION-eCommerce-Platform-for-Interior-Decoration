@@ -1,7 +1,6 @@
 <?php 
 
 namespace App\Controllers\Customer;
-use App\Core\Controller;
 use App\Core\Response;
 use App\Core\Request;
 use App\Core\Session;
@@ -11,7 +10,7 @@ use App\Repositories\AccountRepository;
 use App\Repositories\UserRepository;
 Session::start();
 
-class AccountController extends Controller {
+class AccountController  {
     
     private $orderRepository;
     private $AccountRepository;
@@ -32,18 +31,19 @@ class AccountController extends Controller {
         ];
         $orders = $this->orderRepository->getOrderByUserId(Session::get('id'));
         $user_Address  = $this->AccountRepository->getUserAdress(Session::get('id'));
-        $this->render('customer/account/index' ,['customer' => $customer , 'orders' => $orders , 'userAddress' => $user_Address]);
+        $this->response->render('customer/account/index' ,['customer' => $customer , 'orders' => $orders , 'userAddress' => $user_Address]);
     }
 
     public function account(){
         $customer = $this->userRepository->getUserById(Session::get('id'));
         $user_Address  = $this->AccountRepository->getUserAdress(Session::get('id'));
-        $this->render('customer/account/accountDetails' ,['customer' => $customer ,  'userAddress' => $user_Address->getId() ? $user_Address : null]);
+        $this->response->render('customer/account/accountDetails' ,['customer' => $customer ,  'userAddress' => $user_Address->getId() ? $user_Address : null]);
     }
 
     public function order(){
         $orders = $this->orderRepository->getOrderItemByUserId(Session::get('id'));
-        $this->render('customer/account/order' ,['orders' => $orders]);
+        
+        $this->response->render('customer/account/order' ,['orders' => $orders]);
     }
 
     public function update(Request $request){

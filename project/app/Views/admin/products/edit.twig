@@ -73,7 +73,7 @@
                 
               <div id="variantsContainer">
                 {%  for   variant in product.variants %}
-                  <div  data-size-id="{{variant.variant_id}}" class="variant-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50">
+                  <div  data-variant-id="{{variant.variant_id}}" class="variant-row mb-4 p-4 border border-gray-200 rounded-md bg-gray-50">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                          <input type="hidden" name="variant_id[{{ loop.index0 }}]" value="{{variant.variant_id}}">
                       <div>
@@ -98,7 +98,7 @@
                         <input type="number" name="stock_quantity[{{loop.index0}}]" value="{{variant.stock_quantity ?? '' }}" class="stock-quantity w-full border border-gray-300 rounded-md py-2 px-3">
                       </div>
                     </div>
-                    <button type="button" class="remove-variant mt-3 text-red-500 hover:text-red-700 text-sm">
+                    <button data-variant-id="{{variant.variant_id}}" type="button" class="remove-variant mt-3 text-red-500 hover:text-red-700 text-sm">
                       <i class="fas fa-trash-alt mr-1"></i> Remove
                     </button>
                   </div>
@@ -112,7 +112,7 @@
             
             <div class="mt-8 flex justify-end space-x-3">
               <button type="button" id="cancelBtn" class="py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                <a href="/products">Cancel</a>
+                <a href="/admin/products">Cancel</a>
               </button>
               <button type="submit" class="py-2 px-4 bg-blue hover:bg-blue-dark text-white rounded-md text-sm font-medium">
                 Save Product
@@ -123,5 +123,5 @@
         </div>
        
 
-        <script src="../../../../public/js/update.js" type="module"></script>
+        <script src="../../../../public/js/updateProduct.js" type="module"></script>
 {% endblock %}

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Utility functions
+    
     const showNotification = (parent, message, isSuccess = true) => {
         const notification = document.createElement('div');
         notification.className = isSuccess 
@@ -170,14 +170,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const formData = {
                 id: this.querySelector('input[name="id"]').value,
-                first_name: document.getElementById('edit-firstName').value,
-                last_name: document.getElementById('edit-lastName').value,
+               
                 address: document.getElementById('edit-address').value,
                 city: document.getElementById('edit-city').value,
                 postal_code: document.getElementById('edit-postalCode').value,
                 country: document.getElementById('edit-country').value,
                 phone: document.getElementById('edit-phone').value,
-                email: document.getElementById('edit-email').value
             };
             
             try {
@@ -231,17 +229,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (addressElements.formAdd) {
         addressElements.formAdd.addEventListener('submit', async function(event) {
             event.preventDefault();
-            
             const formData = {
                 user_id: this.querySelector('input[name="user_id"]').value,
-                first_name: document.getElementById('add-firstName').value,
-                last_name: document.getElementById('add-lastName').value,
                 address: document.getElementById('add-address').value,
                 city: document.getElementById('add-city').value,
                 postal_code: document.getElementById('add-postalCode').value,
                 country: document.getElementById('add-country').value,
                 phone: document.getElementById('add-phone').value,
-                email: document.getElementById('add-email').value
             };
             
             try {
@@ -255,15 +249,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (result.success) {
                     showNotification(addressElements.addForm.parentNode, 'Shipping address added successfully!');
                     
-                    // Update display with new address
                     addressElements.display.innerHTML = `
                         <div class="bg-gray-50 rounded p-4">
-                            <p class="font-medium">${formData.first_name} ${formData.last_name}</p>
                             <p>${formData.address}</p>
                             <p>${formData.city}, ${formData.postal_code}</p>
                             <p>${formData.country}</p>
                             <p>${formData.phone}</p>
-                            <p>${formData.email}</p>
                         </div>
                     `;
                     

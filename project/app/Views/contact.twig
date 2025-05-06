@@ -1,0 +1,238 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}
+  Contact Us | ElegantHome
+{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <div class="relative">
+    <div class="h-72 w-full bg-cover bg-center" style="background-image: url('/public/images/hero_contact.jpeg')">
+      <div class="absolute inset-0 bg-charcoal-dark opacity-40"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="text-center">
+          <h1 class="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Contact Us</h1>
+          <p class="text-xl text-white max-w-2xl mx-auto px-4">We're here to help with any questions you may have</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Information and Form -->
+  <section class="py-16 bg-cream">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- Contact Information -->
+        <div>
+          <h2 class="text-3xl font-serif font-bold text-charcoal mb-6">Get in Touch</h2>
+          <div class="w-24 h-1 bg-gold mb-8"></div>
+          
+          <p class="text-lg text-charcoal-light mb-8">
+            We'd love to hear from you! Whether you have a question about our products, need help with an order, or want to discuss interior design services, our team is ready to assist you.
+          </p>
+          
+          <div class="space-y-6">
+            <div class="flex items-start">
+              <div class="w-12 h-12 bg-gold-light rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                <i class="fas fa-map-marker-alt text-gold-dark"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-medium text-charcoal mb-2">Our Showroom</h3>
+                <p class="text-charcoal-light">
+                  123 Elegant Street<br>
+                  New York, NY 10001<br>
+                  United States
+                </p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="w-12 h-12 bg-gold-light rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                <i class="fas fa-phone text-gold-dark"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-medium text-charcoal mb-2">Phone</h3>
+                <p class="text-charcoal-light">
+                  Customer Service: (800) 123-4567<br>
+                  Wholesale Inquiries: (800) 765-4321
+                </p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="w-12 h-12 bg-gold-light rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                <i class="fas fa-envelope text-gold-dark"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-medium text-charcoal mb-2">Email</h3>
+                <p class="text-charcoal-light">
+                  Customer Support: <a href="mailto:support@eleganthome.com" class="text-gold hover:underline">support@eleganthome.com</a><br>
+                  General Inquiries: <a href="mailto:info@eleganthome.com" class="text-gold hover:underline">info@eleganthome.com</a><br>
+                  Press: <a href="mailto:press@eleganthome.com" class="text-gold hover:underline">press@eleganthome.com</a>
+                </p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="w-12 h-12 bg-gold-light rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                <i class="fas fa-clock text-gold-dark"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-medium text-charcoal mb-2">Hours</h3>
+                <p class="text-charcoal-light">
+                  Monday - Friday: 9:00 AM - 6:00 PM EST<br>
+                  Saturday: 10:00 AM - 5:00 PM EST<br>
+                  Sunday: Closed
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-10">
+            <h3 class="text-xl font-medium text-charcoal mb-4">Follow Us</h3>
+            <div class="flex space-x-4">
+              <a href="#" class="w-10 h-10 bg-charcoal rounded-full flex items-center justify-center text-white hover:bg-gold transition duration-300">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="w-10 h-10 bg-charcoal rounded-full flex items-center justify-center text-white hover:bg-gold transition duration-300">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="#" class="w-10 h-10 bg-charcoal rounded-full flex items-center justify-center text-white hover:bg-gold transition duration-300">
+                <i class="fab fa-pinterest-p"></i>
+              </a>
+              <a href="#" class="w-10 h-10 bg-charcoal rounded-full flex items-center justify-center text-white hover:bg-gold transition duration-300">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Contact Form -->
+        <div>
+          <div class="bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-serif font-bold text-charcoal mb-6">Send Us a Message</h2>
+            
+            <form>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label for="firstName" class="block text-charcoal-light mb-2">First Name*</label>
+                  <input type="text" id="firstName" name="firstName" class="w-full border border-cream-dark rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gold" required>
+                </div>
+                
+                <div>
+                  <label for="lastName" class="block text-charcoal-light mb-2">Last Name*</label>
+                  <input type="text" id="lastName" name="lastName" class="w-full border border-cream-dark rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gold" required>
+                </div>
+              </div>
+              
+              <div class="mb-6">
+                <label for="email" class="block text-charcoal-light mb-2">Email Address*</label>
+                <input type="email" id="email" name="email" class="w-full border border-cream-dark rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gold" required>
+              </div>
+              
+              <div class="mb-6">
+                <label for="phone" class="block text-charcoal-light mb-2">Phone Number</label>
+                <input type="tel" id="phone" name="phone" class="w-full border border-cream-dark rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gold">
+              </div>
+              
+              <div class="mb-6">
+                <label for="subject" class="block text-charcoal-light mb-2">Subject*</label>
+                <select id="subject" name="subject" class="w-full border border-cream-dark rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gold" required>
+                  <option value="" disabled selected>Select a subject</option>
+                  <option value="order">Order Inquiry</option>
+                  <option value="product">Product Information</option>
+                  <option value="returns">Returns & Exchanges</option>
+                  <option value="design">Design Consultation</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              
+              <div class="mb-6">
+                <label for="message" class="block text-charcoal-light mb-2">Message*</label>
+                <textarea id="message" name="message" rows="5" class="w-full border border-cream-dark rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gold" required></textarea>
+              </div>
+              
+              <div class="mb-6">
+                <label class="flex items-start">
+                  <input type="checkbox" class="mt-1 mr-2">
+                  <span class="text-sm text-charcoal-light">
+                    I agree to receive occasional newsletters and promotional emails from ElegantHome. You can unsubscribe at any time.
+                  </span>
+                </label>
+              </div>
+              
+              <button type="submit" class="w-full bg-gold hover:bg-gold-dark text-white font-medium py-3 px-6 rounded-lg transition duration-300">
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map Section -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-serif font-bold text-charcoal text-center mb-6">Visit Our Showroom</h2>
+      <div class="w-24 h-1 bg-gold mx-auto mb-12"></div>
+      
+      <div class="relative h-96 rounded-lg overflow-hidden shadow-lg">
+        <!-- Replace with your actual Google Maps embed code -->
+        <div class="absolute inset-0 bg-cream-dark flex items-center justify-center">
+          <p class="text-charcoal text-center p-4">
+            Map placeholder - Replace with actual Google Maps embed code
+            <br><br>
+            <span class="text-gold">123 Elegant Street, New York, NY 10001</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-16 bg-cream">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-serif font-bold text-charcoal text-center mb-6">Frequently Asked Questions</h2>
+      <div class="w-24 h-1 bg-gold mx-auto mb-12"></div>
+      
+      <div class="max-w-3xl mx-auto space-y-6">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-medium text-charcoal mb-2">What are your delivery times?</h3>
+          <p class="text-charcoal-light">
+            Most in-stock items ship within 1-3 business days and arrive within 5-7 business days. Custom and made-to-order pieces typically take 4-6 weeks. You'll receive tracking information once your order ships.
+          </p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-medium text-charcoal mb-2">Do you offer international shipping?</h3>
+          <p class="text-charcoal-light">
+            Yes, we ship to most international destinations. Shipping costs and delivery times vary by location. Please contact our customer service team for specific information about your country.
+          </p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-medium text-charcoal mb-2">What is your return policy?</h3>
+          <p class="text-charcoal-light">
+            We offer a 30-day return policy for most items in their original condition. Custom and made-to-order items are non-returnable. Please refer to our Returns & Exchanges page for complete details.
+          </p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-medium text-charcoal mb-2">Do you offer design consultation services?</h3>
+          <p class="text-charcoal-light">
+            Yes, our professional design team offers both virtual and in-person consultation services. You can book an appointment through our website or by contacting our customer service team.
+          </p>
+        </div>
+      </div>
+      
+      <div class="text-center mt-10">
+        <a href="#" class="inline-block bg-gold hover:bg-gold-dark text-white font-medium py-3 px-6 rounded-lg transition duration-300">
+          View All FAQs
+        </a>
+      </div>
+    </div>
+  </section>
+      <script src="../../../public/js/main.js" type="module"></script>
+
+{% endblock %}

@@ -10,11 +10,9 @@ use App\Repositories\OrderRepository;
 
 class StockService {
 
-    private $productRepository;
     private $orderRepository;
 
     public function __construct(){
-        // $this->ProductRepository = new ProductRepository();
         $this->orderRepository = new OrderRepository();
     }
 

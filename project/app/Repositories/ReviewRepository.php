@@ -30,13 +30,24 @@ class ReviewRepository extends BaseRepository {
        return $reviews;
     }
 
+    public function topThreeReviews(){
+      $stmt = $this->query("SELECT  r.rating , r.content , u.username,uc.country,uc.city
+      from users u 
+      inner join reviews r  on u.id = r.user_id
+      INNER JOIN user_addresses uc ON uc.user_id = r.user_id
+      order by r.rating DESC LIMIT 3 ");
+     $reviewData = $stmt->fetchAll(PDO::FETCH_OBJ);
+   
+     return $reviewData;
+    }
+
     public function getReviewByUserId($user_id){
         $stmt = $this->query("
         SELECT r.id, r.rating, r.content, r.created_at ,
         r.product_id  
         FROM reviews r
         JOIN users s ON s.id = r.user_id
-        JOIN Products p on p.id = r.product_id 
+        JOIN products p on p.id = r.product_id 
         WHERE r.user_id = ?
      ", [$user_id]);
 

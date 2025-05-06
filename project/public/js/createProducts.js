@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const stock = parseInt(input) || 0;
             totalStock += stock;
         });
-        console.log(totalStock);
     
     if (totalStock !== parseInt(stockglobal.value)) {
         const message = totalStock < parseInt(stockglobal.value)

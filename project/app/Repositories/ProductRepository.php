@@ -8,7 +8,7 @@ use PDO;
 
 class ProductRepository extends BaseRepository {
 
-    private $table = "Products";
+    private $table = "products";
 
  
     public function selectAll(){
@@ -34,7 +34,7 @@ class ProductRepository extends BaseRepository {
                     'stock_quantity', pv.stock_quantity
                 )
             )
-            FROM Product_variants pv 
+            FROM product_variants pv 
             WHERE pv.product_id = p.id
          ) AS variants,
          (
@@ -45,13 +45,13 @@ class ProductRepository extends BaseRepository {
                     'is_primary', pi.is_primary
                 )
             )
-            FROM Product_images pi 
+            FROM product_images pi 
             WHERE pi.product_id = p.id
          ) AS images
             FROM 
-                Products p
+                products p
             LEFT JOIN 
-                categorys c ON p.category_id = c.id
+                categories c ON p.category_id = c.id
             LEFT JOIN 
                 reviews r ON r.product_id = p.id
             WHERE 
@@ -68,7 +68,7 @@ class ProductRepository extends BaseRepository {
             }
 
     public function selectCategories(){
-                $categories =  $this->getAll("categorys");
+                $categories =  $this->getAll("categories");
                 $data = [];
                 foreach( $categories as $category ){
                 $data = new Category($category);
@@ -89,115 +89,141 @@ class ProductRepository extends BaseRepository {
     }
 
     public function countCategories(){
-                $stmt = $this->query(" SELECT COUNT(id) as total_categories FROM categorys ");
+                $stmt = $this->query(" SELECT COUNT(id) as total_categories FROM categories ");
                 $result = $stmt->fetch(PDO::FETCH_OBJ);
                 return $result->total_categories;
     }
 
 
     public function insertProduct($data) {
-        $product = [
-            "title" => $data["title"],
-            "category_id" => $data["category_id"],
-            "description" => $data["description"],
-            "base_price" => $data["base_price"],
-            "stock" => $data["stock"],
-            "isAvailable" => $data["isAvailable"] ? 1 : 0
-        ];
-         
-        $product_id = $this->insert($this->table, $product);
+        try {
+            $product = [
+                "title" => $data["title"],
+                "category_id" => $data["category_id"],
+                "description" => $data["description"],
+                "base_price" => $data["base_price"],
+                "stock" => $data["stock"],
+                "isAvailable" => $data["isAvailable"] ? 1 : 0
+            ];
     
-        if (!$product_id) {
+            $product_id = $this->insert($this->table, $product);
+    
+            if (!$product_id) {
+                throw new Exception("Failed to insert product");
+            }
+    
+            $product["id"] = $product_id;
+    
+            $variants = [];
+            $images = [];
+    
+            // Handle product variants
+            if (!empty($data["size_name"]) || !empty($data["color_name"])) {
+                foreach ($data["size_name"] as $index => $sizeName) {
+                    $variant = [
+                        "product_id" => $product_id,
+                        "size_name" => $sizeName,
+                        "color_name" => $data["color_name"][$index],
+                        "color_code" => $data["color_code"][$index],
+                        "price_adjustment" => $data["price_adjustment"][$index],
+                        "stock_quantity" => $data["stock_quantity"][$index],
+                    ];
+    
+                    $variantId = $this->insert("product_variants", $variant);
+                    if (!$variantId) {
+                        throw new Exception("Failed to insert variant");
+                    }
+    
+                    $variants[] = $variant;
+                }
+            }
+    
+            // Handle product images
+            if (!empty($data["images"])) {
+                foreach ($data["images"] as $image) {
+                    $imageData = [
+                        "is_primary" => $image["is_primary"],
+                        "product_id" => $product_id,
+                        "image_path" => $image["path"],
+                    ];
+    
+                    $imageId = $this->insert("product_images", $imageData);
+                    if (!$imageId) {
+                        throw new Exception("Failed to insert image");
+                    }
+    
+                    $images[] = $imageData;
+                }
+            }
+    
+            $productData = array_merge($product, [
+                'variants' => $variants,
+                'images' => $images
+            ]);
+    
+            return new Product($productData);
+        } catch (Exception $e) {
             return false;
         }
-        
-        $product["id"] = $product_id;
-        
-        $variant = [];
-        $images = [];
-        
-        if (!empty($data["size_name"]) || !empty($data["color_name"])) {
-            foreach ($data["size_name"] as $index => $sizeName) {
-                $variant = [
-                    "product_id" => $product_id,
-                    "size_name" => $sizeName,
-                    "color_name" => $data["color_name"][$index],
-                    "color_code" => $data["color_code"][$index],
-                    "price_adjustment" => $data["price_adjustment"][$index],
-                    "stock_quantity" => $data["stock_quantity"][$index],
-                ];
-                
-                $this->insert("Product_variants", $variant);
-                
-                $variants[] = $variant;
-            }
-        }
-    
+    }
 
-        if (!empty($data["images"])) {
-            foreach ($data["images"] as $image) {
-                $imageData = [
-                    "is_primary" => $image["is_primary"],
-                    "product_id" => $product_id,
-                    "image_path" => $image["path"],
-                ];
-                
-                $this->insert("Product_images", $imageData);
-                
-                $images[] = $imageData;
+
+
+
+    public function fetchById($id) {
+        try {
+            $stmt = $this->query("SELECT 
+                p.id,
+                p.title,
+                p.description,
+                p.stock,
+                p.base_price,
+                p.isAvailable,
+                p.category_id,
+                c.title AS category_name
+                FROM products p
+                INNER JOIN categories c ON c.id = p.category_id 
+                WHERE p.id = :id", ['id' => $id]);
+            
+            $product = $stmt->fetch(PDO::FETCH_OBJ);
+            if (!$product) {
+                throw new \Exception("Product not found");
             }
+    
+            $stmt = $this->query("SELECT 
+                id AS image_id,
+                image_path,
+                is_primary
+                FROM product_images
+                WHERE product_id = :id", ['id' => $id]);
+            
+            $product->images = $stmt->fetchAll(PDO::FETCH_OBJ);
+            
+    
+            $stmt = $this->query("SELECT 
+                id AS variant_id,
+                size_name,
+                color_name,
+                color_code,
+                price_adjustment,
+                stock_quantity
+                FROM product_variants
+                WHERE product_id = :id", ['id' => $id]);
+            
+            $product->variants = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+       
+            return $product;
+    
+        } catch (\Exception $e) {
+             return null;
         }
-        
-        $productData = array_merge($product, [
-            'variants' => $variants,
-            'images' => $images
-        ]);
-        
-        $productObject = new Product($productData);
-        
-        
-        
-        
-        return $productObject;
     }
     
     
-    public function fetchById($id){
-        $stmt = $this->query("SELECT 
-        p.id,
-        p.title,
-        p.description,
-        p.stock,
-        p.base_price,
-        p.isAvailable,
-        p.category_id,
-        c.title AS category_name
-        FROM Products p
-        inner join categorys c on c.id = p.category_id 
-        WHERE p.id = $id");
-        $product = $stmt->fetch(PDO::FETCH_OBJ);
-
-        $stmt = $this->query("SELECT 
-        id as image_id,
-        image_path,
-        is_primary
-        FROM Product_images
-        WHERE product_id = $id");
-        $product->images = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-        $stmt = $this->query("SELECT 
-        id as variant_id,
-        size_name,
-        color_name,
-        color_code,
-        price_adjustment,
-        stock_quantity
-        FROM Product_variants
-        WHERE product_id = $id");
-        $product->variants = $stmt->fetchAll(PDO::FETCH_OBJ);
-        return $product;
-
-    }
+    
+    
+    
 
     public function updatProduct($id , $data){
     
@@ -242,14 +268,18 @@ class ProductRepository extends BaseRepository {
             ];
         
             if (!empty($variantIds[$index])) {
-                $this->update("Product_variants", $variantIds[$index], $variant);
+                $this->update("product_variants", $variantIds[$index], $variant);
             } else {
-                $this->insert("Product_variants", $variant);
+                $this->insert("product_variants", $variant);
             }
         }
         return true;
     }
 
+
+   public function deleteProductVariant($id){
+       return $this->delete("product_variants" ,$id);
+   }
 
 
 
@@ -260,9 +290,9 @@ class ProductRepository extends BaseRepository {
     public function productId($id){
       $stmt = $this->query("SELECT  p.id  , p.title, p.description,
        c.title as category_name , pi.image_path as primary_image
-      from Products p
-       inner join Product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
-       inner join categorys c on c.id = p.category_id
+      from products p
+       inner join product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
+       inner join categories c on c.id = p.category_id
        
        where p.id = ? ",[$id]);
       $product =  $stmt->fetch(PDO::FETCH_OBJ);
@@ -281,12 +311,11 @@ class ProductRepository extends BaseRepository {
             c.title AS category_name,
             AVG(r.rating) AS average_rating,
             COUNT(DISTINCT r.id) AS review_count
-            FROM Products p
-            INNER JOIN categorys c ON c.id = p.category_id 
+            FROM products p
+            INNER JOIN categories c ON c.id = p.category_id 
             LEFT JOIN  reviews r ON r.product_id = p.id
              GROUP BY 
-        p.id, p.title, p.description, p.stock, p.base_price, p.isAvailable, c.title, p.created_at
-
+            p.id, p.title, p.description, p.stock, p.base_price, p.isAvailable, c.title, p.created_at
             ORDER BY p.created_at DESC
             LIMIT 5");
         $products = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -298,7 +327,7 @@ class ProductRepository extends BaseRepository {
                 id as image_id,
                 image_path,
                 is_primary
-                FROM Product_images
+                FROM product_images
                 WHERE product_id = ?", [$product->id]);
             $product->images = $stmt->fetchAll(PDO::FETCH_OBJ);
             $articles[] = new Product($product);
@@ -308,12 +337,12 @@ class ProductRepository extends BaseRepository {
     }
 
     public function getProductsByCategory($idCategories){
-        $stmt = $this->query("SELECT  p.id  , p.title, p.description,p.stock,p.base_price,p.isAvailable, ROUND(AVG(r.rating),2) AS average_rating,
+        $stmt = $this->query("SELECT  p.id  , p.title, p.description ,p.stock,p.base_price, p.isAvailable, ROUND(AVG(r.rating),2) AS average_rating,
         COUNT(DISTINCT r.id) AS review_count,
         c.title as category_name , pi.image_path as primary_image
-       from Products p
-        inner join Product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
-        inner join categorys c on c.id = p.category_id
+       from products p
+        inner join product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
+        inner join categories c on c.id = p.category_id
         LEFT JOIN  reviews r ON r.product_id = p.id
         where c.id = ?
         GROUP BY 
@@ -327,9 +356,9 @@ class ProductRepository extends BaseRepository {
         $stmt = $this->query("SELECT  p.id  , p.title, p.description,p.stock,p.base_price,p.isAvailable, ROUND(AVG(r.rating),2) AS average_rating,
         COUNT(DISTINCT r.id) AS review_count,
         c.title as category_name , pi.image_path as primary_image
-       from Products p
-        inner join Product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
-        inner join categorys c on c.id = p.category_id
+       from products p
+        inner join product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
+        inner join categories c on c.id = p.category_id
         LEFT JOIN  reviews r ON r.product_id = p.id
         where p.title LIKE  ?
         GROUP BY 
@@ -349,9 +378,9 @@ class ProductRepository extends BaseRepository {
         $stmt = $this->query("SELECT  p.id  , p.title, p.description,p.stock,p.base_price,p.isAvailable, ROUND(AVG(r.rating),2) AS average_rating,
         COUNT(DISTINCT r.id) AS review_count,
         c.title as category_name , pi.image_path as primary_image
-       from Products p
-        inner join Product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
-        inner join categorys c on c.id = p.category_id
+       from products p
+        inner join product_images pi on p.id  = pi.product_id and pi.is_primary = 1 
+        inner join categories c on c.id = p.category_id
         LEFT JOIN  reviews r ON r.product_id = p.id
         where p.isAvailable = 1 
         GROUP BY 
@@ -362,7 +391,7 @@ class ProductRepository extends BaseRepository {
     }
 
     public function getImages($product_id){
-         $stmt = $this->query("SELECT * from  Product_images where product_id = ?",[$product_id]);
+         $stmt = $this->query("SELECT * from  product_images where product_id = ?",[$product_id]);
          $images = $stmt->fetchAll(PDO::FETCH_OBJ);
          return $images;
     }
@@ -372,7 +401,6 @@ class ProductRepository extends BaseRepository {
             'success' => [],
             'errors' => []
         ];
-    
         if (!empty($data["images"])) {
             foreach ($data["images"] as $index => $image) {
                 $imageData = [
@@ -381,7 +409,7 @@ class ProductRepository extends BaseRepository {
                     "image_path" => $image["path"],
                 ];
                 try {
-                    $this->insert("Product_images", $imageData);
+                    $this->insert("product_images", $imageData);
                     $results['success'][] = "Image at index $index added successfully.";
                 } catch (Exception $e) {
                     $results['errors'][] = "Error at index $index: " . $e->getMessage();
@@ -394,11 +422,11 @@ class ProductRepository extends BaseRepository {
     
 
     public function deleteImage($id){
-      return  $this->delete("Product_images",$id);
+      return  $this->delete("product_images",$id);
     }
 
     public function setPrimaryImage($id) {
-        $image = $this->findById("Product_images", $id);
+        $image = $this->findById("product_images", $id);
     
         if (!$image) {
             throw new Exception("Image not found.");
@@ -406,7 +434,7 @@ class ProductRepository extends BaseRepository {
     
         $newPriority = ($image->is_primary == 1) ? 0 : 1;
     
-        $updateSuccess = $this->update("Product_images", $id, ["is_primary" => $newPriority]);
+        $updateSuccess = $this->update("product_images", $id, ["is_primary" => $newPriority]);
     
         if (!$updateSuccess) {
             throw new Exception("Failed to update status.");

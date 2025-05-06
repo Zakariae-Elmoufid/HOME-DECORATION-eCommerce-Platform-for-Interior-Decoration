@@ -3,7 +3,6 @@
 
 namespace App\Controllers\Customer;
 
-use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Response;
 use App\Core\Session;
@@ -11,7 +10,7 @@ use App\Repositories\WishlistRepository;
 
 
 Session::start();
-class WishlistController extends Controller {
+class WishlistController  {
     
     private $response;
     private $wishlistRepository;

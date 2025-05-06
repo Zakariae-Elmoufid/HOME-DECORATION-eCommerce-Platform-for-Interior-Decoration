@@ -1,24 +1,25 @@
 <?php
 namespace App\Controllers;
-use App\Core\Controller;
 use App\core\Request;
 use App\core\Response;
 use App\core\Validator;
 use App\Services\CategoryService;
 use App\Services\ProductService;
 use App\Repositories\ProductRepository;
+use App\Repositories\ReviewRepository;
 
-
-class HomeController extends Controller{
+class HomeController {
 
 
     private $CategoryService;
     private $ProductService;
     private $productRepository;
+    private $reviewRepository;
     private $response;
 
     public function __construct(){
-        $this->CategoryService = new CategoryService() ; 
+        $this->CategoryService = new CategoryService();
+        $this->reviewRepository = new ReviewRepository(); 
         $this->ProductService = new ProductService() ; 
         $this->productRepository = new ProductRepository();
         $this->response = new Response();
@@ -31,17 +32,26 @@ class HomeController extends Controller{
         $newProducts =   $this->productRepository->getNewProducts();
         
 
-        return $this->render('home', [
+        return $this->response->render('home', [
             'categories' => $categories,
             'products' => $products,
             'newProducts' =>$newProducts
         ]);
     }
 
+    public function about(){
+        $reviews = $this->reviewRepository->topThreeReviews();
+        return $this->response->render('about',["reviews" => $reviews]);
+    }
+
+    public function contact(){
+        return $this->response->render('contact');
+    }
+
     public function product()
     {
         $products = $this->ProductService->fetchAll();
-        return $this->render('products', [
+        return $this->response->render('products', [
             'products' => $products
         ]);
     }
@@ -56,7 +66,7 @@ class HomeController extends Controller{
         $data = $request->getbody();
         $id = $data['category'];
         $products = $this->productRepository->getProductsByCategory($id);
-        return $this->render('customer/productsByCategory', ['products' => $products ]);
+        return $this->response->render('customer/productsByCategory', ['products' => $products ]);
     }
 
     public function productsPaginator(Request $request){

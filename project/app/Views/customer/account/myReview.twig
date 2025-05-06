@@ -19,7 +19,7 @@
             <div class="review-view">
               <div class="flex justify-between mb-2">
                 <div class="flex items-center">
-                  <a href="/product/{{ product.id }}" class="text-lg font-medium text-charcoal hover:text-gold transition duration-300">{{ product.title }}</a>
+                  <a href="/product?id={{ product.id }}" class="text-lg font-medium text-charcoal hover:text-gold transition duration-300">{{ product.title }}</a>
                 </div>
                 <div class="text-sm text-gray-500">
                   {{ review.createdAt|date("F d, Y") }}
@@ -44,7 +44,7 @@
               <!-- Product Image and Link -->
               <div class="flex mt-4">
                 <div class="w-20 h-20 mr-4 flex-shrink-0">
-                  <a href="/product/{{ product.id }}">
+                  <a href="/product?id={{ product.id }}">
                     <img src="/public/uploads/{{ product.primaryImage ?? 'placeholder.jpg' }}" alt="{{ product.title }}" class="w-full h-full object-cover rounded-md">
                   </a>
                 </div>

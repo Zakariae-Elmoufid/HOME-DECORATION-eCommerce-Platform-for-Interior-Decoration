@@ -8,10 +8,14 @@ bars.addEventListener("click", function () {
 
 });
 
+
+
+
 const furniture = document.getElementById('mobile-furniture-dropdown');
 furniture.addEventListener('click', function(){
   document.getElementById('furniture-submenu').classList.toggle('hidden');
-})
+});
+
 });
 
 const  countItem =  document.getElementById('count-cart-item');

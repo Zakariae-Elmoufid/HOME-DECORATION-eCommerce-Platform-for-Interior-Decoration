@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controllers\Auth;
-use App\Core\Controller;
 use App\Core\Request;
 use App\Services\AuthService;
 use App\Services\CartService;
@@ -9,7 +8,7 @@ use App\Core\Session;
 use App\Core\Response;
 Session::start();
 
-class RegisterController extends Controller  {
+class RegisterController   {
 
     private $authService ;
     private $cartServise;
@@ -23,7 +22,7 @@ class RegisterController extends Controller  {
 
 
     public function index(){
-        return $this->render('auth/register');
+        return $this->response->render('auth/register');
     }      
     
     public function store(Request $request){ 
@@ -44,9 +43,9 @@ class RegisterController extends Controller  {
             Session::set("role" , $user->getRole());
             Session::set('id',$user->getId());
             $this->cartServise->associateCartAfterLogin($user->getId());
-            $this->response->redirect('customer/account');
+            $this->response->redirect('/customer/account');
         }
-          $this->redirect('/login');
+          $this->response->redirect('/login');
 
 
     }

@@ -31,15 +31,8 @@ class Request {
         return $path;
     }
 
-    public function getIdFromQuery()
-    {
-        $id = $_GET['id'] ?? null;
-        return $id ? password_hash($id, PASSWORD_DEFAULT) : null;
-    }
 
     
-
-
 
 
     public function getbody()
@@ -49,9 +42,6 @@ class Request {
         if($this->getMethod()==='get')
         {   
             $body = $_GET;
-            // $body['id'] = $_GET['id'];
-            // $body['page'] = $_GET['page'];
-
         }
    
 

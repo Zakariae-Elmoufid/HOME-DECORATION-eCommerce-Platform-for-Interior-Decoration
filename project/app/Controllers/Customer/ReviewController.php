@@ -2,7 +2,6 @@
 
 namespace App\Controllers\Customer;
 
-use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Response;
 use App\Repositories\ProductRepository;
@@ -11,7 +10,7 @@ use App\Core\Session;
 use App\Core\validator;
 Session::start();
 
-class ReviewController extends Controller {
+class ReviewController  {
 
     private $productRepostory;
     private $reviewRepository;
@@ -28,7 +27,7 @@ class ReviewController extends Controller {
     $body = $request->getbody();
     $id = isset($body['id']) ? (int) $body['id'] : null;
     $product =  $this->productRepostory->fetchById($id);
-    $this->render('customer/account/review' ,['product' => $product]);
+    $this->response->render('customer/account/review' ,['product' => $product]);
     }
 
     public function store(Request $request){
@@ -55,10 +54,7 @@ class ReviewController extends Controller {
     }
 
 
-    // public function reviewByProductId(Request $request){
-    //     $body = $request->getbody();
-    //     $id = isset($body['id']) ? (int) $body['id'] : null;
-    // }
+
 
     public function reviewByUserId(){
         $user_id = Session::get('id');
@@ -68,7 +64,7 @@ class ReviewController extends Controller {
             $products[] = $this->productRepostory->productId($review->getProductId());
         }
 
-        $this->render('customer/account/myReview' ,['reviews' => $reviews , 'products' => $products]);
+        $this->response->render('customer/account/myReview' ,['reviews' => $reviews , 'products' => $products]);
 
     }
     public function update(Request $request){

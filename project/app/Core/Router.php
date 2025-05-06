@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Core;
-use App\Middleware\AuthMiddleware; 
+
 class Router {
 
     private  $routes = [];
@@ -50,16 +50,16 @@ class Router {
 
         $callback = $this->routes[$method][$url] ?? false;
         if (!$callback) {
-            // $this->response->statusCode(code: 404);
-            return 'Not Found';
+            $this->response->error404();
+
         }else{
             
             if (isset($this->middlewares[$url])) {
                 foreach ($this->middlewares[$url] as $middleware) {
                     if (is_string($middleware)) {
-                        $middlewareInstance = new $middleware(); // pour middleware classique
+                        $middlewareInstance = new $middleware(); 
                     } else {
-                        $middlewareInstance = $middleware; // instance déjà fournie
+                        $middlewareInstance = $middleware; 
                     }
                     $middlewareInstance->handle($this->request);
                 }
@@ -77,10 +77,8 @@ class Router {
                         $controllerInstance = new $controllerClass();
                         return $controllerInstance->$method();
                     } else {
-                        dump($controllerClass);
-                        http_response_code(404);
-                        echo "404 - Controller Or methode not found";
-                        return;
+                        $this->response->error404();
+                       
                     }
                 }
 

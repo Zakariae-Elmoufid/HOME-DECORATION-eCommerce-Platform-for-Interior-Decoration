@@ -69,7 +69,6 @@
         <div class="bg-white rounded-lg shadow-md p-6">
           <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold">Shipping Address</h2>
-            <a href="" class="text-gold hover:underline text-sm">Edit</a>
           </div>
            {% if userAddress %}
             <address class="not-italic text-gray-600">
@@ -84,10 +83,9 @@
         </div>
 
         <!-- Billing Address -->
-        <div class="bg-white rounded-lg shadow-md p-6">
+        {# <div class="bg-white rounded-lg shadow-md p-6">
           <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold">Billing Address</h2>
-            <a href="" class="text-gold hover:underline text-sm">Edit</a>
           </div>
           {% if customer.billingAddress %}
             <address class="not-italic text-gray-600">
@@ -100,7 +98,7 @@
           {% else %}
             <p class="text-gray-500">No billing address registered</p>
           {% endif %}
-        </div>
+        </div> #}
       </div>
 
       <!-- Recently Viewed -->

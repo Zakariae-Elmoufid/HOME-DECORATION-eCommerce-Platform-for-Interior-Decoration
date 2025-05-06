@@ -19,7 +19,7 @@
       <!-- Image Upload Section -->
       <form id="uploadImageForm" enctype="multipart/form-data" class="mb-8 p-4 bg-gray-50 rounded-lg">
         <h4 class="font-medium text-navy mb-3">Add New Images</h4>
-        <input type="hidden" name="product_id" value=" {{images[0].product_id }}">
+        <input type="hidden" name="product_id" value="{{ product_id }}">
          <div class="col-span-2">
                 <h4 class="font-medium text-navy mb-4">Product Images</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -40,7 +40,7 @@
 
       <h4 class="font-medium text-navy mb-3">Existing Images</h4>
       <div id="imageGallery" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4" 
-           data-product-id="{{ images[0].product_id }}" data-product-images="{{images|json_encode }}">
+           data-product-id="{{ product_id }}" data-product-images="{{images|json_encode }}">
         {% if images and images|length > 0 %}
           {% for image in images %}
             <div class="relative group" data-image-id="{{ image.id }}">

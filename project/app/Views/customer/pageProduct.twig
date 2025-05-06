@@ -34,8 +34,10 @@
 
           <div class="mb-4 border border-gray-200 rounded-lg overflow-hidden">
             {% if primaryImage %}
+              <div class="w-full h-96">
               <img id="main-product-image" src="/public/uploads/{{ primaryImage.image_path }}"
-                class="w-full h-96 object-cover" alt="{{ product.title }}">
+                class="w-full h-full object-contain" alt="{{ product.title }}">
+                </div>  
             {% else %}
               <div class="w-full h-96 bg-gray-100 flex items-center justify-center">
                 <span class="text-gray-400">No image available</span>
@@ -152,7 +154,9 @@
               {% endfor %}
             </div>
           </div>
-{% endif %}
+          {% else %}
+           <input type="hidden" name="variant" value="0">
+         {% endif %}
 
 
         
@@ -259,7 +263,7 @@
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <tbody class="divide-y divide-gray-200">
-              <tr>
+              {# <tr>
                 <td class="py-3 pr-6 text-left text-sm font-medium text-charcoal w-1/3">Material</td>
                 <td class="py-3 pl-6 text-left text-sm text-gray-700">High-quality acrylic with reinforced fiberglass
                 </td>
@@ -283,7 +287,7 @@
               <tr>
                 <td class="py-3 pr-6 text-left text-sm font-medium text-charcoal">Warranty</td>
                 <td class="py-3 pl-6 text-left text-sm text-gray-700">10-year limited manufacturer's warranty</td>
-              </tr>
+              </tr> #}
             </tbody>
           </table>
         </div>
@@ -293,9 +297,9 @@
       <div id="reviews-tab" class="product-tab hidden">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-2xl font-bold text-charcoal">Customer Reviews</h2>
-          <a href="/customer/review?id={{ product.id }}" class="bg-gold hover:bg-gold-dark text-white px-5 py-2 rounded-lg transition duration-300">
+          {# <a href="/customer/review?id={{ product.id }}" class="bg-gold hover:bg-gold-dark text-white px-5 py-2 rounded-lg transition duration-300">
             Write a Review
-          </a>
+          </a> #}
         </div>
 
         <!-- Review List -->
@@ -388,5 +392,7 @@
 
 <script src="/public/js/pageProduct.js" type="module"></script>
 <script src="/public/js/wishlist.js" type="module"></script>
+
+
 
 {% endblock %}

@@ -26,9 +26,7 @@
     <!-- Sidebar -->
     <div id="sidebar" class="hidden lg:flex">
       <div  class="side flex flex-col grow    bg-navy">
-        <div class="flex items-center justify-center h-16 bg-navy-dark">
-          <h2 class="text-xl font-bold text-white font-serif">HomeDecoration</h2>
-        </div>
+        
         <div class="flex flex-col flex-grow px-4 mt-5">
           <nav class="flex-1 space-y-1">
             <a href="/admin" class="flex items-center px-4 py-3 text-sm font-medium text-gray-300 bg-blue rounded-lg group">
@@ -55,14 +53,7 @@
               <i class="fas fa-chart-line mr-3 text-blue-light"></i>
               <span>Admin</span>
             </a>
-            <a href="#" class="flex items-center px-4 py-3 mt-1 text-sm font-medium text-gray-300  rounded-lg group">
-              <i class="fas fa-tag mr-3 text-blue-light"></i>
-              <span>Promotions</span>
-            </a>
-            <a href="#" class="flex items-center px-4 py-3 mt-1 text-sm font-medium text-gray-300  rounded-lg group">
-              <i class="fas fa-cog mr-3 text-blue-light"></i>
-              <span>Settings</span>
-            </a>
+           
           </nav>
           
           <div class="mt-auto pb-5">
@@ -87,26 +78,14 @@
           <button class="lg:hidden text-navy hover:text-blue" id="menu">
             <i class="fas fa-bars text-lg"></i>
           </button>
-          
-          <div class="flex items-center">
-            <div class="relative">
-              <input type="text" class="w-64 pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-blue bg-gray-50" placeholder="Search...">
-              <div class="absolute left-3 top-3 text-gray-400">
-                <i class="fas fa-search"></i>
-              </div>
-            </div>
-          </div>
+
+        <div class="flex items-center justify-center h-10 ">
+          <h2 class="text-xl font-bold  text-navy-dark  font-serif">HomeElagant</h2>
+        </div>
           
           <div class="flex items-center space-x-6">
-            <button class="relative text-navy hover:text-blue">
-              <i class="fas fa-bell text-lg"></i>
-              <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
-            </button>
-            
             <div class="flex items-center">
-              <img class="h-8 w-8 rounded-full object-cover" src="/api/placeholder/32/32" alt="Avatar">
-              <span class="ml-2 text-sm font-medium text-navy">Admin</span>
-              <i class="fas fa-chevron-down ml-1 text-xs text-navy-light"></i>
+              <span class="ml-2 text-sm font-medium text-navy">{{session.username }}</span>
             </div>
           </div>
         </div>

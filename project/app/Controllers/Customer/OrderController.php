@@ -7,12 +7,11 @@ use App\repositories\CartRepository;
 use App\repositories\AccountRepository;
 use App\Services\OrderServise;
 use App\Services\CartService;
-use App\Core\controller;
 use App\Core\Response;
 use App\Core\Request;
 use App\Core\Session;
 
-class OrderController extends Controller {
+class OrderController  {
 
     private $orderService ;
     private $cartService ;
@@ -22,7 +21,6 @@ class OrderController extends Controller {
     private $response ;
 
     public function __construct(){
-        // $this->orderService = new OrderServise;
         $this->orderRepository = new OrderRepository;
         $this->cartRepository = new CartRepository();
         $this->accountRepository = new AccountRepository();
@@ -120,8 +118,5 @@ class OrderController extends Controller {
 
 
 
-    public function show(Request $request){
-        $body = $request->getbody();
-        $id = isset($body['id']) ? (int) $body['id'] : null;
-    }    
+ 
 }

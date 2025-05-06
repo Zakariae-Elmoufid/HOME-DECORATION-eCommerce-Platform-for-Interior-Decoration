@@ -20,11 +20,9 @@ class ProductController extends Controller{
 
     public function getProductsCategory(Request $request){
         $data = $request->getbody();
- 
         $id = $data['category'];
         $products = $this->productRepository->getProductsByCategory($id);
         $this->response->jsonEncode(['products' => $products]);
-        // return $this->render('customer/productsByCategory', ['products' => $products ]);
     }
 
 }

@@ -1,4 +1,4 @@
-import displayMessage from "./alert.js";
+import {displayMessage} from "./alert.js";
 
 document.addEventListener('DOMContentLoaded', function() {
 

@@ -31,7 +31,7 @@ public function fetchAllCustomer(){
     }
 
     public function total_customers(){
-        $stmt = $this->query("select count(*) as total from orders ");
+        $stmt = $this->query("select count(*) as total from users where role_id = 2 ");
         $countCustomers =  $stmt->fetch(PDO::FETCH_OBJ);
         return $countCustomers->total;
     }

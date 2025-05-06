@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(data => {
 
         document.getElementById('modal-order-id').textContent = `#${data.order.id}`;
-        document.getElementById('modal-customer-name').textContent = data.order.first_name+" "+data.order.last_name;
+        document.getElementById('modal-customer-name').textContent = data.order.username;
         document.getElementById('modal-customer-email').textContent = data.order.email;
         document.getElementById('modal-order-date').textContent = new Date(data.order.created_at).toLocaleString();
         document.getElementById('modal-order-status').textContent = data.order.status;
