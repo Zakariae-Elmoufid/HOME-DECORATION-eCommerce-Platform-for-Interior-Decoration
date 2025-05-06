@@ -33,7 +33,7 @@ class AuthService {
         $validator = new Validator($data);
 
         $validator->setRules([
-            'username' => 'required|min:8|max:50',
+            'username' => 'required|min:6|max:50',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|max:100|confirmed:confirm_password'
         ]);
@@ -196,7 +196,7 @@ class AuthService {
         $validator->setRules([
             'username' => 'required|min:8|max:50',
             'email' => 'required|email',
-            'password' => 'required|min:8|max:100|confirmed:confirm_password'
+            // 'password' => 'required|min:8|max:100|confirmed:confirm_password'
         ]);
 
          

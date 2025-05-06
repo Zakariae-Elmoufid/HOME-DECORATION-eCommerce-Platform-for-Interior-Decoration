@@ -12,7 +12,7 @@
       <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <div class="flex flex-wrap justify-between items-center mb-4 pb-4 border-b border-gray-200">
           <div>
-            <h2 class="text-xl font-bold text-charcoal">Order #{{ order.getId }}</h2>
+    <h2 class="text-xl font-bold text-charcoal">Order #{{ loop.index }}</h2>
             <p class="text-sm text-gray-500">Placed on {{ order.orderDate|date('d/m/Y') }}</p>
           </div>
           <div>
@@ -92,17 +92,7 @@
             </tbody>
           </table>
         </div>
-        
-        <div class="mt-6 flex justify-between">
-          <a href="/customer/order/show?id={{ order.id }}" class="text-sm text-gold hover:text-gold-dark transition duration-300">
-            <i class="fas fa-eye mr-1"></i> View details
-          </a>
-          {% if order.status == 'completed' %}
-            <a href="/customer/order?id={{ order.id }}" class="text-sm bg-gold hover:bg-gold-dark text-white py-2 px-4 rounded transition duration-300">
-              <i class="fas fa-redo mr-1"></i> Order again
-            </a>
-          {% endif %}
-        </div>
+  
       </div>
     {% endfor %}
   {% else %}

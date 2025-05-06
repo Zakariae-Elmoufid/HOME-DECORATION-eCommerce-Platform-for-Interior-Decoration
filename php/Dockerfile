@@ -1,6 +1,5 @@
 FROM php:8.4-apache
 
-RUN apt-get update && apt-get install -y libpq-dev
 
 COPY php.ini /usr/local/etc/php/php.ini
 

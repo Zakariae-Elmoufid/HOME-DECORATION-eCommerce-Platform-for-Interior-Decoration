@@ -96,108 +96,134 @@ class ProductRepository extends BaseRepository {
 
 
     public function insertProduct($data) {
-        $product = [
-            "title" => $data["title"],
-            "category_id" => $data["category_id"],
-            "description" => $data["description"],
-            "base_price" => $data["base_price"],
-            "stock" => $data["stock"],
-            "isAvailable" => $data["isAvailable"] ? 1 : 0
-        ];
-         
-        $product_id = $this->insert($this->table, $product);
+        try {
+            $product = [
+                "title" => $data["title"],
+                "category_id" => $data["category_id"],
+                "description" => $data["description"],
+                "base_price" => $data["base_price"],
+                "stock" => $data["stock"],
+                "isAvailable" => $data["isAvailable"] ? 1 : 0
+            ];
     
-        if (!$product_id) {
+            $product_id = $this->insert($this->table, $product);
+    
+            if (!$product_id) {
+                throw new Exception("Failed to insert product");
+            }
+    
+            $product["id"] = $product_id;
+    
+            $variants = [];
+            $images = [];
+    
+            // Handle product variants
+            if (!empty($data["size_name"]) || !empty($data["color_name"])) {
+                foreach ($data["size_name"] as $index => $sizeName) {
+                    $variant = [
+                        "product_id" => $product_id,
+                        "size_name" => $sizeName,
+                        "color_name" => $data["color_name"][$index],
+                        "color_code" => $data["color_code"][$index],
+                        "price_adjustment" => $data["price_adjustment"][$index],
+                        "stock_quantity" => $data["stock_quantity"][$index],
+                    ];
+    
+                    $variantId = $this->insert("product_variants", $variant);
+                    if (!$variantId) {
+                        throw new Exception("Failed to insert variant");
+                    }
+    
+                    $variants[] = $variant;
+                }
+            }
+    
+            // Handle product images
+            if (!empty($data["images"])) {
+                foreach ($data["images"] as $image) {
+                    $imageData = [
+                        "is_primary" => $image["is_primary"],
+                        "product_id" => $product_id,
+                        "image_path" => $image["path"],
+                    ];
+    
+                    $imageId = $this->insert("product_images", $imageData);
+                    if (!$imageId) {
+                        throw new Exception("Failed to insert image");
+                    }
+    
+                    $images[] = $imageData;
+                }
+            }
+    
+            $productData = array_merge($product, [
+                'variants' => $variants,
+                'images' => $images
+            ]);
+    
+            return new Product($productData);
+        } catch (Exception $e) {
             return false;
         }
-        
-        $product["id"] = $product_id;
-        
-        $variant = [];
-        $images = [];
-        
-        if (!empty($data["size_name"]) || !empty($data["color_name"])) {
-            foreach ($data["size_name"] as $index => $sizeName) {
-                $variant = [
-                    "product_id" => $product_id,
-                    "size_name" => $sizeName,
-                    "color_name" => $data["color_name"][$index],
-                    "color_code" => $data["color_code"][$index],
-                    "price_adjustment" => $data["price_adjustment"][$index],
-                    "stock_quantity" => $data["stock_quantity"][$index],
-                ];
-                
-                $this->insert("product_variants", $variant);
-                
-                $variants[] = $variant;
-            }
-        }
-    
+    }
 
-        if (!empty($data["images"])) {
-            foreach ($data["images"] as $image) {
-                $imageData = [
-                    "is_primary" => $image["is_primary"],
-                    "product_id" => $product_id,
-                    "image_path" => $image["path"],
-                ];
-                
-                $this->insert("product_images", $imageData);
-                
-                $images[] = $imageData;
+
+
+
+    public function fetchById($id) {
+        try {
+            $stmt = $this->query("SELECT 
+                p.id,
+                p.title,
+                p.description,
+                p.stock,
+                p.base_price,
+                p.isAvailable,
+                p.category_id,
+                c.title AS category_name
+                FROM products p
+                INNER JOIN categories c ON c.id = p.category_id 
+                WHERE p.id = :id", ['id' => $id]);
+            
+            $product = $stmt->fetch(PDO::FETCH_OBJ);
+            if (!$product) {
+                throw new \Exception("Product not found");
             }
+    
+            $stmt = $this->query("SELECT 
+                id AS image_id,
+                image_path,
+                is_primary
+                FROM product_images
+                WHERE product_id = :id", ['id' => $id]);
+            
+            $product->images = $stmt->fetchAll(PDO::FETCH_OBJ);
+            
+    
+            $stmt = $this->query("SELECT 
+                id AS variant_id,
+                size_name,
+                color_name,
+                color_code,
+                price_adjustment,
+                stock_quantity
+                FROM product_variants
+                WHERE product_id = :id", ['id' => $id]);
+            
+            $product->variants = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+       
+            return $product;
+    
+        } catch (\Exception $e) {
+             return null;
         }
-        
-        $productData = array_merge($product, [
-            'variants' => $variants,
-            'images' => $images
-        ]);
-        
-        $productObject = new Product($productData);
-        
-        
-        
-        
-        return $productObject;
     }
     
     
-    public function fetchById($id){
-        $stmt = $this->query("SELECT 
-        p.id,
-        p.title,
-        p.description,
-        p.stock,
-        p.base_price,
-        p.isAvailable,
-        p.category_id,
-        c.title AS category_name
-        FROM products p
-        inner join categories c on c.id = p.category_id 
-        WHERE p.id = $id");
-        $product = $stmt->fetch(PDO::FETCH_OBJ);
-
-        $stmt = $this->query("SELECT 
-        id as image_id,
-        image_path,
-        is_primary
-        FROM product_images
-        WHERE product_id = $id");
-        $product->images = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-        $stmt = $this->query("SELECT 
-        id as variant_id,
-        size_name,
-        color_name,
-        color_code,
-        price_adjustment,
-        stock_quantity
-        FROM product_variants
-        WHERE product_id = $id");
-        $product->variants = $stmt->fetchAll(PDO::FETCH_OBJ);
-        return $product;
-
-    }
+    
+    
+    
 
     public function updatProduct($id , $data){
     
@@ -250,6 +276,10 @@ class ProductRepository extends BaseRepository {
         return true;
     }
 
+
+   public function deleteProductVariant($id){
+       return $this->delete("product_variants" ,$id);
+   }
 
 
 

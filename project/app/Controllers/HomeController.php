@@ -1,6 +1,5 @@
 <?php
 namespace App\Controllers;
-use App\Core\Controller;
 use App\core\Request;
 use App\core\Response;
 use App\core\Validator;
@@ -9,7 +8,7 @@ use App\Services\ProductService;
 use App\Repositories\ProductRepository;
 use App\Repositories\ReviewRepository;
 
-class HomeController extends Controller{
+class HomeController {
 
 
     private $CategoryService;
@@ -52,7 +51,7 @@ class HomeController extends Controller{
     public function product()
     {
         $products = $this->ProductService->fetchAll();
-        return $this->render('products', [
+        return $this->response->render('products', [
             'products' => $products
         ]);
     }
@@ -67,7 +66,7 @@ class HomeController extends Controller{
         $data = $request->getbody();
         $id = $data['category'];
         $products = $this->productRepository->getProductsByCategory($id);
-        return $this->render('customer/productsByCategory', ['products' => $products ]);
+        return $this->response->render('customer/productsByCategory', ['products' => $products ]);
     }
 
     public function productsPaginator(Request $request){

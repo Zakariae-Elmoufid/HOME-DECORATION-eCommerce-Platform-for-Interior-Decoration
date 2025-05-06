@@ -1,9 +1,9 @@
 {% extends "layouts/main.twig" %}
 {% block title %}Products{% endblock %}
 
-{# {% block SearchDesktop %}
+{% block SearchDesktop %}
      <!-- Search Bar (visible on desktop) -->
-          <div class="hidden md:flex flex-grow max-w-lg mx-6">
+          <div class="hidden md:flex md:flex justify-center  max-w-lg mx-auto">
             <div class="w-full">
               <form class="flex" id="search-bar">
                 <input type="text" placeholder="Search for products..." class="w-full border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold" />
@@ -11,7 +11,7 @@
               </form>
             </div>
           </div>
-{% endblock %} #}
+{% endblock %}
 
 {% block SearchMobile %}
   <!-- Mobile Search (visible on mobile) -->

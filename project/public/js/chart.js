@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to render or update the chart
     function renderChart(data) {
+
         const months = [
             'January', 'February', 'March', 'April', 'May', 'June', 
             'July', 'August', 'September', 'October', 'November', 'December'
@@ -60,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     beginAtZero: true,
                     ticks: {
                         callback: function(value) {
-                            return '$' + value.toLocaleString();
+                            return '$' + value;
                         }
                     }
                 }
@@ -97,10 +98,11 @@ async function initialize() {
     const result = await loadSalesData(currentYear);
  
     if (result.years && result.years.length > 0) {
-
+        
         const defaultYearIndex = result.years.indexOf(currentYear) !== -1 
         ? result.years.indexOf(currentYear) 
         : 0;
+
         populateYearSelector(result.years, result.years[defaultYearIndex]);
         renderChart(result.data);
         
@@ -127,7 +129,6 @@ async function initialize() {
             const period = this.value;
             
             try {
-                // Show loading state
                 productsList.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin mr-2"></i>Loading...</div>';
                 
                 const response = await fetch(`/admin/dashboard/popular-products?period=${period}`);
@@ -137,7 +138,7 @@ async function initialize() {
                 }
                 
                 const data = await response.json();
-                
+                console.log(data.products);   
                 // Build HTML for products
                 let html = '';
                 
@@ -150,8 +151,8 @@ async function initialize() {
                                      class="w-12 h-12 object-cover rounded-md">
                                 <div class="ml-4 flex-1">
                                     <div class="flex justify-between">
-                                        <h4 class="text-sm font-medium text-navy">${product.name}</h4>
-                                        <span class="text-sm font-semibold text-navy">$${product.price}</span>
+                                        <h4 class="text-sm font-medium text-navy">${product.title}</h4>
+                                        <span class="text-sm font-semibold text-navy">$${product.base_price}</span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
                                         <div class="bg-blue h-2 rounded-full" style="width: ${product.percentage}%"></div>

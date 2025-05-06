@@ -70,9 +70,9 @@
                 </div>
                 <div class="ml-4 flex-1">
                   <h3 class="font-medium text-charcoal">{{ item.getProductTitle }}</h3>
-                  <div class="text-sm text-gray-500 mt-1">Color: <span class="text-charcoal">{{ item.getColor }}</div>
-                  <div class="text-sm text-gray-500">Size: <span class="text-charcoal">{{ item.getProductSize }}</span></div>
-                  <div class="text-sm text-gray-500"> Stock:  <span class="size text-charcoal">{{ item.getStockQuantity }}</span></div>
+                  <div class="text-sm text-gray-500 mt-1">{% if item.getColor %} Color: <span class="text-charcoal">{{ item.getColor }} {% endif %}</div>
+                  <div class="text-sm text-gray-500">{% if item.getProductSize %}Size: <span class="text-charcoal">{{ item.getProductSize }}{% endif %}</span></div>
+                  <div class="text-sm text-gray-500"> Stock:  <span class="size text-charcoal">{{ item.getStockQuantity is not null ? item.getStockQuantity : item.getStock }}</span></div>
                   <button data-item-id="{{item.getCartItemId}}" class="remove text-sm text-red-500 mt-2 hover:text-red-700 flex items-center">
                     <i class="fas fa-trash-alt text-xs mr-1"></i> Remove
                   </button>
@@ -136,14 +136,14 @@
           </div>
         </div>
         
-        <!-- Promo Code -->
+        {# <!-- Promo Code -->
         <div class="mb-6">
           <label class="block text-sm font-medium text-gray-500 mb-2">Promo Code</label>
           <div class="flex">
             <input type="text" placeholder="Enter your code" class="flex-grow border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold">
             <button class="bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-r-lg transition duration-300">Apply</button>
           </div>
-        </div>
+        </div> #}
         
         <!-- Checkout Button -->
         <a href="/order" class="w-full bg-gold hover:bg-gold-dark text-white py-3 rounded-md transition duration-300 flex items-center justify-center font-medium">

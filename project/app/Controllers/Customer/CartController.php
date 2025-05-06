@@ -1,7 +1,6 @@
 <?php 
 
 namespace App\Controllers\Customer;
-use App\Core\Controller;
 use App\Core\Response;
 use App\Core\Request;
 use App\Core\Session;
@@ -9,7 +8,7 @@ use App\Services\CartService;
 use App\Repositories\CartRepository;
 use App\Models\Cart;
 
-class CartController extends Controller {
+class CartController  {
     
     private $response;
     private $cartService;
@@ -33,7 +32,7 @@ class CartController extends Controller {
        }
 
        $items = $this->cartRepository->getcartItems($user_id, $guest_id);
-        $this->render("customer/cart",['items' => $items]);
+        $this->response->render("customer/cart",['items' => $items]);
     }
 
     public function addToCart(Request $request){

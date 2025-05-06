@@ -80,7 +80,6 @@ class StripePaymentController
             "order_id" => $order['order_id'],
             "amount" => $order['total'],
             'payment_method' => 'card',
-            'payment_intent_id' => $session->payment_intent,
             'stripe_session_id' => $session->id,
             'currency' => 'usd',
             'status' => 'unpaid',
@@ -125,7 +124,7 @@ class StripePaymentController
                 
                 $this->orderService->decrementStockAfterOrder($payment->getOrderId());
             }
-            $this->confirmation($payment->getOrderId());
+            $this->response->redirect('/payment/confirmation?id='.$payment->getOrderId());
         } else {
             echo "Payment Failed.";
         }
@@ -142,11 +141,11 @@ class StripePaymentController
     }
 
 
-    public function confirmation($orderId ){
+    public function confirmation(Request $request){
+        $body =  $request->getbody();
+        $orderId = $body['id'];
         $order = $this->orderRepository->getOrderById($orderId);
-        if (!$order) {
-            return $this->response->redirect('/checkout');
-        }
+        
         $shippingAddress = $this->orderRepository->getUserAddressById($order->getShippingAddress());
         $payment = $this->paymentRepository->getByOrderId($orderId);
  

@@ -127,21 +127,22 @@ class OrderService {
 
   public function decrementStockAfterOrder($order_id){
     $quantities = $this->orderRepository->getOrderItemQuantity($order_id);
-
+    $countQauntity =  0;
     foreach($quantities as $item) {
-
-
         if ($item->variant_id) {
             $currentStock = $this->orderRepository->currentStock($item->variant_id);
             $newStock = $currentStock - $item->quantity;
             $this->orderRepository->updateQuantity($item->variant_id, ['stock_quantity' => $newStock]);
         } 
-     
+        $countQauntity += $item->quantity ;
     }
-    $totalStock = $this->orderRepository->calculateTotalVariantStock($quantities[0]->product_id);
-    if ( $totalStock !== null) {
-        $this->orderRepository->updateProductStock($quantities[0]->product_id, ['stock' => $totalStock]);
-    }
+    $currentProductStock =  $this->orderRepository->productStock($quantities[0]->product_id);
+
+    $newStock =$currentProductStock - $countQauntity;
+   
+        $this->orderRepository->updateProductStock($quantities[0]->product_id, ['stock' => $newStock]);
+    
+  
 
     $this->orderRepository->updateOrderStatus($order_id,['status'=>'shipped']);
 

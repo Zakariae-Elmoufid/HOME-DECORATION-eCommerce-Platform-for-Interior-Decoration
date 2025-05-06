@@ -10,6 +10,7 @@ class Response
 {
 
     protected Environment $twig;
+    
     public function __construct()
     {
         $loader = new FilesystemLoader(dirname(__DIR__) . '/Views');
@@ -20,9 +21,8 @@ class Response
             return Session::getFlash($key);
         }));
         $this->twig->addGlobal('session', $_SESSION);
-
-
     }
+
     public function render(string $view, array $params = []): string
     {      
         if (session_status() == PHP_SESSION_NONE) {
@@ -39,10 +39,15 @@ class Response
         http_response_code($code);
     }
 
+
     public function redirect(string $url): void
     {
         header("Location: $url");
         exit;
+    }
+
+    public function error404(){
+        $this->render('error404');
     }
 
     public  function renderError(string $message) {

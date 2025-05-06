@@ -22,11 +22,9 @@ class OrderRepository  extends BaseRepository {
         o.subTotal,
         o.shipping,
         u.username,
-        u.email,
-        us.phone
-         FROM orders o
-        inner join user_addresses us on us.id = o.shipping_address_id 
-        inner join users u on us.id = u.id
+        u.email
+        FROM orders o
+        inner join users u on o.user_id = u.id
         ");
         $orders = $stmt->fetchAll(PDO::FETCH_OBJ);
 
@@ -83,8 +81,8 @@ class OrderRepository  extends BaseRepository {
           oi.total_item,
           p.title as productTitle,
           pg.image_path as productImage,
-          pv.size_name, 
-          pv.color_name
+          pv.size_name as selectedSize,  
+          pv.color_name as selectedColor
           from order_items oi
           inner join products p on  oi.product_id = p.id
           inner join product_images pg on  pg.product_id = p.id AND pg.is_primary = 1
@@ -96,7 +94,7 @@ class OrderRepository  extends BaseRepository {
            return null;
         }
         $items = [];
-      
+        
         foreach ($orderItemsData as $item){
             $items[] = new OrderItem($item); 
         }
@@ -142,10 +140,9 @@ class OrderRepository  extends BaseRepository {
         $groupedOrders = [];
         foreach ($orderData as  $obj) {
             $orderItems = $this->getOrderItems($obj->id);
-            $obj->items = $orderItems; 
+            $obj->items = $orderItems;
             $orders[] = new Order((array)$obj);
         }
-       
         return $orders;
     }
 
@@ -225,6 +222,7 @@ class OrderRepository  extends BaseRepository {
         GROUP BY MONTH(created_at) 
         ORDER BY month" ,[$year]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         $monthlyData = array_fill(1, 12, 0);
         foreach ($results as $row) {
             $monthlyData[$row['month']] = (float) $row['total'];
@@ -235,50 +233,34 @@ class OrderRepository  extends BaseRepository {
     public function getAvailableYears(){
         $stmt = $this->query("SELECT DISTINCT YEAR(created_at) as year 
         FROM orders where status  ='delivered'");
+
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
 
     public function getPopularProducts($period){
         $startDate = ($period === 'current') ? date('Y-m-01') :  date('Y-m-01', strtotime('first day of last month'));
-       $endDate = ($period === 'current') ? date('Y-m-d') : date('Y-m-t', strtotime('last day of last month'));
-
+        $endDate = ($period === 'current') ? date('Y-m-d') : date('Y-m-t', strtotime('last day of last month'));
+        
        $stmt = $this->query(
         "SELECT 
-            p.id, 
-            p.title, 
-            p.base_price, 
-            (
-                SELECT pi.image_path 
-                FROM product_images pi 
-                WHERE pi.product_id = p.id AND pi.is_primary = 1  
-                LIMIT 1
-            ) AS image_path,
-            COUNT(oi.id) AS units_sold,
-            SUM(oi.quantity) AS total_quantity,
-            ROUND(
-                SUM(oi.quantity) * 100.0 / (
-                    SELECT MAX(total) FROM (
-                        SELECT SUM(oi2.quantity) AS total
-                        FROM products p2
-                        JOIN order_items oi2 ON p2.id = oi2.product_id
-                        JOIN orders o2 ON oi2.order_id = o2.id 
-                        WHERE o2.created_at BETWEEN :start_date AND :end_date
-                        AND o2.status = 'delivered'
-                        GROUP BY p2.id
-                    ) AS sub
-                ), 2
-            ) AS percentage
-        FROM 
-            products p
-        JOIN 
-            order_items oi ON p.id = oi.product_id
-        JOIN 
-            orders o ON oi.order_id = o.id
-        WHERE 
-            o.created_at BETWEEN :start_date AND :end_date
-            AND o.status = 'delivered'
+        p.id, 
+        p.title, 
+        p.base_price,
+        pi.image_path,
+        COUNT(oi.id) AS units_sold,
+        SUM(oi.quantity) AS total_quantity,
+        ROUND(
+            SUM(oi.quantity) * 100.0 / MAX(SUM(oi.quantity)) OVER (), 
+            2
+        ) AS percentage
+        FROM products p
+        JOIN order_items oi ON p.id = oi.product_id
+        JOIN orders o ON oi.order_id = o.id
+        LEFT JOIN product_images pi ON pi.product_id = p.id AND pi.is_primary = 1
+        WHERE o.created_at BETWEEN :start_date AND :end_date
+        AND o.status = 'delivered'
         GROUP BY 
-            p.id, p.title, p.base_price
+            p.id, p.title, p.base_price, pi.image_path
         ORDER BY 
             total_quantity DESC
         LIMIT 4",
@@ -291,7 +273,7 @@ class OrderRepository  extends BaseRepository {
 
     public function currentMonth(){
         $stmt = $this->query("SELECT SUM(totalAmount) as month_total  FROM orders 
-                 WHERE status = 'completed' 
+                 WHERE status = 'delivered' 
                  AND MONTH(created_at) = MONTH(CURRENT_DATE())
                  AND YEAR(created_at) = YEAR(CURRENT_DATE())
                   AND  status = 'delivered'"
@@ -365,18 +347,13 @@ class OrderRepository  extends BaseRepository {
       return  $this->update('product_variants',$variant_id,$data);
     }
 
-    public function calculateTotalVariantStock($product_id){
-    $stmt = $this->query(
-        "SELECT SUM(stock_quantity) as total_stock 
-         FROM product_variants 
-         WHERE product_id = ?", 
-        [$product_id]
-    );
-
-    $result = $stmt->fetch(PDO::FETCH_OBJ);
-
-    return $result ? (int) $result->total_stock: 0;
+    public function productStock($product_id){
+        $stmt = $this->query('SELECT  stock from products 
+        where id = ?',[$product_id]);
+        return  $stmt->fetchColumn();
     }
+
+    
 
     public function updateProductStock($id,$data){
        return $this->update('products',$id,$data);
@@ -386,10 +363,6 @@ class OrderRepository  extends BaseRepository {
        return $this->update('orders',$order_id,$data);
     }
     
-
-
-    
-    
     }
 
 
@@ -398,3 +371,4 @@ class OrderRepository  extends BaseRepository {
     
     
 
+    

@@ -2,14 +2,13 @@
 
 namespace App\Controllers\Admin;
 
-use App\Core\Controller;
 use App\Core\Request;
 use App\Core\response;
 use App\Services\ProductService;
 use App\Repositories\ProductRepository;
 use App\Repositories\ReviewRepository;
 
-class ProductController extends Controller {
+class ProductController  {
 
     private $ProductService ;
     private $productRepository ;
@@ -38,30 +37,77 @@ class ProductController extends Controller {
        $this->ProductService->store($data);
     }
 
-    public function show(Request $request){
-        $body = $request->getbody();
-        $id = isset($body['id']) ? (int) $body['id'] : null;
-        $data = $this->ProductService->show($id);
-        $this->response->render('customer/pageProduct', [
-        "product" => $data['product'] ,
-        'reviews' => $data['reviews'] , 
-        'count' => $data['count'],
-        'average' => $data['average'],
-         'products' => $data['p'],
-         ]);
+    public function show(Request $request) {
+        try {
+            $body = $request->getBody();
+            $id = isset($body['id']) ? (int) $body['id'] : null;
+    
+            if (!$id || $id <= 0) {
+                throw new \Exception("Invalid product ID.");
+            }
+    
+            $data = $this->ProductService->show($id);
+            $product = $data['product'];
+
+            if (!$product) {
+                throw new \Exception('this  product not found .');
+            }
+    
+            $this->response->render('customer/pageProduct', [
+                "product" => $data['product'],
+                "reviews" => $data['reviews'],
+                "count" => $data['count'],
+                "average" => $data['average'],
+                "products" => $data['p'],
+            ]);
+    
+        } catch (\Exception $e) {
+            $this->response->render('error', [
+                'message' => $e->getMessage()
+            ]);
+        }
     }
+    
 
     public function getProduct(Request $request){
-        $body = $request->getbody();
-        $id = isset($body['id']) ? (int) $body['id'] : null;
-        $data = $this->ProductService->show($id);
-        $this->response->render("admin/products/edit",["categories" => $data['categories'] ,"product" => $data['product']]);
+        try{
+            $body = $request->getbody();
+            $id = isset($body['id']) ? (int) $body['id'] : null;
+            if (!$id || $id <= 0) {
+                throw new \Exception("Invalid product ID.");
+            }
+            
+            $data = $this->ProductService->show($id);
+            if (!$data['product'] || !$data['categories']) {
+                throw new \Exception('this  product not found .');
+            }
+             
+            $this->response->render("admin/products/edit",["categories" => $data['categories'] ,"product" => $data['product']]);
+        }catch(\Exception $e){
+            $this->response->render('error', [
+                'message' => $e->getMessage()
+            ]);
+        }
     }
     
 
     public function update(Request $request){
         $data = $request->getbody();
-        $this->ProductService->update($data);
+        $result = $this->ProductService->update($data);
+        if(isset($result['errors']) && $result['errors']){
+            $this->response->jsonEncode(["errors" => $result['errors'] ]);   
+        }
+        $this->response->jsonEncode(["success" =>$result['success']]);
+    }
+
+    public function deleteProductVariant(Request $request){
+        $body = $request->getbody();
+        $id = isset($body['id']) ? (int) $body['id'] : null;
+        $result  = $this->productRepository->deleteProductVariant($id);
+        if( $result){
+            $this->response->jsonEncode(['succes' => 'delete product varaint succesful']);
+        }
+
     }
 
     public function editImages(Request $request){

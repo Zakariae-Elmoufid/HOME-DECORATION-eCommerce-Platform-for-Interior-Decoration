@@ -27,7 +27,7 @@ use App\Middlewares\RoleMiddleware;
 
 
 
-$app = new Application(dirname(__DIR__));
+$app = new Application();
 $app->router->get('/','HomeController@index');
 $app->router->get('/about_us','HomeController@about');
 $app->router->get('/contact_us','HomeController@contact');
@@ -100,6 +100,10 @@ $app->router->get('/admin/products/edit', [ProductController::class ,'getProduct
 $app->router->middleware('/admin/categorys/edit', new RoleMiddleware([1]));
 $app->router->middleware('/admin/products/edit', new PermissionMiddleware('Manage Products'));
 
+$app->router->get('/admin/product/variant',[ProductController::class ,'deleteProductVariant']);
+$app->router->middleware('/admin/product/variant', new RoleMiddleware([1]));
+$app->router->middleware('/admin/product/variant', new PermissionMiddleware('Manage Products'));
+
 $app->router->get('/admin/products/images', [ProductController::class ,'editImages']);
 $app->router->middleware('/admin/categorys/images', new RoleMiddleware([1]));
 $app->router->middleware('/admin/products/images', new PermissionMiddleware('Manage Products'));
@@ -130,47 +134,50 @@ $app->router->get('/product', [ProductController::class ,'show']);
 
 $app->router->get('/admin/orders','Admin\OrderController@index');
 $app->router->middleware('/admin/categorys/delete', new RoleMiddleware([1]));
+$app->router->middleware('/admin/products/delete', new PermissionMiddleware('Manage Products'));
+
 
 $app->router->get('/admin/orders/details' , [AdminOrderController::class ,'orderDetails']);
-$app->router->middleware('/admin/categorys/delete', new RoleMiddleware([1]));
+$app->router->middleware('/admin/orders/details', new RoleMiddleware([1]));
+$app->router->middleware('/admin/orders/details', new PermissionMiddleware('Manage Orders'));
+
 
 
 $app->router->get('/products/bycategory' ,[HomeController::class , 'getProductsByCategory']);
-$app->router->middleware('/admin/categorys/delete', new RoleMiddleware([1]));
 
 
 $app->router->get('/admin/customer','Admin\CustomerController@index');
-$app->router->middleware('/admin/categorys/delete', new RoleMiddleware([1]));
+$app->router->middleware('/admin/customer', new RoleMiddleware([1]));
 
 
-$app->router->get('/admin/access', 'Admin\AccessController@index')->middleware('/admin/access', new  PermissionMiddleware('Manage Admins'));
-$app->router->middleware('/admin/categorys/delete', new RoleMiddleware([1]));
+$app->router->get('/admin/access', 'Admin\AccessController@index');
+$app->router->middleware('/admin/access', new RoleMiddleware([1]));
+$app->router->middleware('/admin/access', new PermissionMiddleware('Manage Admins'));
 
 
 $app->router->get('/admin/access/create', 'Admin\AccessController@create');
-$app->router->middleware('/admin/categorys/delete', new RoleMiddleware([1]));
-
+$app->router->middleware('/admin/access/create', new RoleMiddleware([1]));
 $app->router->middleware('/admin/access/create', new PermissionMiddleware('Manage Admins'));
 
 $app->router->post('/admin/access/add', [AccessController::class, 'addAdmin']);
-$app->router->middleware('/admin/categorys/delete', new RoleMiddleware([1]));
+$app->router->middleware('/admin/access/add', new RoleMiddleware([1]));
 $app->router->middleware('/admin/access/add', new PermissionMiddleware('Manage Admins'));
 
 $app->router->get('/admin/access/edit', [AccessController::class, 'edit']);
-$app->router->middleware('/admin/categorys/delete', new RoleMiddleware([1]));
+$app->router->middleware('/admin/access/edit', new RoleMiddleware([1]));
 $app->router->middleware('/admin/access/edit', new PermissionMiddleware('Manage Admins'));
 
 $app->router->post('/admin/access/update', [AccessController::class, 'update']);
-$app->router->middleware('/admin/categorys/delete', new RoleMiddleware([1]));
+$app->router->middleware('/admin/access/update', new RoleMiddleware([1]));
 $app->router->middleware('/admin/access/update', new PermissionMiddleware('Manage Admins'));
 
 $app->router->get('/admin/access/delete', [AccessController::class, 'delete']);
-$app->router->middleware('/admin/categorys/delete', new RoleMiddleware([1]));
+$app->router->middleware('/admin/access/delete', new RoleMiddleware([1]));
 $app->router->middleware('/admin/access/delete', new PermissionMiddleware('Manage Admins'));
 
 
 $app->router->get('/admin/status', [AccessController::class, 'updateStatusAdmin']);
-$app->router->middleware('/admin/categorys/delete', new RoleMiddleware([1]));
+$app->router->middleware('/admin/status', new RoleMiddleware([1]));
 $app->router->middleware('/admin/status', new PermissionMiddleware('Manage Admins'));
 
 $app->router->get('/products' , 'HomeController@product');
@@ -184,7 +191,6 @@ $app->router->patch('/cart/update', [CartController::class , 'update']);
 $app->router->delete('/cart/delete', [CartController::class , 'delete']);
 
 $app->router->get('/cart/count', [CartController::class , 'countItem']);
-
 
 $app->router->get('/order',"Customer\OrderController@index");
 $app->router->middleware('/order', AuthMiddleware::class);
@@ -207,9 +213,13 @@ $app->router->middleware('/payment/success', new RoleMiddleware([2]));
 $app->router->get('/payment/cancel',[StripePaymentController::class,'cancel']);
 $app->router->middleware('/payment/cancel', new RoleMiddleware([2]));
 
+$app->router->get('/payment/confirmation',[StripePaymentController::class,'confirmation']);
+$app->router->middleware('/payment/confirmation', new RoleMiddleware([2]));
 
-// $app->router->post('/payment/update-status',[PaymentController::class , 'updateStatus']);
-// $app->router->get('/payment/confirmation',[StripePaymentController::class , 'confirmation']);
+
+
+
+
 
 
 $app->router->get('/customer/account', 'Customer\AccountController@index');

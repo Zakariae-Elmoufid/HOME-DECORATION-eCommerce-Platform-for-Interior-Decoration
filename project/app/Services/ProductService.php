@@ -104,6 +104,8 @@ class ProductService {
         $reviews = $this->reviewRepository->getReviewByProduct($id);
         $AvgandCountReviews = $this->reviewRepository-> avgAndCountReview($id);
         $products = $this->productRepository->selectAll();
+
+        
         
         $data = [
             "p" => $products,
@@ -131,15 +133,16 @@ class ProductService {
         $isValid = $validator->validate();
         if (!$isValid) {
             $errors = $validator->getErrors();
-             $this->response->jsonEncode(["errors" => $errors ]);
+            return ["errors" => $errors ];
 
         }   
             $id = $data["id"];
             
-            $result =$this->productRepository->updatProduct($id ,$data);
+            $result = $this->productRepository->updatProduct($id ,$data);
             if($result){
-                $this->response->jsonEncode(["success" => "update produt is succusful"]);
+                return ["success" => "update produt is succusful"];
             }
+
     }
 
 
