@@ -78,8 +78,6 @@ class CartRepository  extends BaseRepository{
     }
 
     public function updateCartItem($id ,$data){
-        dump($id);
-        dump($data);
         return $this->update('cart_items' , $id, $data);
     }
     public function deleteCartItem($id){

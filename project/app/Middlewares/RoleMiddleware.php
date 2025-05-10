@@ -8,7 +8,7 @@ use App\Core\Request;
 use App\Core\Response;
 
 
-class RoleMiddleware implements MiddlewareInterface {
+class RoleMiddleware implements MiddlewareInterface{
     private array $allowedRoles;
     private  $response;
      

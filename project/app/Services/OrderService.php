@@ -108,7 +108,7 @@ class OrderService {
        $validator->setRules([
         'phone' => 'required|string|min:9|max:20',
         'address' => 'required|min:5|max:100',
-        'city' => 'required|min:8|max:50',
+        'city' => 'required|min:4|max:50',
         'country' => 'required|min:2|max:50',
         'shipping_method' => 'required',
     ]);

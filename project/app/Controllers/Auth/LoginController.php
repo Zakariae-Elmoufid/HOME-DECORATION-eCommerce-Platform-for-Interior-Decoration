@@ -67,6 +67,9 @@ public function loginGoogle(Request $request) {
   $postData = $request->getBody();
   
   $result  = $this->authService->loginGoogle($postData);
+  if(isset($result["errorEmail"]) && $result["errorEmail"]){
+    $this->response->renderError($result["errorEmail"]);
+  }
   $user = $result['user']; 
   Session::set('id',$user->getId()); 
   Session::set("username" , $user->getUsername());

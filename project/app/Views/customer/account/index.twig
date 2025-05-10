@@ -37,7 +37,7 @@
               {% else %}
                 {% for order in orders %}
                   <tr class="border-b border-gray-200">
-                    <td class="py-3 px-4 text-charcoal">#{{ order.number }}</td>
+                    <td class="py-3 px-4 text-charcoal">#{{ loop.index }}</td>
                     <td class="py-3 px-4 text-charcoal">{{ order.date|date('F d, Y') }}</td>
                     <td class="py-3 px-4">
                       {% set statusColors = {
@@ -82,23 +82,7 @@
           {% endif %}
         </div>
 
-        <!-- Billing Address -->
-        {# <div class="bg-white rounded-lg shadow-md p-6">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-semibold">Billing Address</h2>
-          </div>
-          {% if customer.billingAddress %}
-            <address class="not-italic text-gray-600">
-              {{ customer.billingAddress.firstName }} {{ customer.billingAddress.lastName }}<br />
-              {{ customer.billingAddress.street }}<br />
-              {{ customer.billingAddress.city }}, {{ customer.billingAddress.state }} {{ customer.billingAddress.postcode }}<br />
-              {{ customer.billingAddress.country }}<br />
-              {{ customer.billingAddress.phone }}
-            </address>
-          {% else %}
-            <p class="text-gray-500">No billing address registered</p>
-          {% endif %}
-        </div> #}
+   
       </div>
 
       <!-- Recently Viewed -->

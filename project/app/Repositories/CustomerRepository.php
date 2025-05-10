@@ -39,8 +39,8 @@ public function fetchAllCustomer(){
     public function new_customers(){
         $month = date('m');
         $year = date('Y');
-        $stmt = $this->query("select count(*) as total from orders
-         WHERE MONTH(created_at) = :month AND YEAR(created_at) = :year",   [
+        $stmt = $this->query("select count(*) as total from users
+         WHERE MONTH(created_at) = :month AND YEAR(created_at) = :year and  role_id = 2 ",   [
             'month' => $month,
             'year' => $year
         ]);
